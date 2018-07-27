@@ -8,6 +8,7 @@ namespace TouchEffect
     public class TouchView : ContentView
     {
         public event TouchViewStatusChangedHandler TouchStatusChanged;
+        
         public event TouchViewCompletedHandler TouchCompleted;
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(
@@ -21,7 +22,7 @@ namespace TouchEffect
             typeof(object),
             typeof(TouchView),
             default(object));
-
+        
         public ICommand Command
         {
             get => GetValue(CommandProperty) as ICommand;
@@ -40,7 +41,6 @@ namespace TouchEffect
             
             if(status != GestureStatus.Started || canExecuteCommand)
             {
-                OnTouchHandled(status);
                 TouchStatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(status));
             }
 
@@ -49,11 +49,6 @@ namespace TouchEffect
                 Command?.Execute(CommandParameter);
                 TouchCompleted?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
             }
-        }
-
-        protected virtual void OnTouchHandled(GestureStatus status)
-        {
-            Opacity = status == GestureStatus.Started ? 0.7 : 1.0; //TODO: add ability to manage it
         }
     }
 }

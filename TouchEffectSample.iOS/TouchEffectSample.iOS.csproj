@@ -161,5 +161,13 @@
       <Project>{78144B76-1773-47C2-B4D1-5351BEC6867D}</Project>
       <Name>TouchEffect.iOS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TouchEffect\TouchEffect.csproj">
+      <Project>{DA072342-C557-4A65-B9BD-68C0491C3E9D}</Project>
+      <Name>TouchEffect</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\button.png" />
+    <BundleResource Include="Resources\button_pressed.png" />
   </ItemGroup>
 </Project>

@@ -94,6 +94,8 @@
     <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
+    <AndroidResource Include="Resources\drawable\button.png" />
+    <AndroidResource Include="Resources\drawable\button_pressed.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -110,6 +112,10 @@
     <ProjectReference Include="..\TouchEffect.Droid\TouchEffect.Droid.csproj">
       <Project>{297262D7-A22B-4A90-9C46-368CB7F692D8}</Project>
       <Name>TouchEffect.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TouchEffect\TouchEffect.csproj">
+      <Project>{DA072342-C557-4A65-B9BD-68C0491C3E9D}</Project>
+      <Name>TouchEffect</Name>
     </ProjectReference>
   </ItemGroup>
  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
