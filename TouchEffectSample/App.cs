@@ -7,8 +7,7 @@ namespace TouchEffectSample
     {
         public App()
         {
-            new TouchView(); // Sample fix
-            MainPage = new SamplePage();
+			MainPage = new NavigationPage(new SamplePage());
         }
     }
 }

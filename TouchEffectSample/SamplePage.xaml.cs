@@ -9,7 +9,12 @@ namespace TouchEffectSample
     {
         public SamplePage()
         {
-            InitializeComponent();
+			InitializeComponent();
         }
+
+		void Handle_TouchCompleted(TouchEffect.TouchView sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
+		{
+			DisplayAlert("BOOOM", ":(", "OOOOOPS");
+		}
     }
 }

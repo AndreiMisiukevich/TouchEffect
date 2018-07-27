@@ -2,18 +2,35 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
-             x:Class="TouchEffectSample.SamplePage">
+             x:Class="TouchEffectSample.SamplePage"
+             BackgroundColor="White"
+             Title="PRESIDENT'S NUCLEAR BUTTON">
     <StackLayout>
-       <touch:TouchView 
+       <touch:TouchView x:Name="container"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand"
-            HeightRequest="300"
-            WidthRequest="300">
-
-            <Image Source="button">
-                
+            HeightRequest="250"
+            WidthRequest="250"
+            TouchCompleted="Handle_TouchCompleted">
+            <Image Aspect="AspectFill">
+                <Image.Triggers>
+                    <DataTrigger TargetType="Image" 
+                                 Binding="{Binding Source={x:Reference container}, Path=GestureStatus}"
+                                 Value="Completed">
+                        <Setter Property="Source" Value="button" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Image" 
+                                 Binding="{Binding Source={x:Reference container}, Path=GestureStatus}"
+                                 Value="Canceled">
+                        <Setter Property="Source" Value="button" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Image" 
+                                 Binding="{Binding Source={x:Reference container}, Path=GestureStatus}"
+                                 Value="Started">
+                        <Setter Property="Source" Value="button_pressed" />
+                    </DataTrigger>
+                </Image.Triggers>
             </Image>
-            
         </touch:TouchView>
     </StackLayout>
 </ContentPage>
