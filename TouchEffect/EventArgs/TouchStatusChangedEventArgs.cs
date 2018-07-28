@@ -1,14 +1,14 @@
-﻿using Xamarin.Forms;
+﻿using TouchEffect.Enums;
 
 namespace TouchEffect.EventArgs
 {
     public class TouchStatusChangedEventArgs : System.EventArgs
     {
-        public TouchStatusChangedEventArgs(GestureStatus status)
+		public TouchStatusChangedEventArgs(TouchStatus status)
         {
             Status = status;
         }
 
-        public GestureStatus Status { get; }
+		public TouchStatus Status { get; }
     }
 }

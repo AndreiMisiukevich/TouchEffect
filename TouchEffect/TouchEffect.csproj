@@ -10,5 +10,7 @@
   <ItemGroup>
     <Folder Include="Delegates\" />
     <Folder Include="EventArgs\" />
+    <Folder Include="Enums\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
 </Project>

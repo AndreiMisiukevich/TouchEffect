@@ -6,6 +6,7 @@ using TouchEffect.Droid;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using System;
+using TouchEffect.Enums;
 
 [assembly: ExportRenderer(typeof(TouchView), typeof(TouchViewRenderer))]
 namespace TouchEffect.Droid
@@ -27,13 +28,13 @@ namespace TouchEffect.Droid
             switch (e.ActionMasked)
             {
                 case MotionEventActions.Down:
-                    Element?.HandleTouch(GestureStatus.Started);
+					Element?.HandleTouch(TouchStatus.Started);
                     break;
                 case MotionEventActions.Up:
-                    Element?.HandleTouch(GestureStatus.Completed);
+					Element?.HandleTouch(TouchStatus.Completed);
                     break;
                 case MotionEventActions.Cancel:
-                    Element?.HandleTouch(GestureStatus.Canceled);
+					Element?.HandleTouch(TouchStatus.Canceled);
                     break;
             }
             return base.OnTouchEvent(e);

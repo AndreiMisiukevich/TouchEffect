@@ -11,22 +11,17 @@
             HorizontalOptions="CenterAndExpand"
             HeightRequest="250"
             WidthRequest="250"
-            TouchCompleted="Handle_TouchCompleted">
+            Completed="Handle_TouchCompleted">
             <Image Aspect="AspectFill">
                 <Image.Triggers>
                     <DataTrigger TargetType="Image" 
-                                 Binding="{Binding Source={x:Reference container}, Path=GestureStatus}"
-                                 Value="Completed">
+                                 Binding="{Binding Source={x:Reference container}, Path=State}"
+                                 Value="Regular">
                         <Setter Property="Source" Value="button" />
                     </DataTrigger>
                     <DataTrigger TargetType="Image" 
-                                 Binding="{Binding Source={x:Reference container}, Path=GestureStatus}"
-                                 Value="Canceled">
-                        <Setter Property="Source" Value="button" />
-                    </DataTrigger>
-                    <DataTrigger TargetType="Image" 
-                                 Binding="{Binding Source={x:Reference container}, Path=GestureStatus}"
-                                 Value="Started">
+                                 Binding="{Binding Source={x:Reference container}, Path=State}"
+                                 Value="Pressed">
                         <Setter Property="Source" Value="button_pressed" />
                     </DataTrigger>
                 </Image.Triggers>

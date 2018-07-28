@@ -4,6 +4,7 @@ using UIKit;
 using Foundation;
 using TouchEffect.iOS;
 using TouchEffect;
+using TouchEffect.Enums;
 
 [assembly: ExportRenderer(typeof(TouchView), typeof(TouchViewRenderer))]
 namespace TouchEffect.iOS
@@ -14,19 +15,19 @@ namespace TouchEffect.iOS
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
             base.TouchesBegan(touches, evt);
-            Element?.HandleTouch(GestureStatus.Started);
+			Element?.HandleTouch(TouchStatus.Started);
         }
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
             base.TouchesEnded(touches, evt);
-            Element?.HandleTouch(GestureStatus.Completed);
+			Element?.HandleTouch(TouchStatus.Completed);
         }
 
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {
             base.TouchesCancelled(touches, evt);
-            Element?.HandleTouch(GestureStatus.Canceled);
+			Element?.HandleTouch(TouchStatus.Canceled);
         }
     }
 }

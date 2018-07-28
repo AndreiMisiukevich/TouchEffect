@@ -2,14 +2,17 @@
 using TouchEffect.Delegates;
 using TouchEffect.EventArgs;
 using Xamarin.Forms;
+using TouchEffect.Enums;
 
 namespace TouchEffect
 {   
     public class TouchView : ContentView
     {
-        public event TouchViewStatusChangedHandler TouchStatusChanged;
+		public event TouchViewStatusChangedHandler StatusChanged;
+
+		public event TouchViewStateChangedHandler StateChanged;
         
-        public event TouchViewCompletedHandler TouchCompleted;
+        public event TouchViewCompletedHandler Completed;
        
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(
             nameof(Command),
@@ -23,12 +26,18 @@ namespace TouchEffect
             typeof(TouchView),
             default(object));
 
-		public static readonly BindableProperty GestureStatusProperty = BindableProperty.Create(
-			nameof(GestureStatus),
-			typeof(GestureStatus),
+		public static readonly BindableProperty StatusProperty = BindableProperty.Create(
+			nameof(Status),
+			typeof(TouchStatus),
 			typeof(TouchView),
-			GestureStatus.Completed); 
+			TouchStatus.Completed); 
         
+		public static readonly BindableProperty StateProperty = BindableProperty.Create(
+			nameof(State),
+			typeof(TouchState),
+            typeof(TouchView),
+            TouchState.Regular); 
+
         public ICommand Command
         {
             get => GetValue(CommandProperty) as ICommand;
@@ -41,26 +50,38 @@ namespace TouchEffect
             set => SetValue(CommandParameterProperty, value);
         }
 
-		public GestureStatus GestureStatus
+		public TouchStatus Status
         {
-			get => (GestureStatus)GetValue(GestureStatusProperty);
-			set => SetValue(GestureStatusProperty, value);
+			get => (TouchStatus)GetValue(StatusProperty);
+			set => SetValue(StatusProperty, value);
         }
 
-        public void HandleTouch(GestureStatus status)
+		public TouchState State
         {
-            var canExecuteCommand = !IsEnabled || Command == null || TouchCompleted == null;
+			get => (TouchState)GetValue(StateProperty);
+			set => SetValue(StateProperty, value);
+        }
+
+		public void HandleTouch(TouchStatus status)
+        {
+			var canExecuteCommand = !IsEnabled || Command == null || Completed == null;
             
-            if(status != GestureStatus.Started || canExecuteCommand)
+			if(status != TouchStatus.Started || canExecuteCommand)
             {
-				GestureStatus = status;
-                TouchStatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(status));
+
+				State = status == TouchStatus.Started
+                  ? TouchState.Pressed
+                  : TouchState.Regular;
+				
+				Status = status;
+                StateChanged?.Invoke(this, new TouchStateChangedEventArgs(State));
+				StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
             }
 
-            if(status == GestureStatus.Completed && canExecuteCommand)
+			if(status == TouchStatus.Completed && canExecuteCommand)
             {
                 Command?.Execute(CommandParameter);
-                TouchCompleted?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
+				Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
             }
         }
     }
