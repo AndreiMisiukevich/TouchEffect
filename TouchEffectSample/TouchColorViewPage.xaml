@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TouchEffect.Controls;assembly=TouchEffect"
+             x:Class="TouchEffectSample.TouchColorViewPage"
+             BackgroundColor="White"
+             Title="TouchColorViewPage">
+    <StackLayout>
+       <controls:TouchColorView
+            RegularColor="Black"
+            PressedColor="Maroon"
+            Padding="10, 5"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Completed="Handle_TouchCompleted">
+
+            <Label Text="CLICK ME" 
+                   TextColor="White" 
+                   FontSize="60"/>
+        </controls:TouchColorView>
+    </StackLayout>
+</ContentPage>
