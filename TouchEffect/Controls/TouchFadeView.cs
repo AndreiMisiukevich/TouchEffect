@@ -10,13 +10,21 @@ namespace TouchEffect.Controls
 			nameof(RegularOpacity),
 			typeof(double),
 			typeof(TouchView),
-			1.0);
+			1.0,
+			propertyChanged: (bindable, oldValue, newValue) =>
+			{
+				(bindable as TouchFadeView)?.ForceStateChanged();
+			});
 
 		public static readonly BindableProperty PressedOpacityProperty = BindableProperty.Create(
 			nameof(PressedOpacity),
 			typeof(double),
 			typeof(TouchView),
-			0.8);
+			0.8,
+			propertyChanged: (bindable, oldValue, newValue) =>
+			{
+				(bindable as TouchFadeView)?.ForceStateChanged();
+			});
 
 		public static readonly BindableProperty FadeTimeProperty = BindableProperty.Create(
     		nameof(FadeTime),
@@ -29,18 +37,6 @@ namespace TouchEffect.Controls
 			typeof(Easing),
 			typeof(TouchView),
 			null);
-
-		public TouchFadeView()
-		{
-			StateChanged += (sender, args) =>
-			{
-				var opacity = args.State == TouchState.Regular
-							  ? RegularOpacity
-							  : PressedOpacity;
-
-				this.FadeTo(opacity, (uint)Math.Abs(FadeTime), FadeEasing);
-			};
-		}
 
 		public double RegularOpacity
 		{
@@ -64,6 +60,15 @@ namespace TouchEffect.Controls
         {
 			get => GetValue(FadeEasingProperty) as Easing;
 			set => SetValue(FadeEasingProperty, value);
+        }
+
+		protected override void OnStateChanged(TouchView sender, EventArgs.TouchStateChangedEventArgs args)
+        {
+			var opacity = args.State == TouchState.Regular
+                              ? RegularOpacity
+                              : PressedOpacity;
+
+            this.FadeTo(opacity, (uint)Math.Abs(FadeTime), FadeEasing);
         }
 	}
 }

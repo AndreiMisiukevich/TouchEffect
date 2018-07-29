@@ -38,7 +38,12 @@ namespace TouchEffect
             typeof(TouchView),
             TouchState.Regular); 
 
-        public ICommand Command
+        public TouchView()
+		{
+			StateChanged += OnStateChanged;
+		}
+
+		public ICommand Command
         {
             get => GetValue(CommandProperty) as ICommand;
             set => SetValue(CommandProperty, value);
@@ -84,5 +89,12 @@ namespace TouchEffect
 				Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
             }
         }
+
+		protected virtual void OnStateChanged(TouchView sender, EventArgs.TouchStateChangedEventArgs args)
+        {
+        }
+
+		protected void ForceStateChanged()
+		=> OnStateChanged(this, new EventArgs.TouchStateChangedEventArgs(State));
     }
 }

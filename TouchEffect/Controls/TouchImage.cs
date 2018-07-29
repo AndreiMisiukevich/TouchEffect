@@ -10,31 +10,30 @@ namespace TouchEffect.Controls
             nameof(RegularSource),
             typeof(ImageSource),
             typeof(TouchView),
-            default(ImageSource));
+			default(ImageSource),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+			    (bindable as TouchImage)?.ForceStateChanged();
+            });
 
 		public static readonly BindableProperty PressedSourceProperty = BindableProperty.Create(
-            nameof(PressedSource),
-            typeof(ImageSource),
-            typeof(TouchView),
-            default(ImageSource));
+			nameof(PressedSource),
+			typeof(ImageSource),
+			typeof(TouchView),
+			default(ImageSource),
+			propertyChanged: (bindable, oldValue, newValue) =>
+			{
+				(bindable as TouchImage)?.ForceStateChanged();
+			});
 
 		public TouchImage()
-        {
-			var image = new Image
-			{
-				VerticalOptions = LayoutOptions.FillAndExpand,
-				HorizontalOptions = LayoutOptions.FillAndExpand,
-				Aspect = Aspect.AspectFit
-			};
-
-			Image = Content = image;
-
-			StateChanged += (sender, args) =>
-			{
-				image.Source = args.State == TouchState.Regular
-					? RegularSource ?? PressedSource
-					: PressedSource ?? RegularSource;
-			};
+        {         
+			Content = Image = new Image
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                Aspect = Aspect.AspectFit
+            };
         }
 
 		public ImageSource RegularSource
@@ -49,9 +48,13 @@ namespace TouchEffect.Controls
             set => SetValue(PressedSourceProperty, value);
         }
 
-		public new Image Content { get; } 
-
 		public Image Image { get; }
-        
+
+		protected override void OnStateChanged(TouchView sender, EventArgs.TouchStateChangedEventArgs args)
+		{
+			Image.Source = args.State == TouchState.Regular
+                    ? RegularSource ?? PressedSource
+                    : PressedSource ?? RegularSource;
+		}
 	}
 }
