@@ -26,8 +26,8 @@ namespace TouchEffect.Controls
 				(bindable as TouchFadeView)?.ForceStateChanged();
 			});
 
-		public static readonly BindableProperty FadeTimeProperty = BindableProperty.Create(
-    		nameof(FadeTime),
+		public static readonly BindableProperty FadeDurationProperty = BindableProperty.Create(
+			nameof(FadeDuration),
     		typeof(int),
     		typeof(TouchView),
     		0);
@@ -50,10 +50,10 @@ namespace TouchEffect.Controls
 			set => SetValue(PressedOpacityProperty, value);
 		}
 
-		public int FadeTime
+		public int FadeDuration
 		{
-			get => (int)GetValue(FadeTimeProperty);
-			set => SetValue(FadeTimeProperty, value);
+			get => (int)GetValue(FadeDurationProperty);
+			set => SetValue(FadeDurationProperty, value);
 		}
 
 		public Easing FadeEasing
@@ -68,7 +68,7 @@ namespace TouchEffect.Controls
                               ? RegularOpacity
                               : PressedOpacity;
 
-            this.FadeTo(opacity, (uint)Math.Abs(FadeTime), FadeEasing);
+            this.FadeTo(opacity, (uint)Math.Abs(FadeDuration), FadeEasing);
         }
 	}
 }
