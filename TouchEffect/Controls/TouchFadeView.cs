@@ -20,7 +20,7 @@ namespace TouchEffect.Controls
 			nameof(PressedOpacity),
 			typeof(double),
 			typeof(TouchView),
-			0.8,
+			0.6,
 			propertyChanged: (bindable, oldValue, newValue) =>
 			{
 				(bindable as TouchFadeView)?.ForceStateChanged();
@@ -30,7 +30,7 @@ namespace TouchEffect.Controls
     		nameof(FadeTime),
     		typeof(int),
     		typeof(TouchView),
-    		200);
+    		0);
 
 		public static readonly BindableProperty FadeEasingProperty = BindableProperty.Create(
 			nameof(FadeEasing),

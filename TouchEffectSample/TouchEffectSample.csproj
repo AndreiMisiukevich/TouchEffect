@@ -10,4 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TouchEffect\TouchEffect.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="TouchFadeViewPage.cs" />
+  </ItemGroup>
 </Project>

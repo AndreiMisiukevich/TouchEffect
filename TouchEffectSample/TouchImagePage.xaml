@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TouchEffect.Controls;assembly=TouchEffect"
+             x:Class="TouchEffectSample.TouchImagePage"
+             BackgroundColor="White"
+             Title="TouchImagePage">
+    <StackLayout>
+       <controls:TouchImage
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            HeightRequest="250"
+            WidthRequest="250"
+            RegularSource="button"
+            PressedSource="button_pressed"
+            Completed="Handle_TouchCompleted" />
+    </StackLayout>
+</ContentPage>
