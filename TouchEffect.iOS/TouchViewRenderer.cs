@@ -12,6 +12,8 @@ namespace TouchEffect.iOS
 	[Preserve(AllMembers = true)]
 	public class TouchViewRenderer : VisualElementRenderer<TouchView>
 	{
+		public static void Initialize() {}
+
 		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
 			base.TouchesBegan(touches, evt);

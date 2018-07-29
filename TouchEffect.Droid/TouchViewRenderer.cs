@@ -37,7 +37,7 @@ namespace TouchEffect.Droid
 					Element?.HandleTouch(TouchStatus.Canceled);
 					break;
 			}
-			return base.OnTouchEvent(e);
+			return true;
 		}
 	}
 }
