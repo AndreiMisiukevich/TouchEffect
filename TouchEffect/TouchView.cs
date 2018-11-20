@@ -358,18 +358,21 @@ namespace TouchEffect
 
         protected void SetOpacity(TouchState state)
         {
-            if (Abs(RegularOpacity - 1) <= double.Epsilon &&
-               Abs(PressedOpacity - 1) <= double.Epsilon)
+            var regularOpacity = RegularOpacity;
+            var pressedOpacity = PressedOpacity;
+
+            if (Abs(regularOpacity - 1) <= double.Epsilon &&
+               Abs(pressedOpacity - 1) <= double.Epsilon)
             {
                 return;
             }
 
             if (state == TouchState.Regular)
             {
-                this.FadeTo(RegularOpacity, (uint)Abs(RecoverDuration), RecoverEasing);
+                this.FadeTo(regularOpacity, (uint)Abs(RecoverDuration), RecoverEasing);
                 return;
             }
-            this.FadeTo(PressedOpacity, (uint)Abs(FadeDuration), FadeEasing);
+            this.FadeTo(pressedOpacity, (uint)Abs(FadeDuration), FadeEasing);
         }
     }
 }
