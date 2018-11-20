@@ -34,7 +34,7 @@ This plugin provides opportunity to create views with touch effects without usin
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
 
-**XAML:** use TouchView for achieving responisve UI
+**XAML:** use TouchView for achieving responisve UI (Changing background image or/and background color, Fading/Recovering)
 ```xml
        <touch:TouchView
             RegularBackgroundImageSource="button"
@@ -43,7 +43,7 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
             Completed="Handle_TouchCompleted" />
 ```
 
-### All properties are optional
+### All Properties
 
 Property | Type | Default | Description
 --- | --- | --- | ---
