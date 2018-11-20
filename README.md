@@ -37,12 +37,12 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
 **XAML:** use TouchView for achieving responisve UI
 ```xml
        <touch:TouchView
-            RegularBackgroundImageSource="button"  <!-- [optional]: Background image source of regular state. -->
-            PressedBackgroundImageSource="button_pressed" <!-- [optional]: Background image source of pressed state. -->
-            RegularBackgroundImageAspect="AspectFill" <!-- [optional]: Background image aspect of regular state. -->
-            PressedBackgroundImageAspect="AspectFill" <!-- [optional]: Background image aspect of pressed state. -->
-            Command={Binding Command} <!-- [optional]: Touch handler command. -->
-            Completed="Handle_TouchCompleted" /> <!-- [optional]: Touch handler code behind.-->
+            RegularBackgroundImageSource="button"  // [optional]: Background image source of regular state.
+            PressedBackgroundImageSource="button_pressed" // [optional]: Background image source of pressed state.
+            RegularBackgroundImageAspect="AspectFill" // [optional]: Background image aspect of regular state.
+            PressedBackgroundImageAspect="AspectFill" // [optional]: Background image aspect of pressed state.
+            Command={Binding Command} // [optional]: Touch handler command. -->
+            Completed="Handle_TouchCompleted" /> // [optional]: Touch handler code behind.
 ```
 
 **If you want to customize/extend existing controls, you may observe State via triggers
