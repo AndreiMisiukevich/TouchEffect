@@ -37,13 +37,34 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
 **XAML:** use TouchView for achieving responisve UI
 ```xml
        <touch:TouchView
-            RegularBackgroundImageSource="button"  // [optional]: Background image source of regular state.
-            PressedBackgroundImageSource="button_pressed" // [optional]: Background image source of pressed state.
-            RegularBackgroundImageAspect="AspectFill" // [optional]: Background image aspect of regular state.
-            PressedBackgroundImageAspect="AspectFill" // [optional]: Background image aspect of pressed state.
-            Command={Binding Command} // [optional]: Touch handler command. -->
-            Completed="Handle_TouchCompleted" /> // [optional]: Touch handler code behind.
+            RegularBackgroundImageSource="button"
+            PressedBackgroundImageSource="button_pressed"
+            PressedOpacity="1"
+            Completed="Handle_TouchCompleted" />
 ```
+
+### All properties are optional
+
+Property | Type | Default | Description
+--- | --- | --- | ---
+Command | `ICommand` | null | Touch Command handler
+CommandParameter | `object` | null | Touch Command handler parameter
+Status | `TouchStatus` | Completed | Current touch status
+State | `TouchState` | Regular | Current touch state
+RegularBackgroundColor | `Color` | Default | Background color of regular state
+PressedBackgroundColor | `Color` | Default | Background color of pressed state
+RegularOpacity | `double` | 1.0 | Opacity of regular state
+PressedOpacity | `double` | 0.6 | Opacity of pressed state
+FadeDuration | `int` | 0 | Fade animation duration
+FadeEasing | `Easing` | null | Recover animation easing
+RecoverDuration | `int` | 0 | Recover animation duration
+RecoverEasing | `Easing` | null | Fade animation easing
+RegularBackgroundImageSource | `ImageSource` | null | Background image source of regular state
+PressedBackgroundImageSource | `ImageSource` | null | Background image source of pressed state
+RegularBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
+PressedBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
+BackgroundImage | `Image` | null | Background control (it will be created automatically, if RegularBackgroundImageAspect isn't null or PressedBackgroundImageSource aren't isn't null
+
 
 **If you want to customize/extend existing controls, you may observe State via triggers
 ```xml
