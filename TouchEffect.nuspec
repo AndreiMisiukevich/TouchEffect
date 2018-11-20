@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>TouchView</id>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <title>TouchView</title>
     <authors>Andrei Misiukevich</authors>
     <owners>Andrei Misiukevich</owners>
@@ -11,7 +11,7 @@
     <iconUrl>https://cdn0.iconfinder.com/data/icons/iphone-7-airpods-icons-solid-style/24/3d-touch-screen-512.png</iconUrl>
     <description>Touch handling for Xamarin Forms</description>
     <summary>This plugin provides opportunity to achieve UI-repsonse during touch interaction</summary>
-    <tags>touchView, touchImage, touchFadeView, touchColorView, touch, gesture, forms, xamarin forms, tapView</tags>
+    <tags>touchView, touchImage, touchFadeView, touchColorView, touch, gesture, forms, xamarin forms, tapView, ripple</tags>
     <dependencies>
       <group>
           <dependency id="Xamarin.Forms" version="2.4" />
