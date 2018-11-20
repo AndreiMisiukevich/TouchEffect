@@ -34,51 +34,18 @@ This plugin provides opportunity to create views with touch effects without usin
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
 
-**XAML:**
-* TouchImage (Set RegularSource and PressedSource)
+**XAML:** use TouchView for achieving responisve UI
 ```xml
-       <controls:TouchImage
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="CenterAndExpand"
-            HeightRequest="250"
-            WidthRequest="250"
-            RegularSource="button"
-            PressedSource="button_pressed"
-            Completed="Handle_TouchCompleted" />
+       <touch:TouchView
+            RegularBackgroundImageSource="button"  <!-- [optional]: Background image source of regular state. -->
+            PressedBackgroundImageSource="button_pressed" <!-- [optional]: Background image source of pressed state. -->
+            RegularBackgroundImageAspect="AspectFill" <!-- [optional]: Background image aspect of regular state. -->
+            PressedBackgroundImageAspect="AspectFill" <!-- [optional]: Background image aspect of pressed state. -->
+            Command={Binding Command} <!-- [optional]: Touch handler command. -->
+            Completed="Handle_TouchCompleted" /> <!-- [optional]: Touch handler code behind.-->
 ```
 
-* TouchFadeView (You may set RegularOpacity (1.0 by default), PressedOpacity (0.6 by default), FadeDuration (0 by default) and FadeEasing (null by default))
-```xml
-       <controls:TouchFadeView
-            Padding="10, 5"
-            BackgroundColor="Black"
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="CenterAndExpand"
-            Completed="Handle_TouchCompleted">
-
-            <Label Text="CLICK ME" 
-                   TextColor="White" 
-                   FontSize="60"/>
-        </controls:TouchFadeView>
-```
-
-* TouchColorView (Set RegularColor and PressedColor)
-```xml
-       <controls:TouchColorView
-            RegularColor="Black"
-            PressedColor="Maroon"
-            Padding="10, 5"
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="CenterAndExpand"
-            Completed="Handle_TouchCompleted">
-
-            <Label Text="CLICK ME" 
-                   TextColor="White" 
-                   FontSize="60"/>
-        </controls:TouchColorView>
-```
-
-* TouchView - if you want to customize/extend existing controls, you may add touchView and handle UI changes with triggers (Getting TouchImage is below)
+**If you want to customize/extend existing controls, you may observe State via triggers
 ```xml
        <touch:TouchView x:Name="container"
             HeightRequest="250"
@@ -89,12 +56,12 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
                     <DataTrigger TargetType="Image" 
                                  Binding="{Binding Source={x:Reference container}, Path=State}"
                                  Value="Regular">
-                        <Setter Property="Source" Value="button" />
+                        <Setter Property="Source" Value="icon_regular" />
                     </DataTrigger>
                     <DataTrigger TargetType="Image" 
                                  Binding="{Binding Source={x:Reference container}, Path=State}"
                                  Value="Pressed">
-                        <Setter Property="Source" Value="button_pressed" />
+                        <Setter Property="Source" Value="icon_pressed" />
                     </DataTrigger>
                 </Image.Triggers>
             </Image>
