@@ -13,4 +13,7 @@
     <Folder Include="Enums\" />
     <Folder Include="Controls\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controls\TouchColorView.cs" />
+  </ItemGroup>
 </Project>

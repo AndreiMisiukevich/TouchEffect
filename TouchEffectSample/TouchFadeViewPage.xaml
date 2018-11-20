@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:TouchEffect.Controls;assembly=TouchEffect"
+             xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
              x:Class="TouchEffectSample.TouchFadeViewPage"
              BackgroundColor="White"
              Title="TouchFadeViewPage">
     <StackLayout>
-       <controls:TouchFadeView
+       <touch:TouchView
+            FadeDuration="250"
             Padding="10, 5"
             BackgroundColor="Black"
             VerticalOptions="CenterAndExpand"
@@ -16,6 +17,7 @@
             <Label Text="CLICK ME" 
                    TextColor="White" 
                    FontSize="60"/>
-        </controls:TouchFadeView>
+            
+        </touch:TouchView>
     </StackLayout>
 </ContentPage>
