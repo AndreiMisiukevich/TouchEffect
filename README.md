@@ -36,11 +36,32 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
 
 **XAML:** use TouchView for achieving responisve UI (Changing background image or/and background color, Fading/Recovering)
 ```xml
-       <touch:TouchView
+...
+        <touch:TouchView
             RegularBackgroundImageSource="button"
             PressedBackgroundImageSource="button_pressed"
             PressedOpacity="1"
             Completed="Handle_TouchCompleted" />
+...
+        <touch:TouchView
+            FadeDuration="250"
+            RecoverDuration="250"             
+            Completed="Handle_TouchCompleted">
+
+            <Label Text="CLICK ME" />
+
+        </touch:TouchView>
+...
+       <touch:TouchView
+            RegularBackgroundColor="Black"
+            PressedBackgroundColor="Maroon"
+            PressedOpacity="1"
+            Completed="Handle_TouchCompleted">
+
+            <Label Text="CLICK ME"/>
+
+        </touch:TouchView>
+...
 ```
 
 ### All Properties
