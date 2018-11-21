@@ -77,10 +77,12 @@ RegularBackgroundColor | `Color` | Default | Background color of regular state
 PressedBackgroundColor | `Color` | Default | Background color of pressed state
 RegularOpacity | `double` | 1.0 | Opacity of regular state
 PressedOpacity | `double` | 0.6 | Opacity of pressed state
-PressedAnimationDuration | `int` | 0 | The duration of animation by applying PressedOpacity and/or PressedBackgroundColor
-PressedAnimationEasing | `Easing` | null | The easing of animation by applying PressedOpacity and/or PressedBackgroundColor
-RegularAnimationDuration | `int` | 0 | The duration of animation by applying RegularOpacity and/or RegularBackgroundColor
-RegularAnimationEasing | `Easing` | null | The easing of animation by applying RegularOpacity and/or RegularBackgroundColor
+RegularScale | `double` | 1.0 | Scale of regular state
+PressedScale | `double` | 1.0 | Scale of pressed state
+PressedAnimationDuration | `int` | 0 | The duration of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
+PressedAnimationEasing | `Easing` | null | The easing of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
+RegularAnimationDuration | `int` | 0 | The duration of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
+RegularAnimationEasing | `Easing` | null | The easing of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
 RegularBackgroundImageSource | `ImageSource` | null | Background image source of regular state
 PressedBackgroundImageSource | `ImageSource` | null | Background image source of pressed state
 RegularBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
