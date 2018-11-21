@@ -30,7 +30,11 @@ namespace YourApp.iOS
 ## TouchView
 This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer
 
-![Sample GIF](https://media.giphy.com/media/5BUTDOexcuBUvKxkPy/giphy.gif)
+<html>
+<p align="center">
+  <img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/Samples.gif?raw=true" height="500">
+</p>
+</html>
 
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
