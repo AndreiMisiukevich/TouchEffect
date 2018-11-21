@@ -46,8 +46,9 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
             Completed="Handle_TouchCompleted" />
 ...
         <touch:TouchView
-            FadeDuration="250"
-            RecoverDuration="250"             
+            PressedAnimationDuration="500"
+            RegularAnimationDuration="500"  
+            RippleCount="-1"           
             Completed="Handle_TouchCompleted">
 
             <Label Text="CLICK ME" />
@@ -55,9 +56,10 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
         </touch:TouchView>
 ...
        <touch:TouchView
-            RegularBackgroundColor="Black"
-            PressedBackgroundColor="Maroon"
+            PressedBackgroundColor="Red"
             PressedOpacity="1"
+            PressedScale = "1.1"
+            RippleCount="-1"  
             Completed="Handle_TouchCompleted">
 
             <Label Text="CLICK ME"/>
