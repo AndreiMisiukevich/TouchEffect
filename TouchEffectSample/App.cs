@@ -26,7 +26,7 @@ namespace TouchEffectSample
                             },
 							new Button
                             {
-                                Text = "TouchView (Background color)",
+                                Text = "TouchView (Background Color)",
                                 Command = new Command(() => MainPage.Navigation.PushAsync(new TouchColorViewPage()))
                             },
 						}

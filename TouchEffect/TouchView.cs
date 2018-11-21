@@ -4,17 +4,20 @@ using TouchEffect.EventArgs;
 using Xamarin.Forms;
 using TouchEffect.Enums;
 using static System.Math;
+using TouchEffect.Extensions;
 
 namespace TouchEffect
-{   
+{
     public class TouchView : AbsoluteLayout
     {
-		public event TouchViewStatusChangedHandler StatusChanged;
+        public const string ChangeBackgroundColorAnimationName = nameof(ChangeBackgroundColorAnimationName);
 
-		public event TouchViewStateChangedHandler StateChanged;
-        
+        public event TouchViewStatusChangedHandler StatusChanged;
+
+        public event TouchViewStateChangedHandler StateChanged;
+
         public event TouchViewCompletedHandler Completed;
-       
+
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(
             nameof(Command),
             typeof(ICommand),
@@ -27,15 +30,15 @@ namespace TouchEffect
             typeof(TouchView),
             default(object));
 
-		public static readonly BindableProperty StatusProperty = BindableProperty.Create(
-			nameof(Status),
-			typeof(TouchStatus),
-			typeof(TouchView),
-			TouchStatus.Completed); 
-        
-		public static readonly BindableProperty StateProperty = BindableProperty.Create(
-			nameof(State),
-			typeof(TouchState),
+        public static readonly BindableProperty StatusProperty = BindableProperty.Create(
+            nameof(Status),
+            typeof(TouchStatus),
+            typeof(TouchView),
+            TouchStatus.Completed);
+
+        public static readonly BindableProperty StateProperty = BindableProperty.Create(
+            nameof(State),
+            typeof(TouchState),
             typeof(TouchView),
             TouchState.Regular);
 
@@ -46,7 +49,7 @@ namespace TouchEffect
             default(Color),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty PressedBackgroundColorProperty = BindableProperty.Create(
@@ -56,7 +59,7 @@ namespace TouchEffect
             default(Color),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty RegularOpacityProperty = BindableProperty.Create(
@@ -66,7 +69,7 @@ namespace TouchEffect
             1.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty PressedOpacityProperty = BindableProperty.Create(
@@ -76,7 +79,7 @@ namespace TouchEffect
             0.6,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty FadeDurationProperty = BindableProperty.Create(
@@ -110,7 +113,7 @@ namespace TouchEffect
             default(ImageSource),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty PressedBackgroundImageSourceProperty = BindableProperty.Create(
@@ -120,7 +123,7 @@ namespace TouchEffect
             default(ImageSource),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty RegularBackgroundImageAspectProperty = BindableProperty.Create(
@@ -130,7 +133,7 @@ namespace TouchEffect
             default(Aspect),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty PressedBackgroundImageAspectProperty = BindableProperty.Create(
@@ -140,7 +143,7 @@ namespace TouchEffect
             default(Aspect),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public static readonly BindableProperty BackgroundImageProperty = BindableProperty.Create(
@@ -151,13 +154,13 @@ namespace TouchEffect
             BindingMode.TwoWay,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                (bindable as TouchView)?.ForceStateChanged();
+                bindable.AsTouchView().ForceStateChanged();
             });
 
         public TouchView()
-		{
-			StateChanged += OnStateChanged;
-		}
+        {
+            StateChanged += OnStateChanged;
+        }
 
         public ICommand Command
         {
@@ -171,16 +174,16 @@ namespace TouchEffect
             set => SetValue(CommandParameterProperty, value);
         }
 
-		public TouchStatus Status
+        public TouchStatus Status
         {
-			get => (TouchStatus)GetValue(StatusProperty);
-			set => SetValue(StatusProperty, value);
+            get => (TouchStatus)GetValue(StatusProperty);
+            set => SetValue(StatusProperty, value);
         }
 
-		public TouchState State
+        public TouchState State
         {
-			get => (TouchState)GetValue(StateProperty);
-			set => SetValue(StateProperty, value);
+            get => (TouchState)GetValue(StateProperty);
+            set => SetValue(StateProperty, value);
         }
 
         public Color RegularBackgroundColor
@@ -263,36 +266,31 @@ namespace TouchEffect
 
         public void HandleTouch(TouchStatus status)
         {
-			var canExecuteCommand = !IsEnabled || Command == null || Completed == null;
-            
-			if(status != TouchStatus.Started || canExecuteCommand)
-            {
+            var canExecuteCommand = !IsEnabled || Command == null || Completed == null;
 
-				State = status == TouchStatus.Started
+            if (status != TouchStatus.Started || canExecuteCommand)
+            {
+                State = status == TouchStatus.Started
                   ? TouchState.Pressed
                   : TouchState.Regular;
-				
-				Status = status;
+
+                Status = status;
                 StateChanged?.Invoke(this, new TouchStateChangedEventArgs(State));
-				StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
+                StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
             }
 
-			if(status == TouchStatus.Completed && canExecuteCommand)
+            if (status == TouchStatus.Completed && canExecuteCommand)
             {
                 Command?.Execute(CommandParameter);
-				Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
+                Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
             }
         }
 
         protected virtual void OnStateChanged(TouchView sender, TouchStateChangedEventArgs args)
         {
             var state = args.State;
-
-            BatchBegin();
-            SetBackgroundColor(state);
             SetBackgroundImage(state);
-            BatchCommit();
-
+            SetBackgroundColor(state);
             SetOpacity(state);
         }
 
@@ -315,15 +313,35 @@ namespace TouchEffect
             var regularBackgroundColor = RegularBackgroundColor;
             var pressedBackgroundColor = PressedBackgroundColor;
 
-            if(regularBackgroundColor == Color.Default && 
+            if (regularBackgroundColor == Color.Default &&
                pressedBackgroundColor == Color.Default)
             {
                 return;
             }
 
-            BackgroundColor = state == TouchState.Regular
-                    ? regularBackgroundColor
-                    : pressedBackgroundColor;
+            var color = regularBackgroundColor;
+            var duration = RecoverDuration;
+            var easing = RecoverEasing;
+
+            if (state == TouchState.Pressed)
+            {
+                color = pressedBackgroundColor;
+                duration = FadeDuration;
+                easing = FadeEasing;
+            }
+
+            if (duration <= 0)
+            {
+                BackgroundColor = color;
+                return;
+            }
+
+            new Animation{
+                {0, 1,  new Animation(v => BackgroundColor = new Color(v, BackgroundColor.G, BackgroundColor.B, BackgroundColor.A), BackgroundColor.R, color.R) },
+                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, v, BackgroundColor.B, BackgroundColor.A), BackgroundColor.G, color.G) },
+                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, v, BackgroundColor.A), BackgroundColor.B, color.B) },
+                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, v), BackgroundColor.A, color.A) },
+            }.Commit(this, ChangeBackgroundColorAnimationName, 16, (uint)duration, easing);
         }
 
         protected void SetBackgroundImage(TouchState state)
@@ -331,7 +349,7 @@ namespace TouchEffect
             var regularBackgroundImageSource = RegularBackgroundImageSource;
             var pressedBackgroundImageSource = PressedBackgroundImageSource;
 
-            if (regularBackgroundImageSource == null && 
+            if (regularBackgroundImageSource == null &&
                 pressedBackgroundImageSource == null)
             {
                 return;
@@ -339,13 +357,13 @@ namespace TouchEffect
 
             var aspect = RegularBackgroundImageAspect;
             var source = regularBackgroundImageSource;
-            if(state == TouchState.Pressed)
+            if (state == TouchState.Pressed)
             {
                 aspect = PressedBackgroundImageAspect;
                 source = pressedBackgroundImageSource;
             }
 
-            if(BackgroundImage == null)
+            if (BackgroundImage == null)
             {
                 BackgroundImage = new Image();
                 SetLayoutFlags(BackgroundImage, AbsoluteLayoutFlags.All);
@@ -367,12 +385,17 @@ namespace TouchEffect
                 return;
             }
 
-            if (state == TouchState.Regular)
+            var opacity = regularOpacity;
+            var duration = RecoverDuration;
+            var easing = RecoverEasing;
+
+            if (state == TouchState.Pressed)
             {
-                this.FadeTo(regularOpacity, (uint)Abs(RecoverDuration), RecoverEasing);
-                return;
+                opacity = pressedOpacity;
+                duration = FadeDuration;
+                easing = FadeEasing;
             }
-            this.FadeTo(pressedOpacity, (uint)Abs(FadeDuration), FadeEasing);
+            this.FadeTo(opacity, (uint)Abs(duration), easing);
         }
     }
 }

@@ -7,15 +7,18 @@
              Title="TouchColorViewPage">
     <StackLayout>
        <touch:TouchView
-            RegularBackgroundColor="Black"
-            PressedBackgroundColor="Maroon"
+            RegularBackgroundColor="Green"
+            PressedBackgroundColor="Red"
+            PressedOpacity="1"
+            FadeDuration="500"
+            RecoverDuration="500"
             Padding="10, 5"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand"
             Completed="Handle_TouchCompleted">
 
             <Label Text="CLICK ME" 
-                   TextColor="White" 
+                   TextColor="Black" 
                    FontSize="60"/>
         </touch:TouchView>
     </StackLayout>
