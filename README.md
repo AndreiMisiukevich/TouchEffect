@@ -94,7 +94,7 @@ PressedBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of
 RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
 BackgroundImage | `Image` | null | Background control (it will be created automatically, if RegularBackgroundImageAspect isn't null or PressedBackgroundImageSource aren't isn't null
 
-**If you want to customize/extend existing controls, you may observe State via triggers
+**If you want to customize/extend existing controls, you may observe State via triggers**
 ```xml
        <touch:TouchView x:Name="container"
             HeightRequest="250"
