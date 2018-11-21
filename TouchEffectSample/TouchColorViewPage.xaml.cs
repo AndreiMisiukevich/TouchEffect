@@ -14,7 +14,7 @@ namespace TouchEffectSample
 
 		private void Handle_TouchCompleted(TouchEffect.TouchView sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
         {
-            //DisplayAlert("Thank you", ":)", "OK");
+            DisplayAlert("Thank you", ":)", "OK");
         }
     }
 }
