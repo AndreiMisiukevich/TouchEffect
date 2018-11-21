@@ -82,26 +82,26 @@ namespace TouchEffect
                 bindable.AsTouchView().ForceStateChanged();
             });
 
-        public static readonly BindableProperty FadeDurationProperty = BindableProperty.Create(
-            nameof(FadeDuration),
+        public static readonly BindableProperty PressedAnimationDurationProperty = BindableProperty.Create(
+            nameof(PressedAnimationDuration),
             typeof(int),
             typeof(TouchView),
             0);
 
-        public static readonly BindableProperty FadeEasingProperty = BindableProperty.Create(
-            nameof(FadeEasing),
+        public static readonly BindableProperty PressedAnimationEasingProperty = BindableProperty.Create(
+            nameof(PressedAnimationEasing),
             typeof(Easing),
             typeof(TouchView),
             null);
 
-        public static readonly BindableProperty RecoverDurationProperty = BindableProperty.Create(
-            nameof(RecoverDuration),
+        public static readonly BindableProperty RegularAnimationDurationProperty = BindableProperty.Create(
+            nameof(RegularAnimationDuration),
             typeof(int),
             typeof(TouchView),
             0);
 
-        public static readonly BindableProperty RecoverEasingProperty = BindableProperty.Create(
-            nameof(RecoverEasing),
+        public static readonly BindableProperty RegularAnimationEasingProperty = BindableProperty.Create(
+            nameof(RegularAnimationEasing),
             typeof(Easing),
             typeof(TouchView),
             null);
@@ -210,28 +210,28 @@ namespace TouchEffect
             set => SetValue(PressedOpacityProperty, value);
         }
 
-        public int FadeDuration
+        public int PressedAnimationDuration
         {
-            get => (int)GetValue(FadeDurationProperty);
-            set => SetValue(FadeDurationProperty, value);
+            get => (int)GetValue(PressedAnimationDurationProperty);
+            set => SetValue(PressedAnimationDurationProperty, value);
         }
 
-        public Easing FadeEasing
+        public Easing PressedAnimationEasing
         {
-            get => GetValue(FadeEasingProperty) as Easing;
-            set => SetValue(FadeEasingProperty, value);
+            get => GetValue(PressedAnimationEasingProperty) as Easing;
+            set => SetValue(PressedAnimationEasingProperty, value);
         }
 
-        public int RecoverDuration
+        public int RegularAnimationDuration
         {
-            get => (int)GetValue(RecoverDurationProperty);
-            set => SetValue(RecoverDurationProperty, value);
+            get => (int)GetValue(RegularAnimationDurationProperty);
+            set => SetValue(RegularAnimationDurationProperty, value);
         }
 
-        public Easing RecoverEasing
+        public Easing RegularAnimationEasing
         {
-            get => GetValue(RecoverEasingProperty) as Easing;
-            set => SetValue(RecoverEasingProperty, value);
+            get => GetValue(RegularAnimationEasingProperty) as Easing;
+            set => SetValue(RegularAnimationEasingProperty, value);
         }
 
         public ImageSource RegularBackgroundImageSource
@@ -320,14 +320,14 @@ namespace TouchEffect
             }
 
             var color = regularBackgroundColor;
-            var duration = RecoverDuration;
-            var easing = RecoverEasing;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
 
             if (state == TouchState.Pressed)
             {
                 color = pressedBackgroundColor;
-                duration = FadeDuration;
-                easing = FadeEasing;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
             }
 
             if (duration <= 0)
@@ -386,14 +386,14 @@ namespace TouchEffect
             }
 
             var opacity = regularOpacity;
-            var duration = RecoverDuration;
-            var easing = RecoverEasing;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
 
             if (state == TouchState.Pressed)
             {
                 opacity = pressedOpacity;
-                duration = FadeDuration;
-                easing = FadeEasing;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
             }
             this.FadeTo(opacity, (uint)Abs(duration), easing);
         }

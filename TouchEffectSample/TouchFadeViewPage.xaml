@@ -7,7 +7,7 @@
              Title="TouchFadeViewPage">
     <StackLayout>
        <touch:TouchView
-            FadeDuration="250"
+            PressedAnimationDuration="250"
             Padding="10, 5"
             BackgroundColor="Black"
             VerticalOptions="CenterAndExpand"
