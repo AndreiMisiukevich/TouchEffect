@@ -5,6 +5,8 @@ using Xamarin.Forms;
 using TouchEffect.Enums;
 using static System.Math;
 using TouchEffect.Extensions;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace TouchEffect
 {
@@ -106,7 +108,7 @@ namespace TouchEffect
             nameof(PressedAnimationDuration),
             typeof(int),
             typeof(TouchView),
-            0);
+            default(int));
 
         public static readonly BindableProperty PressedAnimationEasingProperty = BindableProperty.Create(
             nameof(PressedAnimationEasing),
@@ -118,7 +120,7 @@ namespace TouchEffect
             nameof(RegularAnimationDuration),
             typeof(int),
             typeof(TouchView),
-            0);
+            default(int));
 
         public static readonly BindableProperty RegularAnimationEasingProperty = BindableProperty.Create(
             nameof(RegularAnimationEasing),
@@ -166,6 +168,16 @@ namespace TouchEffect
                 bindable.AsTouchView().ForceStateChanged();
             });
 
+        public static readonly BindableProperty RippleCountProperty = BindableProperty.Create(
+            nameof(RippleCount),
+            typeof(int),
+            typeof(TouchView),
+            default(int),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
         public static readonly BindableProperty BackgroundImageProperty = BindableProperty.Create(
             nameof(BackgroundImage),
             typeof(Image),
@@ -176,6 +188,9 @@ namespace TouchEffect
             {
                 bindable.AsTouchView().ForceStateChanged();
             });
+
+        private readonly object _backgroundImageLocker = new object();
+        private CancellationTokenSource _animationTokenSource;
 
         public TouchView()
         {
@@ -290,6 +305,12 @@ namespace TouchEffect
             set => SetValue(PressedBackgroundImageAspectProperty, value);
         }
 
+        public int RippleCount
+        {
+            get => (int)GetValue(RippleCountProperty);
+            set => SetValue(RippleCountProperty, value);
+        }
+
         public Image BackgroundImage
         {
             get => GetValue(BackgroundImageProperty) as Image;
@@ -318,15 +339,6 @@ namespace TouchEffect
             }
         }
 
-        protected virtual void OnStateChanged(TouchView sender, TouchStateChangedEventArgs args)
-        {
-            var state = args.State;
-            SetBackgroundImage(state);
-            SetBackgroundColor(state);
-            SetOpacity(state);
-            SetScale(state);
-        }
-
         protected override void OnChildAdded(Element child)
         {
             if (GetLayoutFlags(child) == default(AbsoluteLayoutFlags) &&
@@ -338,44 +350,38 @@ namespace TouchEffect
             base.OnChildAdded(child);
         }
 
+        protected async void OnStateChanged(TouchView sender, TouchStateChangedEventArgs args)
+        {
+            _animationTokenSource?.Cancel();
+            _animationTokenSource = new CancellationTokenSource();
+            var token = _animationTokenSource.Token;
+
+            var state = args.State;
+            SetBackgroundImage(state);
+            var rippleCount = RippleCount;
+
+            if (rippleCount == 0 || state == TouchState.Regular)
+            {
+                await GetAnimationTask(state);
+                return;
+            }
+            do
+            {
+                await GetAnimationTask(TouchState.Pressed);
+                if(token.IsCancellationRequested)
+                {
+                    return;
+                }
+                await GetAnimationTask(TouchState.Regular);
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+            } while (--rippleCount != 0);
+        }
+
         protected void ForceStateChanged()
         => OnStateChanged(this, new TouchStateChangedEventArgs(State));
-
-        protected void SetBackgroundColor(TouchState state)
-        {
-            var regularBackgroundColor = RegularBackgroundColor;
-            var pressedBackgroundColor = PressedBackgroundColor;
-
-            if (regularBackgroundColor == Color.Default &&
-               pressedBackgroundColor == Color.Default)
-            {
-                return;
-            }
-
-            var color = regularBackgroundColor;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                color = pressedBackgroundColor;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-
-            if (duration <= 0)
-            {
-                BackgroundColor = color;
-                return;
-            }
-
-            new Animation{
-                {0, 1,  new Animation(v => BackgroundColor = new Color(v, BackgroundColor.G, BackgroundColor.B, BackgroundColor.A), BackgroundColor.R, color.R) },
-                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, v, BackgroundColor.B, BackgroundColor.A), BackgroundColor.G, color.G) },
-                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, v, BackgroundColor.A), BackgroundColor.B, color.B) },
-                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, v), BackgroundColor.A, color.A) },
-            }.Commit(this, ChangeBackgroundColorAnimationName, 16, (uint)duration, easing);
-        }
 
         protected void SetBackgroundImage(TouchState state)
         {
@@ -405,7 +411,45 @@ namespace TouchEffect
             BackgroundImage.Source = source;
         }
 
-        protected void SetOpacity(TouchState state)
+        protected async Task SetBackgroundColor(TouchState state)
+        {
+            var regularBackgroundColor = RegularBackgroundColor;
+            var pressedBackgroundColor = PressedBackgroundColor;
+
+            if (regularBackgroundColor == Color.Default &&
+               pressedBackgroundColor == Color.Default)
+            {
+                return;
+            }
+
+            var color = regularBackgroundColor;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
+
+            if (state == TouchState.Pressed)
+            {
+                color = pressedBackgroundColor;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
+            }
+
+            if (duration <= 0)
+            {
+                BackgroundColor = color;
+                return;
+            }
+
+            var animationCompletionSource = new TaskCompletionSource<bool>();
+            new Animation{
+                {0, 1,  new Animation(v => BackgroundColor = new Color(v, BackgroundColor.G, BackgroundColor.B, BackgroundColor.A), BackgroundColor.R, color.R) },
+                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, v, BackgroundColor.B, BackgroundColor.A), BackgroundColor.G, color.G) },
+                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, v, BackgroundColor.A), BackgroundColor.B, color.B) },
+                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, v), BackgroundColor.A, color.A) },
+            }.Commit(this, ChangeBackgroundColorAnimationName, 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
+            await animationCompletionSource.Task;
+        }
+
+        protected async Task SetOpacity(TouchState state)
         {
             var regularOpacity = RegularOpacity;
             var pressedOpacity = PressedOpacity;
@@ -426,10 +470,10 @@ namespace TouchEffect
                 duration = PressedAnimationDuration;
                 easing = PressedAnimationEasing;
             }
-            this.FadeTo(opacity, (uint)Abs(duration), easing);
+            await this.FadeTo(opacity, (uint)Abs(duration), easing);
         }
 
-        protected void SetScale(TouchState state)
+        protected async Task SetScale(TouchState state)
         {
             var regularScale = RegularScale;
             var pressedScale = PressedScale;
@@ -450,7 +494,10 @@ namespace TouchEffect
                 duration = PressedAnimationDuration;
                 easing = PressedAnimationEasing;
             }
-            this.ScaleTo(scale, (uint)Abs(duration), easing);
+            await this.ScaleTo(scale, (uint)Abs(duration), easing);
         }
+
+        private Task GetAnimationTask(TouchState state) 
+        => Task.WhenAll(SetBackgroundColor(state), SetOpacity(state), SetScale(state));
     }
 }
