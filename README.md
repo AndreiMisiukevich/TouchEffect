@@ -37,7 +37,7 @@ namespace YourApp.iOS
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
 
-**XAML:** use TouchView for achieving responisve UI (Changing background image or/and background color, Fading/Recovering)
+**XAML:** use TouchView for achieving responisve UI (Changing background image or/and background color or/and opacity or/and scale)
 
 ```xml
 ...
