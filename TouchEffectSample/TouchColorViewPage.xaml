@@ -10,6 +10,8 @@
             RegularBackgroundColor="Green"
             PressedBackgroundColor="Red"
             PressedOpacity="1"
+            PressedScale="1.2"
+            RippleCount="1"
             PressedAnimationDuration="500"
             RegularAnimationDuration="500"
             Padding="10, 5"

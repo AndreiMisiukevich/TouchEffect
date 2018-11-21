@@ -11,6 +11,7 @@
             HorizontalOptions="CenterAndExpand"
             HeightRequest="250"
             WidthRequest="250"
+            PressedOpacity="1"
             RegularBackgroundImageSource="button"
             PressedBackgroundImageSource="button_pressed"
             Completed="Handle_TouchCompleted" />
