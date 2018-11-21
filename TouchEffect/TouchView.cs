@@ -82,6 +82,26 @@ namespace TouchEffect
                 bindable.AsTouchView().ForceStateChanged();
             });
 
+        public static readonly BindableProperty RegularScaleProperty = BindableProperty.Create(
+            nameof(RegularScale),
+            typeof(double),
+            typeof(TouchView),
+            1.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty PressedScaleProperty = BindableProperty.Create(
+            nameof(PressedScale),
+            typeof(double),
+            typeof(TouchView),
+            1.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
         public static readonly BindableProperty PressedAnimationDurationProperty = BindableProperty.Create(
             nameof(PressedAnimationDuration),
             typeof(int),
@@ -210,6 +230,18 @@ namespace TouchEffect
             set => SetValue(PressedOpacityProperty, value);
         }
 
+        public double RegularScale
+        {
+            get => (double)GetValue(RegularOpacityProperty);
+            set => SetValue(RegularOpacityProperty, value);
+        }
+
+        public double PressedScale
+        {
+            get => (double)GetValue(PressedOpacityProperty);
+            set => SetValue(PressedOpacityProperty, value);
+        }
+
         public int PressedAnimationDuration
         {
             get => (int)GetValue(PressedAnimationDurationProperty);
@@ -292,6 +324,7 @@ namespace TouchEffect
             SetBackgroundImage(state);
             SetBackgroundColor(state);
             SetOpacity(state);
+            SetScale(state);
         }
 
         protected override void OnChildAdded(Element child)
@@ -396,6 +429,30 @@ namespace TouchEffect
                 easing = PressedAnimationEasing;
             }
             this.FadeTo(opacity, (uint)Abs(duration), easing);
+        }
+
+        protected void SetScale(TouchState state)
+        {
+            var regularScale = RegularScale;
+            var pressedScale = PressedScale;
+
+            if (Abs(regularScale - 1) <= double.Epsilon &&
+               Abs(pressedScale - 1) <= double.Epsilon)
+            {
+                return;
+            }
+
+            var scale = regularScale;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
+
+            if (state == TouchState.Pressed)
+            {
+                scale = pressedScale;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
+            }
+            this.ScaleTo(scale, (uint)Abs(duration), easing);
         }
     }
 }
