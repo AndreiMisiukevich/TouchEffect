@@ -299,8 +299,8 @@ namespace TouchEffect
             if (GetLayoutFlags(child) == default(AbsoluteLayoutFlags) &&
                GetLayoutBounds(child) == default(Rectangle))
             {
-                SetLayoutFlags(child, AbsoluteLayoutFlags.PositionProportional);
-                SetLayoutBounds(child, new Rectangle(.5, .5, -1, -1));
+                SetLayoutFlags(child, AbsoluteLayoutFlags.All);
+                SetLayoutBounds(child, new Rectangle(0, 0, 1, 1));
             }
             base.OnChildAdded(child);
         }
