@@ -232,14 +232,14 @@ namespace TouchEffect
 
         public double RegularScale
         {
-            get => (double)GetValue(RegularOpacityProperty);
-            set => SetValue(RegularOpacityProperty, value);
+            get => (double)GetValue(RegularScaleProperty);
+            set => SetValue(RegularScaleProperty, value);
         }
 
         public double PressedScale
         {
-            get => (double)GetValue(PressedOpacityProperty);
-            set => SetValue(PressedOpacityProperty, value);
+            get => (double)GetValue(PressedScaleProperty);
+            set => SetValue(PressedScaleProperty, value);
         }
 
         public int PressedAnimationDuration
@@ -399,8 +399,6 @@ namespace TouchEffect
             if (BackgroundImage == null)
             {
                 BackgroundImage = new Image();
-                SetLayoutFlags(BackgroundImage, AbsoluteLayoutFlags.All);
-                SetLayoutBounds(BackgroundImage, new Rectangle(0, 0, 1, 1));
                 Children.Insert(0, BackgroundImage);
             }
             BackgroundImage.Aspect = aspect;
