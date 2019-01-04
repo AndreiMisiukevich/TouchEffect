@@ -104,6 +104,106 @@ namespace TouchEffect
                 bindable.AsTouchView().ForceStateChanged();
             });
 
+        public static readonly BindableProperty RegularTranslationXProperty = BindableProperty.Create(
+            nameof(RegularTranslationX),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty PressedTranslationXProperty = BindableProperty.Create(
+            nameof(PressedTranslationX),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty RegularTranslationYProperty = BindableProperty.Create(
+            nameof(RegularTranslationY),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty PressedTranslationYProperty = BindableProperty.Create(
+            nameof(PressedTranslationY),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty RegularRotationProperty = BindableProperty.Create(
+            nameof(RegularRotation),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty PressedRotationProperty = BindableProperty.Create(
+            nameof(PressedRotation),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty RegularRotationXProperty = BindableProperty.Create(
+            nameof(RegularRotationX),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty PressedRotationXProperty = BindableProperty.Create(
+            nameof(PressedRotationX),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty RegularRotationYProperty = BindableProperty.Create(
+            nameof(RegularRotationY),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
+        public static readonly BindableProperty PressedRotationYProperty = BindableProperty.Create(
+            nameof(PressedRotationY),
+            typeof(double),
+            typeof(TouchView),
+            0.0,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.AsTouchView().ForceStateChanged();
+            });
+
         public static readonly BindableProperty PressedAnimationDurationProperty = BindableProperty.Create(
             nameof(PressedAnimationDuration),
             typeof(int),
@@ -255,6 +355,66 @@ namespace TouchEffect
         {
             get => (double)GetValue(PressedScaleProperty);
             set => SetValue(PressedScaleProperty, value);
+        }
+
+        public double RegularTranslationX
+        {
+            get => (double)GetValue(RegularTranslationXProperty);
+            set => SetValue(RegularTranslationXProperty, value);
+        }
+
+        public double PressedTranslationX
+        {
+            get => (double)GetValue(PressedTranslationXProperty);
+            set => SetValue(PressedTranslationXProperty, value);
+        }
+
+        public double RegularTranslationY
+        {
+            get => (double)GetValue(RegularTranslationYProperty);
+            set => SetValue(RegularTranslationYProperty, value);
+        }
+
+        public double PressedTranslationY
+        {
+            get => (double)GetValue(PressedTranslationYProperty);
+            set => SetValue(PressedTranslationYProperty, value);
+        }
+
+        public double RegularRotation
+        {
+            get => (double)GetValue(RegularRotationProperty);
+            set => SetValue(RegularRotationProperty, value);
+        }
+
+        public double PressedRotation
+        {
+            get => (double)GetValue(PressedRotationProperty);
+            set => SetValue(PressedRotationProperty, value);
+        }
+
+        public double RegularRotationX
+        {
+            get => (double)GetValue(RegularRotationXProperty);
+            set => SetValue(RegularRotationXProperty, value);
+        }
+
+        public double PressedRotationX
+        {
+            get => (double)GetValue(PressedRotationXProperty);
+            set => SetValue(PressedRotationXProperty, value);
+        }
+
+        public double RegularRotationY
+        {
+            get => (double)GetValue(RegularRotationYProperty);
+            set => SetValue(RegularRotationYProperty, value);
+        }
+
+        public double PressedRotationY
+        {
+            get => (double)GetValue(PressedRotationYProperty);
+            set => SetValue(PressedRotationYProperty, value);
         }
 
         public int PressedAnimationDuration
@@ -497,7 +657,117 @@ namespace TouchEffect
             await this.ScaleTo(scale, (uint)Abs(duration), easing);
         }
 
-        private Task GetAnimationTask(TouchState state) 
-        => Task.WhenAll(SetBackgroundColor(state), SetOpacity(state), SetScale(state));
+        protected async Task SetTranslation(TouchState state)
+        {
+            var regularTranslationX = RegularTranslationX;
+            var pressedTranslationX = PressedTranslationX;
+
+            var regularTranslationY = RegularTranslationY;
+            var pressedTranslationY = PressedTranslationY;
+
+            if (Abs(regularTranslationX) <= double.Epsilon &&
+                Abs(pressedTranslationX) <= double.Epsilon && 
+                Abs(regularTranslationY) <= double.Epsilon &&
+                Abs(pressedTranslationY) <= double.Epsilon)
+            {
+                return;
+            }
+
+            var translationX = regularTranslationX;
+            var translationY = regularTranslationY;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
+
+            if (state == TouchState.Pressed)
+            {
+                translationX = pressedTranslationX;
+                translationY = pressedTranslationY;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
+            }
+
+            await this.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
+        }
+
+        protected async Task SetRotation(TouchState state)
+        {
+            var regularRotation = RegularRotation;
+            var pressedRotation = PressedRotation;
+
+            if (Abs(regularRotation) <= double.Epsilon &&
+               Abs(pressedRotation) <= double.Epsilon)
+            {
+                return;
+            }
+
+            var rotation = regularRotation;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
+
+            if (state == TouchState.Pressed)
+            {
+                rotation = pressedRotation;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
+            }
+            await this.RotateTo(rotation, (uint)Abs(duration), easing);
+        }
+
+        protected async Task SetRotationX(TouchState state)
+        {
+            var regularRotationX = RegularRotationX;
+            var pressedRotationX = PressedRotationX;
+
+            if (Abs(regularRotationX) <= double.Epsilon &&
+               Abs(pressedRotationX) <= double.Epsilon)
+            {
+                return;
+            }
+
+            var rotationX = regularRotationX;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
+
+            if (state == TouchState.Pressed)
+            {
+                rotationX = pressedRotationX;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
+            }
+            await this.RotateXTo(rotationX, (uint)Abs(duration), easing);
+        }
+
+        protected async Task SetRotationY(TouchState state)
+        {
+            var regularRotationY = RegularRotationY;
+            var pressedRotationY = PressedRotationY;
+
+            if (Abs(regularRotationY) <= double.Epsilon &&
+               Abs(pressedRotationY) <= double.Epsilon)
+            {
+                return;
+            }
+
+            var rotationY = regularRotationY;
+            var duration = RegularAnimationDuration;
+            var easing = RegularAnimationEasing;
+
+            if (state == TouchState.Pressed)
+            {
+                rotationY = pressedRotationY;
+                duration = PressedAnimationDuration;
+                easing = PressedAnimationEasing;
+            }
+            await this.RotateYTo(rotationY, (uint)Abs(duration), easing);
+        }
+
+        private Task GetAnimationTask(TouchState state)
+        => Task.WhenAll(SetBackgroundColor(state),
+            SetOpacity(state),
+            SetScale(state),
+            SetTranslation(state),
+            SetRotation(state),
+            SetRotationX(state),
+            SetRotationY(state));
     }
 }
