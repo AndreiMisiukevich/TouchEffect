@@ -83,6 +83,16 @@ RegularOpacity | `double` | 1.0 | Opacity of regular state
 PressedOpacity | `double` | 0.6 | Opacity of pressed state
 RegularScale | `double` | 1.0 | Scale of regular state
 PressedScale | `double` | 1.0 | Scale of pressed state
+RegularTranslationX | `double` | 0.0 | TranslationX of regular state
+PressedTranslationX | `double` | 0.0 | TranslationX of pressed state
+RegularTranslationY | `double` | 0.0 | TranslationY of regular state
+PressedTranslationY | `double` | 0.0 | TranslationY of pressed state
+RegularRotation | `double` | 0.0 | Rotation of regular state
+PressedRotation | `double` | 0.0 | Rotation of pressed state
+RegularRotationX | `double` | 0.0 | RotationX of regular state
+PressedRotationX | `double` | 0.0 | RotationX of pressed state
+RegularRotationY | `double` | 0.0 | RotationY of regular state
+PressedRotationY | `double` | 0.0 | RotationY of pressed state
 PressedAnimationDuration | `int` | 0 | The duration of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
 PressedAnimationEasing | `Easing` | null | The easing of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
 RegularAnimationDuration | `int` | 0 | The duration of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
