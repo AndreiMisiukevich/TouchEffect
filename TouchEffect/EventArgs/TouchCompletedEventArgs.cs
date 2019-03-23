@@ -1,7 +1,6 @@
-﻿using System;
-namespace TouchEffect.EventArgs
+﻿namespace TouchEffect.EventArgs
 {
-	public class TouchCompletedEventArgs : System.EventArgs
+    public class TouchCompletedEventArgs : System.EventArgs
 	{
 		public TouchCompletedEventArgs(object parameter)
 		{

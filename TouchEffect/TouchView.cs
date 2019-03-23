@@ -36,13 +36,15 @@ namespace TouchEffect
             nameof(Status),
             typeof(TouchStatus),
             typeof(TouchView),
-            TouchStatus.Completed);
+            TouchStatus.Completed,
+            BindingMode.OneWayToSource);
 
         public static readonly BindableProperty StateProperty = BindableProperty.Create(
             nameof(State),
             typeof(TouchState),
             typeof(TouchView),
-            TouchState.Regular);
+            TouchState.Regular,
+            BindingMode.OneWayToSource);
 
         public static readonly BindableProperty RegularBackgroundColorProperty = BindableProperty.Create(
             nameof(RegularBackgroundColor),
@@ -479,7 +481,7 @@ namespace TouchEffect
 
         public void HandleTouch(TouchStatus status)
         {
-            var canExecuteCommand = !IsEnabled || Command == null || Completed == null;
+            var canExecuteCommand = IsEnabled && (Command != null || Completed != null);
 
             if (status != TouchStatus.Started || canExecuteCommand)
             {
@@ -541,7 +543,7 @@ namespace TouchEffect
         }
 
         protected void ForceStateChanged()
-        => OnStateChanged(this, new TouchStateChangedEventArgs(State));
+            => OnStateChanged(this, new TouchStateChangedEventArgs(State));
 
         protected void SetBackgroundImage(TouchState state)
         {
@@ -762,12 +764,12 @@ namespace TouchEffect
         }
 
         private Task GetAnimationTask(TouchState state)
-        => Task.WhenAll(SetBackgroundColor(state),
-            SetOpacity(state),
-            SetScale(state),
-            SetTranslation(state),
-            SetRotation(state),
-            SetRotationX(state),
-            SetRotationY(state));
+            => Task.WhenAll(SetBackgroundColor(state),
+                SetOpacity(state),
+                SetScale(state),
+                SetTranslation(state),
+                SetRotation(state),
+                SetRotationX(state),
+                SetRotationY(state));
     }
 }
