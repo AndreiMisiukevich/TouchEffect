@@ -494,7 +494,7 @@ namespace TouchEffect
                 StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
             }
 
-            if (status == TouchStatus.Completed && canExecuteCommand)
+            if (status != TouchStatus.Started && canExecuteCommand)
             {
                 Command?.Execute(CommandParameter);
                 Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
@@ -503,8 +503,8 @@ namespace TouchEffect
 
         protected override void OnChildAdded(Element child)
         {
-            if (GetLayoutFlags(child) == default(AbsoluteLayoutFlags) &&
-               GetLayoutBounds(child) == default(Rectangle))
+            if (GetLayoutFlags(child) == AbsoluteLayoutFlags.None &&
+               GetLayoutBounds(child) == new Rectangle(0, 0, -1, -1))
             {
                 SetLayoutFlags(child, AbsoluteLayoutFlags.All);
                 SetLayoutBounds(child, new Rectangle(0, 0, 1, 1));
@@ -517,6 +517,8 @@ namespace TouchEffect
             _animationTokenSource?.Cancel();
             _animationTokenSource = new CancellationTokenSource();
             var token = _animationTokenSource.Token;
+            ViewExtensions.CancelAnimations(this);
+            AnimationExtensions.AbortAnimation(this, ChangeBackgroundColorAnimationName);
 
             var state = args.State;
             SetBackgroundImage(state);
