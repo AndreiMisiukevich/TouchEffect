@@ -297,6 +297,10 @@ namespace TouchEffect
         public TouchView()
         {
             StateChanged += OnStateChanged;
+            GestureRecognizers.Add(new TapGestureRecognizer
+            {
+                Command = new Command(HandleTap)
+            });
         }
 
         public ICommand Command
@@ -481,9 +485,7 @@ namespace TouchEffect
 
         public void HandleTouch(TouchStatus status)
         {
-            var canExecuteCommand = IsEnabled && (Command != null || Completed != null);
-
-            if (status != TouchStatus.Started || canExecuteCommand)
+            if (status != TouchStatus.Started || (IsEnabled && (Command != null || Completed != null)))
             {
                 State = status == TouchStatus.Started
                   ? TouchState.Pressed
@@ -492,12 +494,6 @@ namespace TouchEffect
                 Status = status;
                 StateChanged?.Invoke(this, new TouchStateChangedEventArgs(State));
                 StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
-            }
-
-            if (status != TouchStatus.Started && canExecuteCommand)
-            {
-                Command?.Execute(CommandParameter);
-                Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
             }
         }
 
@@ -763,6 +759,12 @@ namespace TouchEffect
                 easing = PressedAnimationEasing;
             }
             await this.RotateYTo(rotationY, (uint)Abs(duration), easing);
+        }
+
+        private void HandleTap()
+        {
+            Command?.Execute(CommandParameter);
+            Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
         }
 
         private Task GetAnimationTask(TouchState state)
