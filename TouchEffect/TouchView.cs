@@ -532,7 +532,7 @@ namespace TouchEffect
             do
             {
                 await GetAnimationTask(TouchState.Pressed);
-                if(token.IsCancellationRequested)
+                if (token.IsCancellationRequested)
                 {
                     return;
                 }
@@ -670,7 +670,7 @@ namespace TouchEffect
             var pressedTranslationY = PressedTranslationY;
 
             if (Abs(regularTranslationX) <= double.Epsilon &&
-                Abs(pressedTranslationX) <= double.Epsilon && 
+                Abs(pressedTranslationX) <= double.Epsilon &&
                 Abs(regularTranslationY) <= double.Epsilon &&
                 Abs(pressedTranslationY) <= double.Epsilon)
             {

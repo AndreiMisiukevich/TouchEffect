@@ -2,5 +2,5 @@
 
 namespace TouchEffect.Delegates
 {
-	public delegate void TouchViewStateChangedHandler(TouchView sender, TouchStateChangedEventArgs args);
+    public delegate void TouchViewStateChangedHandler(TouchView sender, TouchStateChangedEventArgs args);
 }

@@ -1,10 +1,10 @@
 ﻿
 namespace TouchEffect.Enums
 {
-	public enum TouchStatus
-	{
-		Started,
-		Completed,
-		Canceled
-	}
+    public enum TouchStatus
+    {
+        Started,
+        Completed,
+        Canceled
+    }
 }
