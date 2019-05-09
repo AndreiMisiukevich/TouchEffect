@@ -297,10 +297,13 @@ namespace TouchEffect
         public TouchView()
         {
             StateChanged += OnStateChanged;
-            GestureRecognizers.Add(new TapGestureRecognizer
+            if (Device.RuntimePlatform != Device.Android)
             {
-                Command = new Command(HandleTap)
-            });
+                GestureRecognizers.Add(new TapGestureRecognizer
+                {
+                    Command = new Command(OnTapped)
+                });
+            }
         }
 
         public ICommand Command
@@ -483,9 +486,11 @@ namespace TouchEffect
             set => SetValue(BackgroundImageProperty, value);
         }
 
+        private bool CanExecuteAction => IsEnabled && (Command != null || Completed != null);
+
         public void HandleTouch(TouchStatus status)
         {
-            if (status != TouchStatus.Started || (IsEnabled && (Command != null || Completed != null)))
+            if (status != TouchStatus.Started || CanExecuteAction)
             {
                 State = status == TouchStatus.Started
                   ? TouchState.Pressed
@@ -494,6 +499,11 @@ namespace TouchEffect
                 Status = status;
                 StateChanged?.Invoke(this, new TouchStateChangedEventArgs(State));
                 StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
+            }
+
+            if (Device.RuntimePlatform == Device.Android && status == TouchStatus.Completed)
+            {
+                OnTapped();
             }
         }
 
@@ -761,8 +771,12 @@ namespace TouchEffect
             await this.RotateYTo(rotationY, (uint)Abs(duration), easing);
         }
 
-        private void HandleTap()
+        private void OnTapped()
         {
+            if (!CanExecuteAction)
+            {
+                return;
+            }
             Command?.Execute(CommandParameter);
             Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
         }

@@ -24,7 +24,7 @@ namespace TouchEffectSample.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-			TouchViewRenderer.Initialize();
+			TouchViewRenderer.Preserve();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
