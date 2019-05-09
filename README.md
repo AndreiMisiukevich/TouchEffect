@@ -10,8 +10,9 @@ This plugin provides opportunity to create views with touch effects without usin
 ## Setup
 * Available on NuGet: [TouchView](http://www.nuget.org/packages/TouchView) [![NuGet](https://img.shields.io/nuget/v/TouchView.svg?label=NuGet)](https://www.nuget.org/packages/TouchView)
 * Add nuget package to your Xamarin.Forms .netStandard/PCL project and to your platform-specific projects (iOS and Android)
-* **iOS:** add *TouchViewRenderer.Initialize()* line to your AppDelegate (preserve from linker)
+* Add *TouchViewRenderer.Preserve()* line to your AppDelegate and MainActivity (preserve from linker)
 
+iOS example:
 ```csharp
 using TouchEffect.iOS;
 namespace YourApp.iOS
@@ -21,7 +22,7 @@ namespace YourApp.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            TouchViewRenderer.Initialize();
+            TouchViewRenderer.Preserve();
             LoadApplication(new App());
             return base.FinishedLaunching(app, options);
         }
