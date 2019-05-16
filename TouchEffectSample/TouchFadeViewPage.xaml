@@ -9,6 +9,7 @@
        <touch:TouchView
             PressedAnimationDuration="800"
             RegularAnimationDuration="800"
+            PressedScale="0.9"
             RippleCount="-1"
             Padding="10, 5"
             BackgroundColor="Black"
