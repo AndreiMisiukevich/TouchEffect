@@ -16,25 +16,19 @@ namespace TouchEffectSample
 						Children = {
 							new Button
                             {
-                                Text = "TouchView (Background Image)",
+                                Text = "(Background Image)",
 								Command = new Command(() => MainPage.Navigation.PushAsync(new TouchImagePage()))
                             },
 							new Button
                             {
-                                Text = "TouchView (Fade Effect)",
+                                Text = "(Fade Effect)",
 								Command = new Command(() => MainPage.Navigation.PushAsync(new TouchFadeViewPage()))
                             },
 							new Button
                             {
-                                Text = "TouchView (Background Color)",
+                                Text = "(Background Color and transofrmations)",
                                 Command = new Command(() => MainPage.Navigation.PushAsync(new TouchColorViewPage()))
-                            },
-                            new Button
-                            {
-                                TextColor = Color.Red,
-                                Text = "TouchEff (!NEW!)",
-                                Command = new Command(() => MainPage.Navigation.PushAsync(new TouchEffPage()))
-                            },
+                            }
                         }
 					}
 				}

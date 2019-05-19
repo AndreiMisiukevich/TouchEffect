@@ -26,15 +26,18 @@ namespace TouchEffect.iOS
             _effect.Control = Element as VisualElement;
             _effect.ForceUpdateState();
             _gesture = new TouchUITapGestureRecognizer(_effect);
-            Control?.AddGestureRecognizer(_gesture);
-            Control.UserInteractionEnabled = true;
+            if (Container != null)
+            {
+                Container.AddGestureRecognizer(_gesture);
+                Container.UserInteractionEnabled = true;
+            }
         }
 
         protected override void OnDetached()
         {
             _effect.Control = null;
             _effect = null;
-            Control?.RemoveGestureRecognizer(_gesture);
+            Container?.RemoveGestureRecognizer(_gesture);
             _gesture?.Dispose();
             _gesture = null;
         }

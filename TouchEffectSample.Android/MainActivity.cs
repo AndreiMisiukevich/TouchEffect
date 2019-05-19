@@ -1,11 +1,8 @@
-﻿using System;
-
+﻿
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
+using TouchEffect.Android;
 
 namespace TouchEffectSample.Droid
 {
@@ -20,6 +17,7 @@ namespace TouchEffectSample.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            TouchEffectPreserver.Preserve();
             LoadApplication(new App());
         }
     }

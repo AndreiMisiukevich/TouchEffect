@@ -25,9 +25,9 @@ namespace TouchEffect.Android
             _effect.Control = Element as VisualElement;
             _effect.ForceUpdateState();
 
-            if (Control != null)
+            if (Container != null)
             {
-                Control.Touch += OnTouch;
+                Container.Touch += OnTouch;
             }
         }
 
@@ -35,9 +35,9 @@ namespace TouchEffect.Android
         {
             _effect.Control = null;
             _effect = null;
-            if (Control != null)
+            if (Container != null)
             {
-                Control.Touch -= OnTouch;
+                Container.Touch -= OnTouch;
             }
         }
 

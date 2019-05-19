@@ -9,7 +9,7 @@ namespace TouchEffectSample
             InitializeComponent();
         }
 
-		private void Handle_TouchCompleted(TouchEffect.TouchView sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
+		private void Handle_TouchCompleted(VisualElement sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
         {
 			DisplayAlert("Thank you", ":)", "OK");
         }
