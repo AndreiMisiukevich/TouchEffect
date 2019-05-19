@@ -29,7 +29,13 @@ namespace TouchEffectSample
                                 Text = "TouchView (Background Color)",
                                 Command = new Command(() => MainPage.Navigation.PushAsync(new TouchColorViewPage()))
                             },
-						}
+                            new Button
+                            {
+                                TextColor = Color.Red,
+                                Text = "TouchEff (!NEW!)",
+                                Command = new Command(() => MainPage.Navigation.PushAsync(new TouchEffPage()))
+                            },
+                        }
 					}
 				}
 			});

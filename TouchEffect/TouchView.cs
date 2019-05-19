@@ -3,17 +3,14 @@ using TouchEffect.Delegates;
 using TouchEffect.EventArgs;
 using Xamarin.Forms;
 using TouchEffect.Enums;
-using static System.Math;
 using TouchEffect.Extensions;
-using System.Threading.Tasks;
-using System.Threading;
+using System;
 
 namespace TouchEffect
 {
-    public class TouchView : AbsoluteLayout
+    [Obsolete("Please use TEffect as Effect instead, or TouchImage if you wish to update image source during touch interaction")]
+    public class TouchView : AbsoluteLayout, ITouchEff
     {
-        public const string ChangeBackgroundColorAnimationName = nameof(ChangeBackgroundColorAnimationName);
-
         public event TouchViewStatusChangedHandler StatusChanged;
 
         public event TouchViewStateChangedHandler StateChanged;
@@ -291,17 +288,17 @@ namespace TouchEffect
                 bindable.AsTouchView().ForceStateChanged();
             });
 
-        private readonly object _backgroundImageLocker = new object();
-        private CancellationTokenSource _animationTokenSource;
+        private readonly TouchVisualManager _visualManager;
 
         public TouchView()
         {
-            StateChanged += OnStateChanged;
-            if (Device.RuntimePlatform != Device.Android)
+            _visualManager = new TouchVisualManager(Device.iOS);
+            StateChanged += (sender, args) => ForceStateChanged();
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 GestureRecognizers.Add(new TapGestureRecognizer
                 {
-                    Command = new Command(OnTapped)
+                    Command = new Command(() => _visualManager.OnTapped(this))
                 });
             }
         }
@@ -486,25 +483,16 @@ namespace TouchEffect
             set => SetValue(BackgroundImageProperty, value);
         }
 
-        private bool CanExecuteAction => IsEnabled && (Command != null || Completed != null);
+        public bool IsCompletedSet => Completed != null;
 
-        public void HandleTouch(TouchStatus status)
+        public VisualElement Control
         {
-            if (status != TouchStatus.Started || CanExecuteAction)
+            get => this;
+#pragma warning disable
+            set
             {
-                State = status == TouchStatus.Started
-                  ? TouchState.Pressed
-                  : TouchState.Regular;
-
-                Status = status;
-                StateChanged?.Invoke(this, new TouchStateChangedEventArgs(State));
-                StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
             }
-
-            if (Device.RuntimePlatform == Device.Android && status == TouchStatus.Completed)
-            {
-                OnTapped();
-            }
+#pragma warning restore
         }
 
         protected override void OnChildAdded(Element child)
@@ -518,42 +506,19 @@ namespace TouchEffect
             base.OnChildAdded(child);
         }
 
-        protected async void OnStateChanged(TouchView sender, TouchStateChangedEventArgs args)
-        {
-            _animationTokenSource?.Cancel();
-            _animationTokenSource = new CancellationTokenSource();
-            var token = _animationTokenSource.Token;
-            ViewExtensions.CancelAnimations(this);
-            AnimationExtensions.AbortAnimation(this, ChangeBackgroundColorAnimationName);
+        public void HandleTouch(TouchStatus status)
+            => _visualManager.HandleTouch(this, status);
 
-            var state = args.State;
-            SetBackgroundImage(state);
-            var rippleCount = RippleCount;
+        public void RaiseStateChanged()
+            => StateChanged?.Invoke(this, new TouchStateChangedEventArgs(State));
 
-            if (rippleCount == 0 || state == TouchState.Regular)
-            {
-                await GetAnimationTask(state);
-                return;
-            }
-            do
-            {
-                await GetAnimationTask(TouchState.Pressed);
-                if (token.IsCancellationRequested)
-                {
-                    return;
-                }
-                await GetAnimationTask(TouchState.Regular);
-                if (token.IsCancellationRequested)
-                {
-                    return;
-                }
-            } while (--rippleCount != 0);
-        }
+        public void RaiseStatusChanged()
+            => StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
 
-        protected void ForceStateChanged()
-            => OnStateChanged(this, new TouchStateChangedEventArgs(State));
+        public void RaiseCompleted()
+            => Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
 
-        protected void SetBackgroundImage(TouchState state)
+        private void SetBackgroundImage(TouchState state)
         {
             var regularBackgroundImageSource = RegularBackgroundImageSource;
             var pressedBackgroundImageSource = PressedBackgroundImageSource;
@@ -581,213 +546,11 @@ namespace TouchEffect
             BackgroundImage.Source = source;
         }
 
-        protected async Task SetBackgroundColor(TouchState state)
+        private void ForceStateChanged()
         {
-            var regularBackgroundColor = RegularBackgroundColor;
-            var pressedBackgroundColor = PressedBackgroundColor;
-
-            if (regularBackgroundColor == Color.Default &&
-               pressedBackgroundColor == Color.Default)
-            {
-                return;
-            }
-
-            var color = regularBackgroundColor;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                color = pressedBackgroundColor;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-
-            if (duration <= 0)
-            {
-                BackgroundColor = color;
-                return;
-            }
-
-            var animationCompletionSource = new TaskCompletionSource<bool>();
-            new Animation{
-                {0, 1,  new Animation(v => BackgroundColor = new Color(v, BackgroundColor.G, BackgroundColor.B, BackgroundColor.A), BackgroundColor.R, color.R) },
-                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, v, BackgroundColor.B, BackgroundColor.A), BackgroundColor.G, color.G) },
-                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, v, BackgroundColor.A), BackgroundColor.B, color.B) },
-                {0, 1,  new Animation(v => BackgroundColor = new Color(BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, v), BackgroundColor.A, color.A) },
-            }.Commit(this, ChangeBackgroundColorAnimationName, 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
-            await animationCompletionSource.Task;
+            var state = State;
+            SetBackgroundImage(state);
+            _visualManager.ChangeStateAsync(this, new TouchStateChangedEventArgs(state));
         }
-
-        protected async Task SetOpacity(TouchState state)
-        {
-            var regularOpacity = RegularOpacity;
-            var pressedOpacity = PressedOpacity;
-
-            if (Abs(regularOpacity - 1) <= double.Epsilon &&
-               Abs(pressedOpacity - 1) <= double.Epsilon)
-            {
-                return;
-            }
-
-            var opacity = regularOpacity;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                opacity = pressedOpacity;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-            await this.FadeTo(opacity, (uint)Abs(duration), easing);
-        }
-
-        protected async Task SetScale(TouchState state)
-        {
-            var regularScale = RegularScale;
-            var pressedScale = PressedScale;
-
-            if (Abs(regularScale - 1) <= double.Epsilon &&
-               Abs(pressedScale - 1) <= double.Epsilon)
-            {
-                return;
-            }
-
-            var scale = regularScale;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                scale = pressedScale;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-            await this.ScaleTo(scale, (uint)Abs(duration), easing);
-        }
-
-        protected async Task SetTranslation(TouchState state)
-        {
-            var regularTranslationX = RegularTranslationX;
-            var pressedTranslationX = PressedTranslationX;
-
-            var regularTranslationY = RegularTranslationY;
-            var pressedTranslationY = PressedTranslationY;
-
-            if (Abs(regularTranslationX) <= double.Epsilon &&
-                Abs(pressedTranslationX) <= double.Epsilon &&
-                Abs(regularTranslationY) <= double.Epsilon &&
-                Abs(pressedTranslationY) <= double.Epsilon)
-            {
-                return;
-            }
-
-            var translationX = regularTranslationX;
-            var translationY = regularTranslationY;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                translationX = pressedTranslationX;
-                translationY = pressedTranslationY;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-
-            await this.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
-        }
-
-        protected async Task SetRotation(TouchState state)
-        {
-            var regularRotation = RegularRotation;
-            var pressedRotation = PressedRotation;
-
-            if (Abs(regularRotation) <= double.Epsilon &&
-               Abs(pressedRotation) <= double.Epsilon)
-            {
-                return;
-            }
-
-            var rotation = regularRotation;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                rotation = pressedRotation;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-            await this.RotateTo(rotation, (uint)Abs(duration), easing);
-        }
-
-        protected async Task SetRotationX(TouchState state)
-        {
-            var regularRotationX = RegularRotationX;
-            var pressedRotationX = PressedRotationX;
-
-            if (Abs(regularRotationX) <= double.Epsilon &&
-               Abs(pressedRotationX) <= double.Epsilon)
-            {
-                return;
-            }
-
-            var rotationX = regularRotationX;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                rotationX = pressedRotationX;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-            await this.RotateXTo(rotationX, (uint)Abs(duration), easing);
-        }
-
-        protected async Task SetRotationY(TouchState state)
-        {
-            var regularRotationY = RegularRotationY;
-            var pressedRotationY = PressedRotationY;
-
-            if (Abs(regularRotationY) <= double.Epsilon &&
-               Abs(pressedRotationY) <= double.Epsilon)
-            {
-                return;
-            }
-
-            var rotationY = regularRotationY;
-            var duration = RegularAnimationDuration;
-            var easing = RegularAnimationEasing;
-
-            if (state == TouchState.Pressed)
-            {
-                rotationY = pressedRotationY;
-                duration = PressedAnimationDuration;
-                easing = PressedAnimationEasing;
-            }
-            await this.RotateYTo(rotationY, (uint)Abs(duration), easing);
-        }
-
-        private void OnTapped()
-        {
-            if (!CanExecuteAction)
-            {
-                return;
-            }
-            Command?.Execute(CommandParameter);
-            Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
-        }
-
-        private Task GetAnimationTask(TouchState state)
-            => Task.WhenAll(SetBackgroundColor(state),
-                SetOpacity(state),
-                SetScale(state),
-                SetTranslation(state),
-                SetRotation(state),
-                SetRotationX(state),
-                SetRotationY(state));
     }
 }

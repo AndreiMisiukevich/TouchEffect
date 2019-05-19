@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TouchViewRenderer.cs" />
+    <Compile Include="PlatformTouchEff.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TouchEffect\TouchEffect.csproj">
