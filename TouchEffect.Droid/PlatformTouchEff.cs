@@ -23,7 +23,7 @@ namespace TouchEffect.Android
         {
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
-            _effect.ForceUpdateState();
+            _effect.ForceUpdateState(false);
 
             if (Container != null)
             {

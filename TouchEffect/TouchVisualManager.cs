@@ -40,7 +40,7 @@ namespace TouchEffect
             }
         }
 
-        public async void ChangeStateAsync(ITouchEff sender, TouchStateChangedEventArgs args)
+        public async void ChangeStateAsync(ITouchEff sender, TouchState state, bool animated)
         {
             _animationTokenSource?.Cancel();
             _animationTokenSource = new CancellationTokenSource();
@@ -48,7 +48,12 @@ namespace TouchEffect
             ViewExtensions.CancelAnimations(sender.Control);
             AnimationExtensions.AbortAnimation(sender.Control, ChangeBackgroundColorAnimationName);
 
-            var state = args.State;
+            if(!animated)
+            {
+                await GetAnimationTask(sender, state, 0);
+                return;
+            }
+
             var rippleCount = sender.RippleCount;
 
             if (rippleCount == 0 || state == TouchState.Regular)
@@ -81,7 +86,7 @@ namespace TouchEffect
             sender.RaiseCompleted();
         }
 
-        private async Task SetBackgroundColorAsync(ITouchEff sender, TouchState state)
+        private async Task SetBackgroundColorAsync(ITouchEff sender, TouchState state, int? forcedDuration)
         {
             var regularBackgroundColor = sender.RegularBackgroundColor;
             var pressedBackgroundColor = sender.PressedBackgroundColor;
@@ -110,6 +115,7 @@ namespace TouchEffect
             }
 
             var animationCompletionSource = new TaskCompletionSource<bool>();
+            duration = forcedDuration ?? duration;
             new Animation{
                 {0, 1,  new Animation(v => sender.Control.BackgroundColor = new Color(v, sender.Control.BackgroundColor.G, sender.Control.BackgroundColor.B, sender.Control.BackgroundColor.A), sender.Control.BackgroundColor.R, color.R) },
                 {0, 1,  new Animation(v => sender.Control.BackgroundColor = new Color(sender.Control.BackgroundColor.R, v, sender.Control.BackgroundColor.B, sender.Control.BackgroundColor.A), sender.Control.BackgroundColor.G, color.G) },
@@ -119,7 +125,7 @@ namespace TouchEffect
             await animationCompletionSource.Task;
         }
 
-        private async Task SetOpacityAsync(ITouchEff sender, TouchState state)
+        private async Task SetOpacityAsync(ITouchEff sender, TouchState state, int? forcedDuration)
         {
             var regularOpacity = sender.RegularOpacity;
             var pressedOpacity = sender.PressedOpacity;
@@ -140,10 +146,11 @@ namespace TouchEffect
                 duration = sender.PressedAnimationDuration;
                 easing = sender.PressedAnimationEasing;
             }
+            duration = forcedDuration ?? duration;
             await sender.Control.FadeTo(opacity, (uint)Abs(duration), easing);
         }
 
-        private async Task SetScaleAsync(ITouchEff sender, TouchState state)
+        private async Task SetScaleAsync(ITouchEff sender, TouchState state, int? forcedDuration)
         {
             var regularScale = sender.RegularScale;
             var pressedScale = sender.PressedScale;
@@ -164,10 +171,11 @@ namespace TouchEffect
                 duration = sender.PressedAnimationDuration;
                 easing = sender.PressedAnimationEasing;
             }
+            duration = forcedDuration ?? duration;
             await sender.Control.ScaleTo(scale, (uint)Abs(duration), easing);
         }
 
-        private async Task SetTranslationAsync(ITouchEff sender, TouchState state)
+        private async Task SetTranslationAsync(ITouchEff sender, TouchState state, int? forcedDuration)
         {
             var regularTranslationX = sender.RegularTranslationX;
             var pressedTranslationX = sender.PressedTranslationX;
@@ -195,11 +203,11 @@ namespace TouchEffect
                 duration = sender.PressedAnimationDuration;
                 easing = sender.PressedAnimationEasing;
             }
-
+            duration = forcedDuration ?? duration;
             await sender.Control.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationAsync(ITouchEff sender, TouchState state)
+        private async Task SetRotationAsync(ITouchEff sender, TouchState state, int? forcedDuration)
         {
             var regularRotation = sender.RegularRotation;
             var pressedRotation = sender.PressedRotation;
@@ -220,10 +228,11 @@ namespace TouchEffect
                 duration = sender.PressedAnimationDuration;
                 easing = sender.PressedAnimationEasing;
             }
+            duration = forcedDuration ?? duration;
             await sender.Control.RotateTo(rotation, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationXAsync(ITouchEff sender, TouchState state)
+        private async Task SetRotationXAsync(ITouchEff sender, TouchState state, int? forcedDuration)
         {
             var regularRotationX = sender.RegularRotationX;
             var pressedRotationX = sender.PressedRotationX;
@@ -244,10 +253,11 @@ namespace TouchEffect
                 duration = sender.PressedAnimationDuration;
                 easing = sender.PressedAnimationEasing;
             }
+            duration = forcedDuration ?? duration;
             await sender.Control.RotateXTo(rotationX, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationYAsync(ITouchEff sender, TouchState state)
+        private async Task SetRotationYAsync(ITouchEff sender, TouchState state, int? forcedDuration)
         {
             var regularRotationY = sender.RegularRotationY;
             var pressedRotationY = sender.PressedRotationY;
@@ -268,16 +278,17 @@ namespace TouchEffect
                 duration = sender.PressedAnimationDuration;
                 easing = sender.PressedAnimationEasing;
             }
+            duration = forcedDuration ?? duration;
             await sender.Control.RotateYTo(rotationY, (uint)Abs(duration), easing);
         }
 
-        private Task GetAnimationTask(ITouchEff sender, TouchState state)
-            => Task.WhenAll(SetBackgroundColorAsync(sender, state),
-                SetOpacityAsync(sender, state),
-                SetScaleAsync(sender, state),
-                SetTranslationAsync(sender, state),
-                SetRotationAsync(sender, state),
-                SetRotationXAsync(sender, state),
-                SetRotationYAsync(sender, state));
+        private Task GetAnimationTask(ITouchEff sender, TouchState state, int? forcedDuration = null)
+            => Task.WhenAll(SetBackgroundColorAsync(sender, state, forcedDuration),
+                SetOpacityAsync(sender, state, forcedDuration),
+                SetScaleAsync(sender, state, forcedDuration),
+                SetTranslationAsync(sender, state, forcedDuration),
+                SetRotationAsync(sender, state, forcedDuration),
+                SetRotationXAsync(sender, state, forcedDuration),
+                SetRotationYAsync(sender, state, forcedDuration));
     }
 }

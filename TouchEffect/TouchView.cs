@@ -550,7 +550,7 @@ namespace TouchEffect
         {
             var state = State;
             SetBackgroundImage(state);
-            _visualManager.ChangeStateAsync(this, new TouchStateChangedEventArgs(state));
+            _visualManager.ChangeStateAsync(this, state, true);
         }
     }
 }

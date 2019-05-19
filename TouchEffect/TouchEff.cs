@@ -478,13 +478,13 @@ namespace TouchEffect
             => Completed?.Invoke(Control, new TouchCompletedEventArgs(CommandParameter));
             
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void ForceUpdateState()
+        public void ForceUpdateState(bool animated = true)
         {
             if(Control == null)
             {
                 return;
             }
-            _visualManager.ChangeStateAsync(this, new TouchStateChangedEventArgs(State));
+            _visualManager.ChangeStateAsync(this, State, animated);
             StateForceUpdated?.Invoke(this, System.EventArgs.Empty);
         }
     }
