@@ -24,7 +24,7 @@ namespace TouchEffect.iOS
         {
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
-            _effect.ForceStateChanged();
+            _effect.ForceUpdateState();
             _gesture = new TouchUITapGestureRecognizer(_effect);
             Control?.AddGestureRecognizer(_gesture);
             Control.UserInteractionEnabled = true;

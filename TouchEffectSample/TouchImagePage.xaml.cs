@@ -1,4 +1,5 @@
 ﻿using Xamarin.Forms;
+using System.Windows.Input;
 
 namespace TouchEffectSample
 {
@@ -9,9 +10,10 @@ namespace TouchEffectSample
             InitializeComponent();
         }
 
-		private void Handle_TouchCompleted(TouchEffect.TouchView sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
+        public ICommand Command { get; } = new Command(() =>
         {
-            DisplayAlert("BOOOM", ":(", "OOOOOPS");
-        }
+            Application.Current.MainPage.DisplayAlert("BOOOM", ":(", "OOOOOPS");
+        });
+
     }
 }

@@ -1,14 +1,17 @@
 ﻿using TouchEffect.Enums;
 using TouchEffect.Extensions;
 using Xamarin.Forms;
+
 namespace TouchEffect
 {
     public class TouchImage : Image
     {
+        private readonly object _setImageLocker = new object();
+
         public TouchImage()
         {
             Effects.Add(new TouchEff());
-            this.GetTouchEff().StateChanged += (sender, args) => SetImage(args.State);
+            this.GetTouchEff().StateForceUpdated += (s, e) => ForceUpdateState();
         }
 
         public static readonly BindableProperty RegularBackgroundImageSourceProperty = BindableProperty.Create(
@@ -18,7 +21,7 @@ namespace TouchEffect
             default(ImageSource),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedBackgroundImageSourceProperty = BindableProperty.Create(
@@ -28,7 +31,7 @@ namespace TouchEffect
             default(ImageSource),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularBackgroundImageAspectProperty = BindableProperty.Create(
@@ -38,7 +41,7 @@ namespace TouchEffect
             default(Aspect),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedBackgroundImageAspectProperty = BindableProperty.Create(
@@ -48,7 +51,7 @@ namespace TouchEffect
             default(Aspect),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public ImageSource RegularBackgroundImageSource
@@ -75,7 +78,7 @@ namespace TouchEffect
             set => SetValue(PressedBackgroundImageAspectProperty, value);
         }
 
-        private void SetImage(TouchState state)
+        private void ForceUpdateState()
         {
             var regularBackgroundImageSource = RegularBackgroundImageSource;
             var pressedBackgroundImageSource = PressedBackgroundImageSource;
@@ -88,15 +91,19 @@ namespace TouchEffect
 
             var aspect = RegularBackgroundImageAspect;
             var source = regularBackgroundImageSource;
-            if (state == TouchState.Pressed)
+            if (this.GetTouchEff()?.State == TouchState.Pressed)
             {
                 aspect = PressedBackgroundImageAspect;
                 source = pressedBackgroundImageSource;
             }
 
-
-            Aspect = aspect;
-            Source = source;
+            lock (_setImageLocker)
+            {
+                BatchBegin();
+                Aspect = aspect;
+                Source = source;
+                BatchCommit();
+            }
         }
     }
 }

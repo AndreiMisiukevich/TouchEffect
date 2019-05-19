@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using TouchEffect.Enums;
 using TouchEffect.Extensions;
 using System.ComponentModel;
+using System;
 
 namespace TouchEffect
 {
@@ -15,8 +16,10 @@ namespace TouchEffect
         public TouchEff() : base($"{nameof(TouchEffect)}.{nameof(TouchEff)}")
         {
             _visualManager = new TouchVisualManager();
-            StateChanged += (sender, args) => ForceStateChanged();
+            StateChanged += (sender, args) => ForceUpdateState();
         }
+
+        internal event EventHandler StateForceUpdated;
 
         public event TEffectStatusChangedHandler StatusChanged;
 
@@ -57,7 +60,7 @@ namespace TouchEffect
             default(Color),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedBackgroundColorProperty = BindableProperty.CreateAttached(
@@ -67,7 +70,7 @@ namespace TouchEffect
             default(Color),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularOpacityProperty = BindableProperty.CreateAttached(
@@ -77,17 +80,17 @@ namespace TouchEffect
             1.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedOpacityProperty = BindableProperty.CreateAttached(
             "PressedOpacity",
             typeof(double),
             typeof(TouchEff),
-            0.6,
+            1.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularScaleProperty = BindableProperty.CreateAttached(
@@ -97,7 +100,7 @@ namespace TouchEffect
             1.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedScaleProperty = BindableProperty.CreateAttached(
@@ -107,7 +110,7 @@ namespace TouchEffect
             1.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularTranslationXProperty = BindableProperty.CreateAttached(
@@ -117,7 +120,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedTranslationXProperty = BindableProperty.CreateAttached(
@@ -127,7 +130,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularTranslationYProperty = BindableProperty.CreateAttached(
@@ -137,7 +140,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedTranslationYProperty = BindableProperty.CreateAttached(
@@ -147,7 +150,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularRotationProperty = BindableProperty.CreateAttached(
@@ -157,7 +160,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedRotationProperty = BindableProperty.CreateAttached(
@@ -167,7 +170,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularRotationXProperty = BindableProperty.CreateAttached(
@@ -177,7 +180,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedRotationXProperty = BindableProperty.CreateAttached(
@@ -187,7 +190,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty RegularRotationYProperty = BindableProperty.CreateAttached(
@@ -197,7 +200,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedRotationYProperty = BindableProperty.CreateAttached(
@@ -207,7 +210,7 @@ namespace TouchEffect
             0.0,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static readonly BindableProperty PressedAnimationDurationProperty = BindableProperty.CreateAttached(
@@ -241,7 +244,7 @@ namespace TouchEffect
             default(int),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceStateChanged();
+                bindable.GetTouchEff()?.ForceUpdateState();
             });
 
         public static ICommand GetCommand(BindableObject bindable)
@@ -475,7 +478,14 @@ namespace TouchEffect
             => Completed?.Invoke(Control, new TouchCompletedEventArgs(CommandParameter));
             
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void ForceStateChanged()
-            => _visualManager.ChangeStateAsync(this, new TouchStateChangedEventArgs(State));
+        public void ForceUpdateState()
+        {
+            if(Control == null)
+            {
+                return;
+            }
+            _visualManager.ChangeStateAsync(this, new TouchStateChangedEventArgs(State));
+            StateForceUpdated?.Invoke(this, System.EventArgs.Empty);
+        }
     }
 }
