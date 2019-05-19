@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using TouchEffect.Enums;
-using TouchEffect.EventArgs;
 using Xamarin.Forms;
 using static System.Math;
 using System.Collections.Generic;

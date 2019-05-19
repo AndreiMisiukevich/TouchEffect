@@ -8,7 +8,7 @@ using System;
 
 namespace TouchEffect
 {
-    [Obsolete("Please use TEffect as Effect instead, or TouchImage if you wish to update image source during touch interaction")]
+    [Obsolete("Please use TouchEff as Effect instead, or TouchImage if you wish to update image source during touch interaction")]
     public class TouchView : AbsoluteLayout, ITouchEff
     {
         public event TouchViewStatusChangedHandler StatusChanged;
