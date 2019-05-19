@@ -10,25 +10,7 @@ This plugin provides opportunity to create views with touch effects without usin
 ## Setup
 * Available on NuGet: [TouchView](http://www.nuget.org/packages/TouchView) [![NuGet](https://img.shields.io/nuget/v/TouchView.svg?label=NuGet)](https://www.nuget.org/packages/TouchView)
 * Add nuget package to your Xamarin.Forms .netStandard/PCL project and to your platform-specific projects (iOS and Android)
-* Add *TouchViewRenderer.Preserve()* line to your AppDelegate and MainActivity (preserve from linker)
-
-iOS example:
-```csharp
-using TouchEffect.iOS;
-namespace YourApp.iOS
-{
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
-    {
-        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
-        {
-            global::Xamarin.Forms.Forms.Init();
-            TouchViewRenderer.Preserve();
-            LoadApplication(new App());
-            return base.FinishedLaunching(app, options);
-        }
-    }
-}
-```
+* Add *TouchEffectPreserver.Preserve()* line to your AppDelegate and MainActivity (preserve from linker)
 
 |Platform|Version|
 | ------------------- | ------------------- |
@@ -38,40 +20,79 @@ namespace YourApp.iOS
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
 
-**XAML:** use TouchView for achieving responisve UI (Changing background image or/and background color or/and opacity or/and scale)
+**XAML:** use TouchEff for achieving responisve UI (Changing background image or/and background color or/and opacity or/and scale).
 
-```xml
+Add TouchEff to element's Effects collection and use TouchEff attached propertis for setting up touc visual effect.
+
+```xaml
 ...
-        <touch:TouchView
-            RegularBackgroundImageSource="button"
-            PressedBackgroundImageSource="button_pressed"
-            PressedOpacity="1"
-            Completed="Handle_TouchCompleted" />
+  xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
 ...
-        <touch:TouchView
-            PressedAnimationDuration="500"
-            RegularAnimationDuration="500"  
-            RippleCount="-1"           
-            Completed="Handle_TouchCompleted">
-
-            <Label Text="CLICK ME" />
-
-        </touch:TouchView>
+       <ContentView
+            touch:TouchEff.PressedAnimationDuration="800"
+            touch:TouchEff.RegularAnimationDuration="800"
+            touch:TouchEff.PressedScale="0.9"
+            touch:TouchEff.PressedOpacity="0.6"
+            touch:TouchEff.RippleCount="-1"
+            
+            Padding="10, 5"
+            BackgroundColor="Black"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand">
+            
+            <ContentView.Effects>
+                <touch:TouchEff Completed="Handle_TouchCompleted"/>
+            </ContentView.Effects>
+            
+            <Label Text="CLICK ME" 
+                   TextColor="White" 
+                   FontSize="60"/>
+            
+        </ContentView>
 ...
-       <touch:TouchView
-            PressedBackgroundColor="Red"
-            PressedOpacity="1"
-            PressedScale = "1.1"
-            RippleCount="-1"  
-            Completed="Handle_TouchCompleted">
+       <StackLayout
+            touch:TouchEff.RegularBackgroundColor="Green"
+            touch:TouchEff.PressedBackgroundColor="Red"
+            touch:TouchEff.PressedScale="1.2"
+            touch:TouchEff.RippleCount="1"
+            touch:TouchEff.PressedRotation="10"
+            touch:TouchEff.PressedRotationX="15"
+            touch:TouchEff.PressedRotationY="15"
+            touch:TouchEff.PressedTranslationX="5"
+            touch:TouchEff.PressedTranslationY="5"
+            touch:TouchEff.PressedAnimationDuration="500"
+            touch:TouchEff.RegularAnimationDuration="500"
+            Padding="10, 5"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand">
+            <StackLayout.Effects>
+                <touch:TouchEff Completed="Handle_TouchCompleted" />
+            </StackLayout.Effects>
 
-            <Label Text="CLICK ME"/>
-
-        </touch:TouchView>
-...
+            <Label Text="CLICK ME" 
+                   TextColor="Black" 
+                   FontSize="60"/>
+        </StackLayout>
 ```
 
-### All Properties
+If you wich to change Image Source on touch, you should use TouchImage control. It has several bindable properties for managing Pressed/Regular Source/Aspect of the image.
+
+```xaml
+...
+  xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
+...
+       <touch:TouchImage
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            HeightRequest="250"
+            WidthRequest="250"
+            RegularBackgroundImageSource="button"
+            PressedBackgroundImageSource="button_pressed"
+            touch:TouchEff.Command="{Binding Command}"
+            />
+```
+
+### TouchEff Attached Properties
 Property | Type | Default | Description
 --- | --- | --- | ---
 Command | `ICommand` | null | Touch Command handler
@@ -98,35 +119,18 @@ PressedAnimationDuration | `int` | 0 | The duration of animation by applying Pre
 PressedAnimationEasing | `Easing` | null | The easing of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
 RegularAnimationDuration | `int` | 0 | The duration of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
 RegularAnimationEasing | `Easing` | null | The easing of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
+RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
+
+### TouchImage Bindable Properties
+Property | Type | Default | Description
+--- | --- | --- | ---
 RegularBackgroundImageSource | `ImageSource` | null | Background image source of regular state
 PressedBackgroundImageSource | `ImageSource` | null | Background image source of pressed state
 RegularBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
 PressedBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
-RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
-BackgroundImage | `Image` | null | Background control (it will be created automatically, if RegularBackgroundImageAspect isn't null or PressedBackgroundImageSource isn't null
 
-**If you want to customize/extend existing controls, you may observe State via triggers**
-```xml
-       <touch:TouchView x:Name="container"
-            HeightRequest="250"
-            WidthRequest="250"
-            Completed="Handle_TouchCompleted">
-            <Image>
-                <Image.Triggers>
-                    <DataTrigger TargetType="Image" 
-                                 Binding="{Binding Source={x:Reference container}, Path=State}"
-                                 Value="Regular">
-                        <Setter Property="Source" Value="icon_regular" />
-                    </DataTrigger>
-                    <DataTrigger TargetType="Image" 
-                                 Binding="{Binding Source={x:Reference container}, Path=State}"
-                                 Value="Pressed">
-                        <Setter Property="Source" Value="icon_pressed" />
-                    </DataTrigger>
-                </Image.Triggers>
-            </Image>
-        </touch:TouchView>
-```
+**If you want to customize/extend existing controls, you may observe State property via triggers**
+
 
 Check source code for more info, or 🇧🇾 ***just ask me =)*** 🇧🇾
 
