@@ -75,7 +75,7 @@ Add TouchEff to element's Effects collection and use TouchEff attached propertis
         </StackLayout>
 ```
 
-If you wich to change Image Source on touch, you should use TouchImage control. It has several bindable properties for managing Pressed/Regular Source/Aspect of the image.
+If you wish to change Image Source on touch, you should use TouchImage control. It has several bindable properties for managing Pressed/Regular Source/Aspect of the image.
 
 ```xaml
 ...
@@ -102,7 +102,7 @@ State | `TouchState` | Regular | Current touch state
 RegularBackgroundColor | `Color` | Default | Background color of regular state
 PressedBackgroundColor | `Color` | Default | Background color of pressed state
 RegularOpacity | `double` | 1.0 | Opacity of regular state
-PressedOpacity | `double` | 0.6 | Opacity of pressed state
+PressedOpacity | `double` | 1.0 | Opacity of pressed state
 RegularScale | `double` | 1.0 | Scale of regular state
 PressedScale | `double` | 1.0 | Scale of pressed state
 RegularTranslationX | `double` | 0.0 | TranslationX of regular state
