@@ -483,6 +483,8 @@ namespace TouchEffect
             set => SetValue(BackgroundImageProperty, value);
         }
 
+        public bool? IsToggled { get; set; }
+
         public bool IsCompletedSet => Completed != null;
 
         public VisualElement Control

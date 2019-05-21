@@ -1,6 +1,7 @@
 ﻿using TouchEffect.Enums;
 using TouchEffect.Extensions;
 using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace TouchEffect
 {
@@ -10,8 +11,7 @@ namespace TouchEffect
 
         public TouchImage()
         {
-            Effects.Add(new TouchEff());
-            this.GetTouchEff().StateForceUpdated += (s, e) => ForceUpdateState();
+            Effects.Add(new TouchEff(GetAnimationTask));
         }
 
         public static readonly BindableProperty RegularBackgroundImageSourceProperty = BindableProperty.Create(
@@ -78,7 +78,7 @@ namespace TouchEffect
             set => SetValue(PressedBackgroundImageAspectProperty, value);
         }
 
-        private void ForceUpdateState()
+        private Task GetAnimationTask(ITouchEff sender, TouchState state, double? durationMultiplier = null)
         {
             var regularBackgroundImageSource = RegularBackgroundImageSource;
             var pressedBackgroundImageSource = PressedBackgroundImageSource;
@@ -86,12 +86,12 @@ namespace TouchEffect
             if (regularBackgroundImageSource == null &&
                 pressedBackgroundImageSource == null)
             {
-                return;
+                return Task.FromResult(false);
             }
 
             var aspect = RegularBackgroundImageAspect;
             var source = regularBackgroundImageSource;
-            if (this.GetTouchEff()?.State == TouchState.Pressed)
+            if (state == TouchState.Pressed)
             {
                 aspect = PressedBackgroundImageAspect;
                 source = pressedBackgroundImageSource;
@@ -104,6 +104,8 @@ namespace TouchEffect
                 Source = source;
                 BatchCommit();
             }
+
+            return Task.FromResult(true);
         }
     }
 }

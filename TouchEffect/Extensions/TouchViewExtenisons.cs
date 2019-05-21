@@ -15,5 +15,10 @@ namespace TouchEffect.Extensions
 
         public static TouchEff GetTouchEff(this BindableObject bindable)
             => (bindable as VisualElement)?.Effects.FirstOrDefault(x => x is TouchEff) as TouchEff;
+
+        public static int AdjustDurationMultiplier(this int duration, double? multiplier)
+            => multiplier.HasValue
+                ? (int)(multiplier.Value * duration)
+                : duration;
     }
 }

@@ -56,6 +56,8 @@ namespace TouchEffect
 
         int RippleCount { get; }
 
+        bool? IsToggled { get; set; }
+
         bool IsCompletedSet { get; }
 
         VisualElement Control { get; set; }

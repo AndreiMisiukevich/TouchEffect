@@ -6,6 +6,7 @@ using TouchEffect.Enums;
 using TouchEffect.Extensions;
 using System.ComponentModel;
 using System;
+using System.Threading.Tasks;
 
 namespace TouchEffect
 {
@@ -19,7 +20,8 @@ namespace TouchEffect
             StateChanged += (sender, args) => ForceUpdateState();
         }
 
-        internal event EventHandler StateForceUpdated;
+        internal TouchEff(Func<ITouchEff, TouchState, double?, Task> animationTaskGetter) : this()
+            => _visualManager.SetCustomAnimationTask(animationTaskGetter);
 
         public event TEffectStatusChangedHandler StatusChanged;
 
@@ -34,27 +36,27 @@ namespace TouchEffect
             default(ICommand));
 
         public static readonly BindableProperty CommandParameterProperty = BindableProperty.CreateAttached(
-            "CommandParameter",
+            nameof(CommandParameter),
             typeof(object),
             typeof(TouchEff),
             default(object));
 
         public static readonly BindableProperty StatusProperty = BindableProperty.CreateAttached(
-            "Status",
+            nameof(Status),
             typeof(TouchStatus),
             typeof(TouchEff),
             TouchStatus.Completed,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty StateProperty = BindableProperty.CreateAttached(
-            "State",
+            nameof(State),
             typeof(TouchState),
             typeof(TouchEff),
             TouchState.Regular,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty RegularBackgroundColorProperty = BindableProperty.CreateAttached(
-            "RegularBackgroundColor",
+            nameof(RegularBackgroundColor),
             typeof(Color),
             typeof(TouchEff),
             default(Color),
@@ -64,7 +66,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedBackgroundColorProperty = BindableProperty.CreateAttached(
-            "PressedBackgroundColor",
+            nameof(PressedBackgroundColor),
             typeof(Color),
             typeof(TouchEff),
             default(Color),
@@ -74,7 +76,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty RegularOpacityProperty = BindableProperty.CreateAttached(
-            "RegularOpacity",
+            nameof(RegularOpacity),
             typeof(double),
             typeof(TouchEff),
             1.0,
@@ -84,7 +86,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedOpacityProperty = BindableProperty.CreateAttached(
-            "PressedOpacity",
+            nameof(PressedOpacity),
             typeof(double),
             typeof(TouchEff),
             1.0,
@@ -94,7 +96,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty RegularScaleProperty = BindableProperty.CreateAttached(
-            "RegularScale",
+            nameof(RegularScale),
             typeof(double),
             typeof(TouchEff),
             1.0,
@@ -104,7 +106,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedScaleProperty = BindableProperty.CreateAttached(
-            "PressedScale",
+            nameof(PressedScale),
             typeof(double),
             typeof(TouchEff),
             1.0,
@@ -114,7 +116,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty RegularTranslationXProperty = BindableProperty.CreateAttached(
-            "RegularTranslationX",
+            nameof(RegularTranslationX),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -124,7 +126,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedTranslationXProperty = BindableProperty.CreateAttached(
-            "PressedTranslationX",
+            nameof(PressedTranslationX),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -134,7 +136,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty RegularTranslationYProperty = BindableProperty.CreateAttached(
-            "RegularTranslationY",
+            nameof(RegularTranslationY),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -144,7 +146,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedTranslationYProperty = BindableProperty.CreateAttached(
-            "PressedTranslationY",
+            nameof(PressedTranslationY),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -154,7 +156,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty RegularRotationProperty = BindableProperty.CreateAttached(
-            "RegularRotation",
+            nameof(RegularRotation),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -164,7 +166,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedRotationProperty = BindableProperty.CreateAttached(
-            "PressedRotation",
+            nameof(PressedRotation),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -174,7 +176,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty RegularRotationXProperty = BindableProperty.CreateAttached(
-            "RegularRotationX",
+            nameof(RegularRotationX),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -184,7 +186,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedRotationXProperty = BindableProperty.CreateAttached(
-            "PressedRotationX",
+            nameof(PressedRotationX),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -194,7 +196,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty RegularRotationYProperty = BindableProperty.CreateAttached(
-            "RegularRotationY",
+            nameof(RegularRotationY),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -204,7 +206,7 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedRotationYProperty = BindableProperty.CreateAttached(
-            "PressedRotationY",
+            nameof(PressedRotationY),
             typeof(double),
             typeof(TouchEff),
             0.0,
@@ -214,37 +216,48 @@ namespace TouchEffect
             });
 
         public static readonly BindableProperty PressedAnimationDurationProperty = BindableProperty.CreateAttached(
-            "PressedAnimationDuration",
+            nameof(PressedAnimationDuration),
             typeof(int),
             typeof(TouchEff),
             default(int));
 
         public static readonly BindableProperty PressedAnimationEasingProperty = BindableProperty.CreateAttached(
-            "PressedAnimationEasing",
+            nameof(PressedAnimationEasing),
             typeof(Easing),
             typeof(TouchEff),
             null);
 
         public static readonly BindableProperty RegularAnimationDurationProperty = BindableProperty.CreateAttached(
-            "RegularAnimationDuration",
+            nameof(RegularAnimationDuration),
             typeof(int),
             typeof(TouchEff),
             default(int));
 
         public static readonly BindableProperty RegularAnimationEasingProperty = BindableProperty.CreateAttached(
-            "RegularAnimationEasing",
+            nameof(RegularAnimationEasing),
             typeof(Easing),
             typeof(TouchEff),
             null);
 
         public static readonly BindableProperty RippleCountProperty = BindableProperty.CreateAttached(
-            "RippleCount",
+            nameof(RippleCount),
             typeof(int),
             typeof(TouchEff),
             default(int),
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+            });
+
+        public static readonly BindableProperty IsToggledProperty = BindableProperty.CreateAttached(
+            nameof(IsToggled),
+            typeof(bool?),
+            typeof(TouchEff),
+            default(bool?),
+            BindingMode.TwoWay,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState(false);
             });
 
         public static ICommand GetCommand(BindableObject bindable)
@@ -397,6 +410,12 @@ namespace TouchEffect
         public static void SetRippleCount(BindableObject bindable, int value)
             => bindable.SetValue(RippleCountProperty, value);
 
+        public static bool? GetIsToggled(BindableObject bindable)
+            => (bool?)bindable.GetValue(IsToggledProperty);
+
+        public static void SetIsToggled(BindableObject bindable, bool? value)
+            => bindable.SetValue(IsToggledProperty, value);
+
         public ICommand Command => GetCommand(Control);
 
         public object CommandParameter => GetCommandParameter(Control);
@@ -455,6 +474,12 @@ namespace TouchEffect
 
         public int RippleCount => GetRippleCount(Control);
 
+        public bool? IsToggled
+        {
+            get => GetIsToggled(Control);
+            set => SetIsToggled(Control, value);
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsCompletedSet => Completed != null;
 
@@ -485,7 +510,12 @@ namespace TouchEffect
                 return;
             }
             _visualManager.ChangeStateAsync(this, State, animated);
-            StateForceUpdated?.Invoke(this, System.EventArgs.Empty);
+        }
+
+        protected override void OnDetached()
+        {
+            base.OnDetached();
+            _visualManager.SetCustomAnimationTask(null);
         }
     }
 }
