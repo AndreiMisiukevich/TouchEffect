@@ -1,11 +1,25 @@
 # TouchView control for Xamarin Forms (based on Xamarin Forms AbsoluteLayout)
 This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer
 
+
+## GIF
 <html>
-<p align="center">
-  <img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/Samples.gif?raw=true" height="500">
-</p>
+  <table style="width:100%">
+    <tr>
+      <th>TouchImage</th>
+      <th>Fade / Ripple</th> 
+      <th>Background color / Transformations</th>
+      <th>IsToggled / image</th>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/1.gif?raw=true"></td>
+      <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/2.gif?raw=true"></td>
+      <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/3.gif?raw=true"></td>
+    <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/4.gif?raw=true"></td>
+    </tr>
+  </table>
 </html>
+
 
 ## Setup
 * Available on NuGet: [TouchView](http://www.nuget.org/packages/TouchView) [![NuGet](https://img.shields.io/nuget/v/TouchView.svg?label=NuGet)](https://www.nuget.org/packages/TouchView)
