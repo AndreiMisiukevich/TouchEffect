@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using TouchEffect.Enums;
 using TouchEffect.Extensions;
 using System;
+using TouchEffect.Interfaces;
 
 namespace TouchEffect
 {
@@ -16,6 +17,8 @@ namespace TouchEffect
         public event TouchViewStateChangedHandler StateChanged;
 
         public event TouchViewCompletedHandler Completed;
+
+        public event AnimationStartedHandler AnimationStarted;
 
         public static readonly BindableProperty CommandProperty = BindableProperty.Create(
             nameof(Command),
@@ -553,6 +556,10 @@ namespace TouchEffect
             var state = State;
             SetBackgroundImage(state);
             _visualManager.ChangeStateAsync(this, state, true);
+        }
+
+        public void RaiseAnimationStarted(TouchState state, int duration)
+        {
         }
     }
 }

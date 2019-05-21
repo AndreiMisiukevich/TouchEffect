@@ -95,6 +95,8 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
     <AndroidResource Include="Resources\drawable\button.png" />
     <AndroidResource Include="Resources\drawable\button_pressed.png" />
+    <AndroidResource Include="Resources\drawable\check.png" />
+    <AndroidResource Include="Resources\drawable\x.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

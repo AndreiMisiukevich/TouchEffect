@@ -169,5 +169,7 @@
   <ItemGroup>
     <BundleResource Include="Resources\button.png" />
     <BundleResource Include="Resources\button_pressed.png" />
+    <BundleResource Include="Resources\check.png" />
+    <BundleResource Include="Resources\x.png" />
   </ItemGroup>
 </Project>

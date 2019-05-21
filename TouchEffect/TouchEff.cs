@@ -7,6 +7,8 @@ using TouchEffect.Extensions;
 using System.ComponentModel;
 using System;
 using System.Threading.Tasks;
+using System.Threading;
+using TouchEffect.Interfaces;
 
 namespace TouchEffect
 {
@@ -20,7 +22,7 @@ namespace TouchEffect
             StateChanged += (sender, args) => ForceUpdateState();
         }
 
-        internal TouchEff(Func<ITouchEff, TouchState, double?, Task> animationTaskGetter) : this()
+        internal TouchEff(Func<ITouchEff, TouchState, int, CancellationToken, Task> animationTaskGetter) : this()
             => _visualManager.SetCustomAnimationTask(animationTaskGetter);
 
         public event TEffectStatusChangedHandler StatusChanged;
@@ -28,6 +30,8 @@ namespace TouchEffect
         public event TEffectStateChangedHandler StateChanged;
 
         public event TEffectCompletedHandler Completed;
+
+        public event AnimationStartedHandler AnimationStarted;
 
         public static readonly BindableProperty CommandProperty = BindableProperty.CreateAttached(
             nameof(Command),
@@ -501,7 +505,11 @@ namespace TouchEffect
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseCompleted()
             => Completed?.Invoke(Control, new TouchCompletedEventArgs(CommandParameter));
-            
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void RaiseAnimationStarted(TouchState state, int duration)
+            => AnimationStarted?.Invoke(Control, new AnimationStartedEventArgs(state, duration));
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ForceUpdateState(bool animated = true)
         {

@@ -2,9 +2,9 @@
 using TouchEffect.Enums;
 using Xamarin.Forms;
 
-namespace TouchEffect
+namespace TouchEffect.Interfaces
 {
-    internal interface ITouchEff
+    public interface ITouchEff
     {
         ICommand Command { get; }
 
@@ -69,5 +69,7 @@ namespace TouchEffect
         void RaiseStatusChanged();
 
         void RaiseCompleted();
+
+        void RaiseAnimationStarted(TouchState state, int duration);
     }
 }

@@ -28,6 +28,11 @@ namespace TouchEffectSample
                             {
                                 Text = "(Background Color and transofrmations)",
                                 Command = new Command(() => MainPage.Navigation.PushAsync(new TouchColorViewPage()))
+                            },
+                            new Button
+                            {
+                                Text = "(Toggle sample)",
+                                Command = new Command(() => MainPage.Navigation.PushAsync(new TogglePage()))
                             }
                         }
 					}
