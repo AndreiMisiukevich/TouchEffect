@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using TouchEffect;
+using TouchEffectSample.Issues;
 namespace TouchEffectSample
 {
     public class App : Application
@@ -32,7 +33,9 @@ namespace TouchEffectSample
                             new Button
                             {
                                 Text = "(Toggle sample)",
-                                Command = new Command(() => MainPage.Navigation.PushAsync(new TogglePage()))
+                                Command = new Command(() => MainPage.Navigation.PushAsync(Device.RuntimePlatform == Device.Android 
+                                    ? (Page) new AndroidTogglePage() 
+                                    : new TogglePage()))
                             }
                         }
 					}

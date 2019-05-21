@@ -13,4 +13,7 @@
   <ItemGroup>
     <Compile Remove="TouchFadeViewPage.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Issues\" />
+  </ItemGroup>
 </Project>

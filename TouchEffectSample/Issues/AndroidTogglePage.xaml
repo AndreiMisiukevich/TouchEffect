@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:forms="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.Core"
+             xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
+             Title="Toggle"
+             x:Name="page"
+             x:Class="TouchEffectSample.Issues.AndroidTogglePage">
+    
+    <Grid Padding="20, 50">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <ContentView  x:Name="frame1"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="0" 
+                Grid.Column="0" 
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.IsToggled="false"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="check.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame2"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                
+                Grid.Row="0" 
+                Grid.Column="1" 
+                touch:TouchEff.IsToggled="true"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+           <Image Margin="10" Source="x.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame3"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="0" 
+                Grid.Column="2" 
+                touch:TouchEff.IsToggled="false"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="check.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame4"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="1" 
+                Grid.Column="0" 
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.IsToggled="false"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="check.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame5"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="1" 
+                Grid.Column="1" 
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.IsToggled="true"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="x.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame6"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="1" 
+                Grid.Column="2" 
+                touch:TouchEff.IsToggled="false"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="check.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame7"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="2" 
+                Grid.Column="0" 
+                touch:TouchEff.IsToggled="false"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="check.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame8"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="2" 
+                Grid.Column="1" 
+                touch:TouchEff.IsToggled="false"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="check.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+        <ContentView  x:Name="frame9"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Padding="0"
+                WidthRequest="80" 
+                HeightRequest="80" 
+                Grid.Row="2" 
+                Grid.Column="2" 
+                touch:TouchEff.IsToggled="true"
+                touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
+                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.PressedBackgroundColor="Gold"
+                touch:TouchEff.PressedRotationY="180"
+                touch:TouchEff.PressedScale="1.2"
+                touch:TouchEff.RippleCount="-1"
+                touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.PressedAnimationDuration="500"
+                touch:TouchEff.RegularAnimationDuration="500">
+            <ContentView.Effects>
+                <touch:TouchEff AnimationStarted="OnAnimStarted"/>
+            </ContentView.Effects>
+            <Image Margin="10" Source="x.png" Aspect="AspectFill"/>
+        </ContentView>
+        
+    </Grid>
+    
+</ContentPage>
