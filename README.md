@@ -120,6 +120,7 @@ PressedAnimationEasing | `Easing` | null | The easing of animation by applying P
 RegularAnimationDuration | `int` | 0 | The duration of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
 RegularAnimationEasing | `Easing` | null | The easing of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
 RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
+IsToggled | `bool?` | null | This property allows to achieve "switch" behavior. **null** means that feature is disabled and view will return to inital state after touch releasing
 
 ### TouchImage Bindable Properties
 Property | Type | Default | Description
