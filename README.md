@@ -1,6 +1,9 @@
 # TouchView control for Xamarin Forms (based on Xamarin Forms AbsoluteLayout)
 This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer
 
+### Build Status
+* Azure DevOps: [![Build status](https://dev.azure.com/andreimisiukevich/TouchView/_apis/build/status/TouchView-nuget-CI)](https://dev.azure.com/andreimisiukevich/TouchView/_build/latest?definitionId=1)
+
 ## GIF
 <html>
   <table style="width:100%">
