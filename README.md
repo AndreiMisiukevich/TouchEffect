@@ -31,6 +31,8 @@ This plugin provides opportunity to create views with touch effects without usin
 | ------------------- | ------------------- |
 |Xamarin.iOS|8.0+|
 |Xamarin.Android|15+|
+|Xamarin.Mac|All|
+|Xamarin.UWP|10+|
 
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
