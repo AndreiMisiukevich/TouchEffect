@@ -131,6 +131,10 @@
     <None Include="TouchEffectSample.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\button.png" />
+    <Content Include="Assets\button_pressed.png" />
+    <Content Include="Assets\check.png" />
+    <Content Include="Assets\x.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
