@@ -29,5 +29,8 @@
     <!--Xamarin.iOS-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\Xamarin.iOS10\TouchEffect.dll" />
     <file src="TouchEffect.iOS\bin\Release\TouchEffect.iOS.dll" target="lib\Xamarin.iOS10\TouchEffect.iOS.dll" />
+	 <!--Windows WinUWP-->
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\uap\TouchEffect.dll" />
+    <file src="TouchEffect.UWP\bin\Release\TouchEffect.UWP.dll" target="lib\uap\TouchEffect.UWP.dll" />
   </files>
 </package>
