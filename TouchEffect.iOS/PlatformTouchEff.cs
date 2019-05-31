@@ -4,7 +4,6 @@ using Foundation;
 using TouchEffect.iOS;
 using Xamarin.Forms;
 using TouchEffect;
-using System;
 using TouchEffect.Extensions;
 using TouchEffect.Enums;
 

@@ -1,6 +1,6 @@
-﻿using Xamarin.Forms.Internals;
+﻿using Foundation;
 
-namespace TouchEffect.UWP
+namespace TouchEffect.Mac
 {
     [Preserve(AllMembers = true)]
     public static class TouchEffectPreserver

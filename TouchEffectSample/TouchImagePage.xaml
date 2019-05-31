@@ -9,6 +9,7 @@
              Title="TouchImagePage">
     <StackLayout>
         <touch:TouchImage
+            x:Name="image"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand"
             HeightRequest="250"
@@ -19,6 +20,7 @@
                     <OnPlatform.Platforms>
                         <On Platform="iOS" Value="button" />
                         <On Platform="Android" Value="button" />
+                        <On Platform="macOS" Value="button" />
                         <On Platform="UWP" Value="Assets/button.png" />
                     </OnPlatform.Platforms>
                 </OnPlatform>
@@ -28,6 +30,7 @@
                     <OnPlatform.Platforms>
                         <On Platform="iOS" Value="button_pressed" />
                         <On Platform="Android" Value="button_pressed" />
+                        <On Platform="macOS" Value="button_pressed" />
                         <On Platform="UWP" Value="Assets/button_pressed.png" />
                     </OnPlatform.Platforms>
                 </OnPlatform>
