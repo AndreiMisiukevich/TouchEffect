@@ -69,7 +69,7 @@ namespace TouchEffect.UWP
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            this._pressed = true;
+            _pressed = true;
 
             Element.GetTouchEff().HandleTouch(TouchStatus.Started);
         }
