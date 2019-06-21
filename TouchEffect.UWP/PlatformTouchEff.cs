@@ -21,7 +21,7 @@ namespace TouchEffect.UWP
 
         private TouchEff _effect;
 
-        private bool _pressed = false;
+        private bool _pressed;
 
         protected override void OnAttached()
         {
