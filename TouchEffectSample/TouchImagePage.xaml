@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
              x:Class="TouchEffectSample.TouchImagePage"
@@ -7,14 +8,33 @@
              BackgroundColor="White"
              Title="TouchImagePage">
     <StackLayout>
-       <touch:TouchImage
+        <touch:TouchImage
+            x:Name="image"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand"
             HeightRequest="250"
             WidthRequest="250"
-            RegularBackgroundImageSource="button"
-            PressedBackgroundImageSource="button_pressed"
-            touch:TouchEff.Command="{Binding Command, Source={x:Reference root}}"
-            />
+            touch:TouchEff.Command="{Binding Command, Source={x:Reference root}}">
+            <touch:TouchImage.RegularBackgroundImageSource>
+                <OnPlatform x:TypeArguments="ImageSource">
+                    <OnPlatform.Platforms>
+                        <On Platform="iOS" Value="button" />
+                        <On Platform="Android" Value="button" />
+                        <On Platform="macOS" Value="button" />
+                        <On Platform="UWP" Value="Assets/button.png" />
+                    </OnPlatform.Platforms>
+                </OnPlatform>
+            </touch:TouchImage.RegularBackgroundImageSource>
+            <touch:TouchImage.PressedBackgroundImageSource>
+                <OnPlatform x:TypeArguments="ImageSource">
+                    <OnPlatform.Platforms>
+                        <On Platform="iOS" Value="button_pressed" />
+                        <On Platform="Android" Value="button_pressed" />
+                        <On Platform="macOS" Value="button_pressed" />
+                        <On Platform="UWP" Value="Assets/button_pressed.png" />
+                    </OnPlatform.Platforms>
+                </OnPlatform>
+            </touch:TouchImage.PressedBackgroundImageSource>
+        </touch:TouchImage>
     </StackLayout>
 </ContentPage>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>TouchView</id>
-    <version>3.0.1</version>
+    <version>$version$</version>
     <title>TouchView</title>
     <authors>Andrei Misiukevich</authors>
     <owners>Andrei Misiukevich</owners>
@@ -29,5 +29,11 @@
     <!--Xamarin.iOS-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\Xamarin.iOS10\TouchEffect.dll" />
     <file src="TouchEffect.iOS\bin\Release\TouchEffect.iOS.dll" target="lib\Xamarin.iOS10\TouchEffect.iOS.dll" />
+    <!--Windows WinUWP-->
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\uap\TouchEffect.dll" />
+    <file src="TouchEffect.UWP\bin\Release\TouchEffect.UWP.dll" target="lib\uap\TouchEffect.UWP.dll" />
+    <!--Xamarin.Mac-->
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\Xamarin.Mac20\TouchEffect.dll" />
+    <file src="TouchEffect.Mac\bin\Release\TouchEffect.Mac.dll" target="lib\Xamarin.Mac20\TouchEffect.Mac.dll" />
   </files>
 </package>

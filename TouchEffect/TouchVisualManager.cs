@@ -341,13 +341,15 @@ namespace TouchEffect
 
         private Task GetAnimationTask(ITouchEff sender, TouchState state, double? durationMultiplier = null)
         {
+            var token = _animationTokenSource.Token;
+
             var duration = (state == TouchState.Regular
                 ? sender.RegularAnimationDuration
                 : sender.PressedAnimationDuration).AdjustDurationMultiplier(durationMultiplier);
 
             sender.RaiseAnimationStarted(state, duration);
             return Task.WhenAll(
-                _customAnimationTaskGetter?.Invoke(sender, state, duration, _animationTokenSource.Token) ?? Task.FromResult(true),
+                _customAnimationTaskGetter?.Invoke(sender, state, duration, token) ?? Task.FromResult(true),
                 SetBackgroundColorAsync(sender, state, duration),
                 SetOpacityAsync(sender, state, duration),
                 SetScaleAsync(sender, state, duration),
@@ -363,11 +365,14 @@ namespace TouchEffect
                     for (var progress = AnimationProgressDelay; progress < duration; progress += AnimationProgressDelay)
                     {
                         await Task.Delay(AnimationProgressDelay).ConfigureAwait(false);
+                        if (token.IsCancellationRequested)
+                        {
+                            return;
+                        }
                         _animationProgress = (double)progress / duration;
                     }
                     _animationProgress = 1;
-
-                }, _animationTokenSource.Token));
+                }));
         }
     }
 }
