@@ -29,6 +29,11 @@ namespace TouchEffect.Android
             {
                 Container.Touch += OnTouch;
             }
+            else if (Control != null)
+            {
+                Control.Touch += OnTouch;
+            }
+
         }
 
         protected override void OnDetached()
@@ -39,6 +44,11 @@ namespace TouchEffect.Android
             {
                 Container.Touch -= OnTouch;
             }
+            if (Control != null)
+            {
+                Control.Touch -= OnTouch;
+            }
+
         }
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
