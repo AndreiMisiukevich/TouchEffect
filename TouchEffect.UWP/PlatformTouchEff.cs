@@ -21,6 +21,8 @@ namespace TouchEffect.UWP
 
         private TouchEff _effect;
 
+        private bool _pressed;
+
         protected override void OnAttached()
         {
             _effect = Element.GetTouchEff();
@@ -44,21 +46,31 @@ namespace TouchEffect.UWP
                 Container.PointerPressed -= OnPointerPressed;
                 Container.PointerReleased -= OnPointerReleased;
                 Container.PointerCanceled -= OnPointerCanceled;
+
+                _pressed = false;
             }
         }
 
         private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
         {
+            _pressed = false;
+
             Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
         }
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
+            if (_pressed)
+            {
+                _pressed = false;
+                Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
+            }            
         }
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            _pressed = true;
+
             Element.GetTouchEff().HandleTouch(TouchStatus.Started);
         }
     }
