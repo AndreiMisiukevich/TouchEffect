@@ -15,6 +15,7 @@ namespace TouchEffect
     public class TouchEff : RoutingEffect, ITouchEff
     {
         private readonly TouchVisualManager _visualManager;
+        private VisualElement _control;
 
         public TouchEff() : base($"{nameof(TouchEffect)}.{nameof(TouchEff)}")
         {
@@ -488,7 +489,15 @@ namespace TouchEffect
         public bool IsCompletedSet => Completed != null;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public VisualElement Control { get; set; }
+        public VisualElement Control
+        {
+            get => _control;
+            set
+            {
+                _visualManager.AbortAnimations(this);
+                _control = value;
+            }
+        }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void HandleTouch(TouchStatus status)
@@ -513,7 +522,7 @@ namespace TouchEffect
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ForceUpdateState(bool animated = true)
         {
-            if(Control == null)
+            if (Control == null)
             {
                 return;
             }

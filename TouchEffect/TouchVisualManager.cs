@@ -98,11 +98,9 @@ namespace TouchEffect
 
         public async void ChangeStateAsync(ITouchEff sender, TouchState state, bool animated)
         {
-            _animationTokenSource?.Cancel();
+            AbortAnimations(sender);
             _animationTokenSource = new CancellationTokenSource();
             var token = _animationTokenSource.Token;
-            ViewExtensions.CancelAnimations(sender.Control);
-            AnimationExtensions.AbortAnimation(sender.Control, ChangeBackgroundColorAnimationName);
 
             var isToggled = sender.IsToggled;
 
@@ -164,6 +162,18 @@ namespace TouchEffect
             sender.RaiseCompleted();
         }
 
+        internal void AbortAnimations(ITouchEff sender)
+        {
+            _animationTokenSource?.Cancel();
+            var control = sender.Control;
+            if (control == null)
+            {
+                return;
+            }
+            ViewExtensions.CancelAnimations(control);
+            AnimationExtensions.AbortAnimation(control, ChangeBackgroundColorAnimationName);
+        }
+
         private async Task SetBackgroundColorAsync(ITouchEff sender, TouchState state, int duration)
         {
             var regularBackgroundColor = sender.RegularBackgroundColor;
@@ -184,18 +194,19 @@ namespace TouchEffect
                 easing = sender.PressedAnimationEasing;
             }
 
+            var control = sender.Control;
             if (duration <= 0)
             {
-                sender.Control.BackgroundColor = color;
+                control.BackgroundColor = color;
                 return;
             }
 
             var animationCompletionSource = new TaskCompletionSource<bool>();
             new Animation{
-                {0, 1,  new Animation(v => sender.Control.BackgroundColor = new Color(v, sender.Control.BackgroundColor.G, sender.Control.BackgroundColor.B, sender.Control.BackgroundColor.A), sender.Control.BackgroundColor.R, color.R) },
-                {0, 1,  new Animation(v => sender.Control.BackgroundColor = new Color(sender.Control.BackgroundColor.R, v, sender.Control.BackgroundColor.B, sender.Control.BackgroundColor.A), sender.Control.BackgroundColor.G, color.G) },
-                {0, 1,  new Animation(v => sender.Control.BackgroundColor = new Color(sender.Control.BackgroundColor.R, sender.Control.BackgroundColor.G, v, sender.Control.BackgroundColor.A), sender.Control.BackgroundColor.B, color.B) },
-                {0, 1,  new Animation(v => sender.Control.BackgroundColor = new Color(sender.Control.BackgroundColor.R, sender.Control.BackgroundColor.G, sender.Control.BackgroundColor.B, v), sender.Control.BackgroundColor.A, color.A) },
+                {0, 1,  new Animation(v => control.BackgroundColor = new Color(v, control.BackgroundColor.G, control.BackgroundColor.B, control.BackgroundColor.A), control.BackgroundColor.R, color.R) },
+                {0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, v, control.BackgroundColor.B, control.BackgroundColor.A), control.BackgroundColor.G, color.G) },
+                {0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, v, control.BackgroundColor.A), control.BackgroundColor.B, color.B) },
+                {0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, control.BackgroundColor.B, v), control.BackgroundColor.A, color.A) },
             }.Commit(sender.Control, ChangeBackgroundColorAnimationName, 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
             await animationCompletionSource.Task;
         }
@@ -341,8 +352,11 @@ namespace TouchEffect
 
         private Task GetAnimationTask(ITouchEff sender, TouchState state, double? durationMultiplier = null)
         {
+            if (sender.Control == null)
+            {
+                return Task.CompletedTask;
+            }
             var token = _animationTokenSource.Token;
-
             var duration = (state == TouchState.Regular
                 ? sender.RegularAnimationDuration
                 : sender.PressedAnimationDuration).AdjustDurationMultiplier(durationMultiplier);

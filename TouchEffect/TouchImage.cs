@@ -111,12 +111,12 @@ namespace TouchEffect
                 source = pressedBackgroundImageSource;
             }
 
-            if(ShouldSetImageOnAnimationEnd)
+            if (ShouldSetImageOnAnimationEnd)
             {
                 await Task.Delay(duration, token);
             }
 
-            if(token.IsCancellationRequested)
+            if (token.IsCancellationRequested)
             {
                 return;
             }
