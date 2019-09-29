@@ -361,6 +361,11 @@ namespace TouchEffect
                 ? sender.RegularAnimationDuration
                 : sender.PressedAnimationDuration).AdjustDurationMultiplier(durationMultiplier);
 
+            if(duration <= 0 && Device.RuntimePlatform == Device.Android)
+            {
+                duration = 1;
+            }
+
             sender.RaiseAnimationStarted(state, duration);
             return Task.WhenAll(
                 _customAnimationTaskGetter?.Invoke(sender, state, duration, token) ?? Task.FromResult(true),
