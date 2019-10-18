@@ -28,7 +28,8 @@ namespace TouchEffect
 
         private TouchState _animationState;
 
-        private bool CanExecuteAction(ITouchEff sender) => sender.Control.IsEnabled && (sender.Command != null || sender.IsCompletedSet);
+        private bool CanExecuteAction(ITouchEff sender)
+            => sender.Control.IsEnabled && ((sender.Command?.CanExecute(sender.CommandParameter) ?? false) || sender.IsCompletedSet);
 
         internal TouchVisualManager(params string[] skipTapHandlingPlatforms)
             => _skipTapHandlingPlatforms = new HashSet<string>(skipTapHandlingPlatforms);
