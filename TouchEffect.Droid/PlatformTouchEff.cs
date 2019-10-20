@@ -7,6 +7,7 @@ using TouchEffect.Enums;
 using Android.Runtime;
 using Android.Views;
 using AView = Android.Views.View;
+using System;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -38,17 +39,23 @@ namespace TouchEffect.Android
 
         protected override void OnDetached()
         {
-            _effect.Control = null;
-            _effect = null;
-            if (Container != null)
+            try
             {
-                Container.Touch -= OnTouch;
+                _effect.Control = null;
+                _effect = null;
+                if (Container != null)
+                {
+                    Container.Touch -= OnTouch;
+                }
+                if (Control != null)
+                {
+                    Control.Touch -= OnTouch;
+                }
             }
-            if (Control != null)
+            catch(ObjectDisposedException)
             {
-                Control.Touch -= OnTouch;
+                //suppress exception
             }
-
         }
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
