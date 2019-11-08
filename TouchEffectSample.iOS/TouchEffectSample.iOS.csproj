@@ -148,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.2.0.848062</Version>
+      <Version>4.3.0.947036</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -160,6 +160,8 @@
     <ProjectReference Include="..\TouchEffect.iOS\TouchEffect.iOS.csproj">
       <Project>{78144B76-1773-47C2-B4D1-5351BEC6867D}</Project>
       <Name>TouchEffect.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\TouchEffect\TouchEffect.csproj">
       <Project>{DA072342-C557-4A65-B9BD-68C0491C3E9D}</Project>
