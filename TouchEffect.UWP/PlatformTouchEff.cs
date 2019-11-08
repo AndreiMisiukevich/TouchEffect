@@ -6,6 +6,7 @@ using TouchEffect.UWP;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.UWP;
+using System.Diagnostics;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -22,6 +23,7 @@ namespace TouchEffect.UWP
         private TouchEff _effect;
 
         private bool _pressed;
+        private bool _inrange;
 
         protected override void OnAttached()
         {
@@ -34,6 +36,27 @@ namespace TouchEffect.UWP
                 Container.PointerPressed += OnPointerPressed;
                 Container.PointerReleased += OnPointerReleased;
                 Container.PointerCanceled += OnPointerCanceled;
+                Container.PointerCaptureLost += OnPointerCanceled;
+                Container.PointerExited += Container_PointerExited;
+                Container.PointerEntered += Container_PointerEntered;
+            }
+        }
+
+        private void Container_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            _inrange = true;
+            if (_pressed)
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+            }
+        }
+
+        private void Container_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            _inrange = false;
+            if (_pressed)
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
             }
         }
 
@@ -46,8 +69,12 @@ namespace TouchEffect.UWP
                 Container.PointerPressed -= OnPointerPressed;
                 Container.PointerReleased -= OnPointerReleased;
                 Container.PointerCanceled -= OnPointerCanceled;
+                Container.PointerCaptureLost -= OnPointerCanceled;
+                Container.PointerExited -= Container_PointerExited;
+                Container.PointerEntered -= Container_PointerEntered;
 
                 _pressed = false;
+                _inrange = false;
             }
         }
 
@@ -60,15 +87,19 @@ namespace TouchEffect.UWP
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            if (_pressed)
+            if (_pressed && _inrange)
             {
-                _pressed = false;
                 Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
-            }            
+            }
+            else
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+            }
         }
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            Container.CapturePointer(e.Pointer);
             _pressed = true;
 
             Element.GetTouchEff().HandleTouch(TouchStatus.Started);
