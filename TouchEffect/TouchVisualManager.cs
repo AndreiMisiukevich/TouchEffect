@@ -39,7 +39,7 @@ namespace TouchEffect
             var canExecuteAction = CanExecuteAction(sender);
             if (status != TouchStatus.Started || canExecuteAction)
             {
-                if (!canExecuteAction)
+                if (!canExecuteAction && status != TouchStatus.HoverEnter && status != TouchStatus.HoverLeave)
                 {
                     status = TouchStatus.Canceled;
                 }

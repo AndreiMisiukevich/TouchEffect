@@ -16,4 +16,9 @@
   <ItemGroup>
     <Folder Include="Issues\" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="HoverPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
