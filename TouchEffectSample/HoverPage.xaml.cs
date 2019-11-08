@@ -25,7 +25,7 @@ namespace TouchEffectSample
             {
                 sender.Opacity = 0.5;
             }
-            else if(args.Status == TouchEffect.Enums.TouchStatus.HoverLeave || args.Status == TouchEffect.Enums.TouchStatus.Canceled)
+            else if(args.Status == TouchEffect.Enums.TouchStatus.HoverLeave)
             {
                 sender.Opacity = 1;
             }

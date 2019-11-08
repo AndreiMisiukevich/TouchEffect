@@ -58,19 +58,73 @@ namespace TouchEffect.Android
             }
         }
 
+        bool _inrange;
+        bool _pressed;
+        bool _leftrange = false;
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
+            Console.WriteLine(e.Event.Action);
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
-                    Element.GetTouchEff().HandleTouch(TouchStatus.Started);
-                    break;
+                    {
+                        _pressed = true;
+                        Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+                        break;
+                    }
+
                 case MotionEventActions.Up:
-                    Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
-                    break;
+                    {
+                        _pressed = false;
+                        if (_inrange)
+                        {
+                            Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
+                            _inrange = false;
+                        }
+                        else
+                        {
+                            Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                        }
+                        break;
+                    }
                 case MotionEventActions.Cancel:
-                    Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
-                    break;
+                    {
+                        _pressed = false;
+                        Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                        break;
+                    }
+
+                case MotionEventActions.HoverEnter:
+                    {
+                        Element.GetTouchEff().HandleTouch(TouchStatus.HoverEnter);
+                        break;
+                    }
+                case MotionEventActions.HoverExit:
+                    {
+                        Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
+                        break;
+                    }
+                case MotionEventActions.Move:
+                    {
+                        //TODO Determine if pointer is within the control
+                        /*
+                        if(pointer in control) 
+                        {
+                            Console.WriteLine("INRANGE");
+                            _inrange = true;
+                            if(_leftrange)
+                                Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+                        }
+                        else
+                        {
+                            _leftrange = true;
+                            Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                        }
+                        */
+                        break;
+
+                    }
+
             }
             e.Handled = true;
         }

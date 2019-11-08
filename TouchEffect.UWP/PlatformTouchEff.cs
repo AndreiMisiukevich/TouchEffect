@@ -36,7 +36,6 @@ namespace TouchEffect.UWP
                 Container.PointerPressed += OnPointerPressed;
                 Container.PointerReleased += OnPointerReleased;
                 Container.PointerCanceled += OnPointerCanceled;
-                Container.PointerCaptureLost += OnPointerCanceled;
                 Container.PointerExited += Container_PointerExited;
                 Container.PointerEntered += Container_PointerEntered;
             }
@@ -49,6 +48,10 @@ namespace TouchEffect.UWP
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Started);
             }
+            else
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.HoverEnter);
+            }
         }
 
         private void Container_PointerExited(object sender, PointerRoutedEventArgs e)
@@ -57,6 +60,11 @@ namespace TouchEffect.UWP
             if (_pressed)
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
+            }
+            else
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
             }
         }
 
@@ -69,7 +77,6 @@ namespace TouchEffect.UWP
                 Container.PointerPressed -= OnPointerPressed;
                 Container.PointerReleased -= OnPointerReleased;
                 Container.PointerCanceled -= OnPointerCanceled;
-                Container.PointerCaptureLost -= OnPointerCanceled;
                 Container.PointerExited -= Container_PointerExited;
                 Container.PointerEntered -= Container_PointerEntered;
 
@@ -89,6 +96,7 @@ namespace TouchEffect.UWP
         {
             if (_pressed && _inrange)
             {
+                _pressed = false;
                 Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
             }
             else
