@@ -44,28 +44,17 @@ namespace TouchEffect.UWP
         private void Container_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             _inrange = true;
+            Element.GetTouchEff().HandleTouch(TouchStatus.HoverEnter);
             if (_pressed)
-            {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Started);
-            }
-            else
-            {
-                Element.GetTouchEff().HandleTouch(TouchStatus.HoverEnter);
-            }
         }
 
         private void Container_PointerExited(object sender, PointerRoutedEventArgs e)
         {
             _inrange = false;
             if (_pressed)
-            {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
-                Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
-            }
-            else
-            {
-                Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
-            }
+            Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
         }
 
         protected override void OnDetached()

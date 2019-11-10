@@ -41,15 +41,21 @@ namespace TouchEffect.Mac
         }
     }
 
+
     internal sealed class TouchNSClickGestureRecognizer : NSGestureRecognizer
     {
         private TouchEff _effect;
         private NSView _container;
+        /*private NSTrackingArea _trackingarea;*/
 
         public TouchNSClickGestureRecognizer(TouchEff effect, NSView container)
         {
             _effect = effect;
             _container = container;
+            /*
+            _trackingarea = new NSTrackingArea(container.Frame, NSTrackingAreaOptions.MouseEnteredAndExited, container, null);
+            _container.AddTrackingArea(_trackingarea);
+            */
         }
 
         private Rectangle ViewRect
