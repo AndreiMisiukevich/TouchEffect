@@ -44,7 +44,7 @@ namespace TouchEffect.UWP
         private void Container_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
             _inrange = true;
-            Element.GetTouchEff().HandleTouch(TouchStatus.HoverEnter);
+            Element.GetTouchEff().HandleHover(HoverStatus.Entered);
             if (_pressed)
                 Element.GetTouchEff().HandleTouch(TouchStatus.Started);
         }
@@ -54,7 +54,7 @@ namespace TouchEffect.UWP
             _inrange = false;
             if (_pressed)
                 Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
-            Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
+            Element.GetTouchEff().HandleHover(HoverStatus.Exited);
         }
 
         protected override void OnDetached()

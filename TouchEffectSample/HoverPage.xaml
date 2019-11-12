@@ -11,7 +11,7 @@
         <Grid>
             <Grid WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="100" BackgroundColor="Black">
                 <Grid.Effects>
-                    <touch:TouchEff StatusChanged="TouchEff_StatusChanged"/>
+                    <touch:TouchEff HoverStatusChanged="TouchEff_HoverStatusChanged" HoverStateChanged="TouchEff_HoverStateChanged"/>
                 </Grid.Effects>
                 <Label Text="Hover me" HorizontalOptions="Center" VerticalOptions="Center" TextColor="White"/>
             </Grid>

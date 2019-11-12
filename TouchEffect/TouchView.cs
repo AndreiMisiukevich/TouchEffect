@@ -16,6 +16,10 @@ namespace TouchEffect
 
         public event TouchViewStateChangedHandler StateChanged;
 
+        public event TouchViewHoverStatusChangedHandler HoverStatusChanged;
+
+        public event TouchViewHoverStateChangedHandler HoverStateChanged;
+
         public event TouchViewCompletedHandler Completed;
 
         public event AnimationStartedHandler AnimationStarted;
@@ -44,6 +48,20 @@ namespace TouchEffect
             typeof(TouchState),
             typeof(TouchView),
             TouchState.Regular,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty HoverStatusProperty = BindableProperty.Create(
+            nameof(HoverStatus),
+            typeof(HoverStatus),
+            typeof(TouchView),
+            HoverStatus.Exited,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty HoverStateProperty = BindableProperty.Create(
+            nameof(HoverState),
+            typeof(HoverState),
+            typeof(TouchView),
+            HoverState.Regular,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty RegularBackgroundColorProperty = BindableProperty.Create(
@@ -330,6 +348,19 @@ namespace TouchEffect
             set => SetValue(StateProperty, value);
         }
 
+        public HoverStatus HoverStatus
+        {
+            get => (HoverStatus)GetValue(HoverStatusProperty);
+            set => SetValue(HoverStatusProperty, value);
+        }
+
+        public HoverState HoverState
+        {
+            get => (HoverState)GetValue(HoverStateProperty);
+            set => SetValue(HoverStateProperty, value);
+        }
+
+
         public Color RegularBackgroundColor
         {
             get => (Color)GetValue(RegularBackgroundColorProperty);
@@ -519,6 +550,12 @@ namespace TouchEffect
 
         public void RaiseStatusChanged()
             => StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
+
+        public void RaiseHoverStateChanged()
+            => HoverStateChanged?.Invoke(this, new HoverStateChangedEventArgs(HoverState));
+
+        public void RaiseHoverStatusChanged()
+            => HoverStatusChanged?.Invoke(this, new HoverStatusChangedEventArgs(HoverStatus));
 
         public void RaiseCompleted()
             => Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));

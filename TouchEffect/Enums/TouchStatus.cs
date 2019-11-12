@@ -6,7 +6,5 @@ namespace TouchEffect.Enums
         Started,
         Completed,
         Canceled,
-        HoverEnter,
-        HoverLeave
     }
 }

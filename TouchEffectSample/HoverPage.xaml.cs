@@ -18,17 +18,21 @@ namespace TouchEffectSample
             InitializeComponent();
         }
 
-        private void TouchEff_StatusChanged(VisualElement sender, TouchEffect.EventArgs.TouchStatusChangedEventArgs args)
+        private void TouchEff_HoverStateChanged(VisualElement sender, TouchEffect.EventArgs.HoverStateChangedEventArgs args)
         {
-            Debug.WriteLine(args.Status);
-            if(args.Status == TouchEffect.Enums.TouchStatus.HoverEnter)
+            if(args.State == TouchEffect.Enums.HoverState.Hovering)
             {
                 sender.Opacity = 0.5;
             }
-            else if(args.Status == TouchEffect.Enums.TouchStatus.HoverLeave)
+            else
             {
                 sender.Opacity = 1;
             }
+        }
+
+        private void TouchEff_HoverStatusChanged(VisualElement sender, TouchEffect.EventArgs.HoverStatusChangedEventArgs args)
+        {
+            Debug.WriteLine(args.Status);
         }
     }
 }
