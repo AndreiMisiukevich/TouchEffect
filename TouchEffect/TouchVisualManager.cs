@@ -99,20 +99,20 @@ namespace TouchEffect
 
         public void HandleHover(ITouchEff sender, HoverStatus status)
         {
-            if (sender.Control.IsEnabled)
+            if (!(sender.Control?.IsEnabled ?? false)) {
+                return;
+            }
+            sender.HoverStatus = status;
+            sender.RaiseHoverStatusChanged();
+            if (status == HoverStatus.Entered && sender.HoverState == HoverState.Regular)
             {
-                sender.HoverStatus = status;
-                sender.RaiseHoverStatusChanged();
-                if (status == HoverStatus.Entered && sender.HoverState== HoverState.Regular)
-                {
-                    sender.HoverState = HoverState.Hovering;
-                    sender.RaiseHoverStateChanged();
-                }
-                else if(status== HoverStatus.Exited && sender.HoverState == HoverState.Hovering)
-                {
-                    sender.HoverState = HoverState.Regular;
-                    sender.RaiseHoverStateChanged();
-                }
+                sender.HoverState = HoverState.Hovering;
+                sender.RaiseHoverStateChanged();
+            }
+            else if(status == HoverStatus.Exited && sender.HoverState == HoverState.Hovering)
+            {
+                sender.HoverState = HoverState.Regular;
+                sender.RaiseHoverStateChanged();
             }
         }
         public async void ChangeStateAsync(ITouchEff sender, TouchState state, bool animated)
