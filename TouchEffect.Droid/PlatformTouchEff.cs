@@ -96,12 +96,12 @@ namespace TouchEffect.Android
 
                 case MotionEventActions.HoverEnter:
                     {
-                        Element.GetTouchEff().HandleTouch(TouchStatus.HoverEnter);
+                        Element.GetTouchEff().HandleHover(HoverStatus.Entered);
                         break;
                     }
                 case MotionEventActions.HoverExit:
                     {
-                        Element.GetTouchEff().HandleTouch(TouchStatus.HoverLeave);
+                        Element.GetTouchEff().HandleHover(HoverStatus.Exited);
                         break;
                     }
                 case MotionEventActions.Move:
