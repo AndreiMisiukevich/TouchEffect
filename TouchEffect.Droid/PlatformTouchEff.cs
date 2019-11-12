@@ -61,9 +61,11 @@ namespace TouchEffect.Android
         bool _inrange;
         bool _pressed;
         bool _leftrange = false;
+        int[] twoIntArray = new int[2];
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
-            Console.WriteLine(e.Event.Action);
+            AView senderView = sender as AView;
+
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
@@ -106,25 +108,25 @@ namespace TouchEffect.Android
                     }
                 case MotionEventActions.Move:
                     {
-                        //TODO Determine if pointer is within the control
-                        /*
-                        if(pointer in control) 
+                        senderView.GetLocationOnScreen(twoIntArray);
+                        var screenPointerCoords = new Point(twoIntArray[0] + e.Event.GetX(), twoIntArray[1] + e.Event.GetY());
+                        Rectangle viewRect = new Rectangle(twoIntArray[0], twoIntArray[1], senderView.Width, senderView.Height);
+
+                        if (viewRect.Contains(screenPointerCoords))
                         {
                             Console.WriteLine("INRANGE");
                             _inrange = true;
-                            if(_leftrange)
+                            if (_leftrange)
                                 Element.GetTouchEff().HandleTouch(TouchStatus.Started);
                         }
                         else
                         {
                             _leftrange = true;
+                            _inrange = false;
                             Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
                         }
-                        */
                         break;
-
                     }
-
             }
             e.Handled = true;
         }
