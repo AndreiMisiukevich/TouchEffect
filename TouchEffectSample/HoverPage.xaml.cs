@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ using Xamarin.Forms.Xaml;
 
 namespace TouchEffectSample
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HoverPage : ContentPage
     {
         public HoverPage()
@@ -20,7 +18,7 @@ namespace TouchEffectSample
 
         private void TouchEff_HoverStateChanged(VisualElement sender, TouchEffect.EventArgs.HoverStateChangedEventArgs args)
         {
-            if(args.State == TouchEffect.Enums.HoverState.Hovering)
+            if (args.State == TouchEffect.Enums.HoverState.Hovering)
             {
                 sender.Opacity = 0.5;
             }
@@ -28,11 +26,6 @@ namespace TouchEffectSample
             {
                 sender.Opacity = 1;
             }
-        }
-
-        private void TouchEff_HoverStatusChanged(VisualElement sender, TouchEffect.EventArgs.HoverStatusChangedEventArgs args)
-        {
-            Debug.WriteLine(args.Status);
         }
     }
 }

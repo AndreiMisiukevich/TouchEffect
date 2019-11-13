@@ -3,15 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             Title="Hover Sample"
              xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
+             mc:Ignorable="d"
              x:Class="TouchEffectSample.HoverPage">
     <ContentPage.Content>
         <Grid>
             <Grid WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="100" BackgroundColor="Black">
                 <Grid.Effects>
-                    <touch:TouchEff HoverStatusChanged="TouchEff_HoverStatusChanged" HoverStateChanged="TouchEff_HoverStateChanged"/>
+                    <touch:TouchEff HoverStateChanged="TouchEff_HoverStateChanged"/>
                 </Grid.Effects>
                 <Label Text="Hover me" HorizontalOptions="Center" VerticalOptions="Center" TextColor="White"/>
             </Grid>
