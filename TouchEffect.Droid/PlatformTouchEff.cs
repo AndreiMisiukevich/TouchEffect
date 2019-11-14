@@ -71,6 +71,7 @@ namespace TouchEffect.Android
                 case MotionEventActions.Down:
                     {
                         _pressed = true;
+                        _inrange = true;
                         Element.GetTouchEff().HandleTouch(TouchStatus.Started);
                         break;
                     }
@@ -114,7 +115,6 @@ namespace TouchEffect.Android
 
                         if (viewRect.Contains(screenPointerCoords))
                         {
-                            Console.WriteLine("INRANGE");
                             _inrange = true;
                             if (_leftrange)
                                 Element.GetTouchEff().HandleTouch(TouchStatus.Started);
