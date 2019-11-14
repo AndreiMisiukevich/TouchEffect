@@ -82,7 +82,6 @@ namespace TouchEffect.UWP
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            _pressed = false;
             if (_pressed && _inrange)
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
@@ -91,6 +90,7 @@ namespace TouchEffect.UWP
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
             }
+            _pressed = false;
         }
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
