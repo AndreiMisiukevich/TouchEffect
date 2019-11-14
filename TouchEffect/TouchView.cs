@@ -46,6 +46,20 @@ namespace TouchEffect
             TouchState.Regular,
             BindingMode.OneWayToSource);
 
+        public static readonly BindableProperty HoverStatusProperty = BindableProperty.Create(
+            nameof(HoverStatus),
+            typeof(HoverStatus),
+            typeof(TouchView),
+            HoverStatus.Exited,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty HoverStateProperty = BindableProperty.Create(
+            nameof(HoverState),
+            typeof(HoverState),
+            typeof(TouchView),
+            HoverState.Regular,
+            BindingMode.OneWayToSource);
+
         public static readonly BindableProperty RegularBackgroundColorProperty = BindableProperty.Create(
             nameof(RegularBackgroundColor),
             typeof(Color),
@@ -330,6 +344,19 @@ namespace TouchEffect
             set => SetValue(StateProperty, value);
         }
 
+        public HoverStatus HoverStatus
+        {
+            get => (HoverStatus)GetValue(HoverStatusProperty);
+            set => SetValue(HoverStatusProperty, value);
+        }
+
+        public HoverState HoverState
+        {
+            get => (HoverState)GetValue(HoverStateProperty);
+            set => SetValue(HoverStateProperty, value);
+        }
+
+
         public Color RegularBackgroundColor
         {
             get => (Color)GetValue(RegularBackgroundColorProperty);
@@ -522,6 +549,12 @@ namespace TouchEffect
 
         public void RaiseCompleted()
             => Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
+            
+        public void RaiseHoverStateChanged()
+            => throw new NotImplementedException();
+
+        public void RaiseHoverStatusChanged()
+            => throw new NotImplementedException();
 
         private void SetBackgroundImage(TouchState state)
         {

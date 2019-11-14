@@ -14,6 +14,10 @@ namespace TouchEffect.Interfaces
 
         TouchState State { get; set; }
 
+        HoverStatus HoverStatus { get; set; }
+
+        HoverState HoverState { get; set; }
+
         Color RegularBackgroundColor { get; }
 
         Color PressedBackgroundColor { get; }
@@ -66,7 +70,11 @@ namespace TouchEffect.Interfaces
 
         void RaiseStateChanged();
 
+        void RaiseHoverStateChanged();
+
         void RaiseStatusChanged();
+
+        void RaiseHoverStatusChanged();
 
         void RaiseCompleted();
 

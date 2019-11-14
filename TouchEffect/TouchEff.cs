@@ -30,6 +30,10 @@ namespace TouchEffect
 
         public event TEffectStateChangedHandler StateChanged;
 
+        public event TEffectHoverStatusChangedHandler HoverStatusChanged;
+
+        public event TEffectHoverStateChangedHandler HoverStateChanged;
+
         public event TEffectCompletedHandler Completed;
 
         public event AnimationStartedHandler AnimationStarted;
@@ -58,6 +62,21 @@ namespace TouchEffect
             typeof(TouchState),
             typeof(TouchEff),
             TouchState.Regular,
+            BindingMode.OneWayToSource);
+
+
+        public static readonly BindableProperty HoverStatusProperty = BindableProperty.CreateAttached(
+            nameof(Status),
+            typeof(HoverStatus),
+            typeof(TouchEff),
+            HoverStatus.Exited,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty HoverStateProperty = BindableProperty.CreateAttached(
+            nameof(State),
+            typeof(HoverState),
+            typeof(TouchEff),
+            HoverState.Regular,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty RegularBackgroundColorProperty = BindableProperty.CreateAttached(
@@ -289,6 +308,18 @@ namespace TouchEffect
         public static void SetState(BindableObject bindable, TouchState value)
             => bindable.SetValue(StateProperty, value);
 
+        public static HoverStatus GetHoverStatus(BindableObject bindable)
+            => (HoverStatus)bindable.GetValue(HoverStatusProperty);
+
+        public static void SetHoverStatus(BindableObject bindable, HoverStatus value)
+            => bindable.SetValue(HoverStatusProperty, value);
+
+        public static HoverState GetHoverState(BindableObject bindable)
+            => (HoverState)bindable.GetValue(HoverStateProperty);
+
+        public static void SetHoverState(BindableObject bindable, HoverState value)
+            => bindable.SetValue(HoverStateProperty, value);
+
         public static Color GetRegularBackgroundColor(BindableObject bindable)
             => (Color)bindable.GetValue(RegularBackgroundColorProperty);
 
@@ -437,6 +468,18 @@ namespace TouchEffect
             set => SetState(Control, value);
         }
 
+        public HoverStatus HoverStatus
+        {
+            get => GetHoverStatus(Control);
+            set => SetHoverStatus(Control, value);
+        }
+
+        public HoverState HoverState
+        {
+            get => GetHoverState(Control);
+            set => SetHoverState(Control, value);
+        }
+
         public Color RegularBackgroundColor => GetRegularBackgroundColor(Control);
 
         public Color PressedBackgroundColor => GetPressedBackgroundColor(Control);
@@ -504,12 +547,24 @@ namespace TouchEffect
             => _visualManager.HandleTouch(this, status);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
+        public void HandleHover(HoverStatus status)
+            => _visualManager.HandleHover(this, status);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseStateChanged()
             => StateChanged?.Invoke(Control, new TouchStateChangedEventArgs(State));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseStatusChanged()
             => StatusChanged?.Invoke(Control, new TouchStatusChangedEventArgs(Status));
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void RaiseHoverStateChanged()
+            => HoverStateChanged?.Invoke(Control, new HoverStateChangedEventArgs(HoverState));
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void RaiseHoverStatusChanged()
+            => HoverStatusChanged?.Invoke(Control, new HoverStatusChangedEventArgs(HoverStatus));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseCompleted()
