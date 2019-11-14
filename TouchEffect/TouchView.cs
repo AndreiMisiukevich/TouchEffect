@@ -16,10 +16,6 @@ namespace TouchEffect
 
         public event TouchViewStateChangedHandler StateChanged;
 
-        public event TouchViewHoverStatusChangedHandler HoverStatusChanged;
-
-        public event TouchViewHoverStateChangedHandler HoverStateChanged;
-
         public event TouchViewCompletedHandler Completed;
 
         public event AnimationStartedHandler AnimationStarted;
@@ -551,14 +547,14 @@ namespace TouchEffect
         public void RaiseStatusChanged()
             => StatusChanged?.Invoke(this, new TouchStatusChangedEventArgs(Status));
 
-        public void RaiseHoverStateChanged()
-            => HoverStateChanged?.Invoke(this, new HoverStateChangedEventArgs(HoverState));
-
-        public void RaiseHoverStatusChanged()
-            => HoverStatusChanged?.Invoke(this, new HoverStatusChangedEventArgs(HoverStatus));
-
         public void RaiseCompleted()
             => Completed?.Invoke(this, new TouchCompletedEventArgs(CommandParameter));
+            
+        public void RaiseHoverStateChanged()
+            => throw new NotImplementedException();
+
+        public void RaiseHoverStatusChanged()
+            => throw new NotImplementedException();
 
         private void SetBackgroundImage(TouchState state)
         {
