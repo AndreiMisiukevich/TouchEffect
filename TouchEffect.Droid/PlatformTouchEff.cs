@@ -58,75 +58,58 @@ namespace TouchEffect.Android
             }
         }
 
-        bool _inrange;
-        bool _pressed;
-        bool _leftrange = false;
-        int[] twoIntArray = new int[2];
+        bool inRange;
+        private int[] _viewLocation = new int[2];
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
-            AView senderView = sender as AView;
+            var senderView = sender as AView;
 
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
-                    {
-                        _pressed = true;
-                        _inrange = true;
+                        inRange = true;
                         Element.GetTouchEff().HandleTouch(TouchStatus.Started);
                         break;
-                    }
 
                 case MotionEventActions.Up:
-                    {
-                        _pressed = false;
-                        if (_inrange)
+                        if (inRange)
                         {
                             Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
-                            _inrange = false;
+                            inRange = false;
                         }
                         else
                         {
                             Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
                         }
                         break;
-                    }
                 case MotionEventActions.Cancel:
-                    {
-                        _pressed = false;
                         Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
                         break;
-                    }
 
                 case MotionEventActions.HoverEnter:
-                    {
                         Element.GetTouchEff().HandleHover(HoverStatus.Entered);
                         break;
-                    }
                 case MotionEventActions.HoverExit:
-                    {
                         Element.GetTouchEff().HandleHover(HoverStatus.Exited);
                         break;
-                    }
                 case MotionEventActions.Move:
-                    {
-                        senderView.GetLocationOnScreen(twoIntArray);
-                        var screenPointerCoords = new Point(twoIntArray[0] + e.Event.GetX(), twoIntArray[1] + e.Event.GetY());
-                        Rectangle viewRect = new Rectangle(twoIntArray[0], twoIntArray[1], senderView.Width, senderView.Height);
+                        senderView.GetLocationOnScreen(_viewLocation);
+                        var screenPointerCoords = new Point(_viewLocation[0] + e.Event.GetX(), _viewLocation[1] + e.Event.GetY());
+                        Rectangle viewRect = new Rectangle(_viewLocation[0], _viewLocation[1], senderView.Width, senderView.Height);
 
                         if (viewRect.Contains(screenPointerCoords))
                         {
-                            _inrange = true;
-                            if (_leftrange)
-                                Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+                        if (!inRange)
+                            Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+                        inRange = true;
+                            
                         }
                         else
                         {
-                            _leftrange = true;
-                            _inrange = false;
+                            inRange = false;
                             Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
                         }
                         break;
-                    }
             }
             e.Handled = true;
         }

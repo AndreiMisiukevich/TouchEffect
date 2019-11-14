@@ -18,14 +18,7 @@ namespace TouchEffectSample
 
         private void TouchEff_HoverStateChanged(VisualElement sender, TouchEffect.EventArgs.HoverStateChangedEventArgs args)
         {
-            if (args.State == TouchEffect.Enums.HoverState.Hovering)
-            {
-                sender.Opacity = 0.5;
-            }
-            else
-            {
-                sender.Opacity = 1;
-            }
+            sender.Opacity = args.State == TouchEffect.Enums.HoverState.Hovering ? 0.5 : 1.0;
         }
     }
 }

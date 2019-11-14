@@ -560,7 +560,7 @@ namespace TouchEffect
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseHoverStateChanged()
-    => HoverStateChanged?.Invoke(Control, new HoverStateChangedEventArgs(HoverState));
+            => HoverStateChanged?.Invoke(Control, new HoverStateChangedEventArgs(HoverState));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseHoverStatusChanged()

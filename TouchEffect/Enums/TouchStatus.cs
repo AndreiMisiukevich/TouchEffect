@@ -5,6 +5,6 @@ namespace TouchEffect.Enums
     {
         Started,
         Completed,
-        Canceled,
+        Canceled
     }
 }

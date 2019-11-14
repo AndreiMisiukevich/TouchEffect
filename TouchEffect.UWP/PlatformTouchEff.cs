@@ -6,7 +6,6 @@ using TouchEffect.UWP;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.UWP;
-using System.Diagnostics;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -36,12 +35,12 @@ namespace TouchEffect.UWP
                 Container.PointerPressed += OnPointerPressed;
                 Container.PointerReleased += OnPointerReleased;
                 Container.PointerCanceled += OnPointerCanceled;
-                Container.PointerExited += Container_PointerExited;
-                Container.PointerEntered += Container_PointerEntered;
+                Container.PointerExited += OnPointerExited;
+                Container.PointerEntered += OnPointerEntered;
             }
         }
 
-        private void Container_PointerEntered(object sender, PointerRoutedEventArgs e)
+        private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
             _inrange = true;
             Element.GetTouchEff().HandleHover(HoverStatus.Entered);
@@ -49,7 +48,7 @@ namespace TouchEffect.UWP
                 Element.GetTouchEff().HandleTouch(TouchStatus.Started);
         }
 
-        private void Container_PointerExited(object sender, PointerRoutedEventArgs e)
+        private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
             _inrange = false;
             if (_pressed)
@@ -66,8 +65,8 @@ namespace TouchEffect.UWP
                 Container.PointerPressed -= OnPointerPressed;
                 Container.PointerReleased -= OnPointerReleased;
                 Container.PointerCanceled -= OnPointerCanceled;
-                Container.PointerExited -= Container_PointerExited;
-                Container.PointerEntered -= Container_PointerEntered;
+                Container.PointerExited -= OnPointerExited;
+                Container.PointerEntered -= OnPointerEntered;
 
                 _pressed = false;
                 _inrange = false;
