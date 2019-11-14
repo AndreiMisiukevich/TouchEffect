@@ -40,8 +40,6 @@ namespace TouchEffect.Mac
             _gesture = null;
         }
     }
-
-
     internal sealed class TouchNSClickGestureRecognizer : NSGestureRecognizer
     {
         private TouchEff _effect;
