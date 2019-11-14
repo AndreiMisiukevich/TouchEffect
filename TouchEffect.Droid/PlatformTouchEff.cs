@@ -52,24 +52,63 @@ namespace TouchEffect.Android
                     Control.Touch -= OnTouch;
                 }
             }
-            catch(ObjectDisposedException)
+            catch (ObjectDisposedException)
             {
                 //suppress exception
             }
         }
 
+        bool inRange;
+        private int[] _viewLocation = new int[2];
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
+            var senderView = sender as AView;
+
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
+                    inRange = true;
                     Element.GetTouchEff().HandleTouch(TouchStatus.Started);
                     break;
+
                 case MotionEventActions.Up:
-                    Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
+                    if (inRange)
+                    {
+                        Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
+                        inRange = false;
+                    }
+                    else
+                    {
+                        Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                    }
                     break;
                 case MotionEventActions.Cancel:
                     Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                    break;
+
+                case MotionEventActions.HoverEnter:
+                    Element.GetTouchEff().HandleHover(HoverStatus.Entered);
+                    break;
+                case MotionEventActions.HoverExit:
+                    Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+                    break;
+                case MotionEventActions.Move:
+                    senderView.GetLocationOnScreen(_viewLocation);
+                    var screenPointerCoords = new Point(_viewLocation[0] + e.Event.GetX(), _viewLocation[1] + e.Event.GetY());
+                    Rectangle viewRect = new Rectangle(_viewLocation[0], _viewLocation[1], senderView.Width, senderView.Height);
+
+                    if (viewRect.Contains(screenPointerCoords))
+                    {
+                        if (!inRange)
+                            Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+                        inRange = true;
+
+                    }
+                    else
+                    {
+                        inRange = false;
+                        Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                    }
                     break;
             }
             e.Handled = true;

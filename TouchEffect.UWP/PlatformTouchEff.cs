@@ -22,6 +22,7 @@ namespace TouchEffect.UWP
         private TouchEff _effect;
 
         private bool _pressed;
+        private bool _inrange;
 
         protected override void OnAttached()
         {
@@ -34,7 +35,25 @@ namespace TouchEffect.UWP
                 Container.PointerPressed += OnPointerPressed;
                 Container.PointerReleased += OnPointerReleased;
                 Container.PointerCanceled += OnPointerCanceled;
+                Container.PointerExited += OnPointerExited;
+                Container.PointerEntered += OnPointerEntered;
             }
+        }
+
+        private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            _inrange = true;
+            Element.GetTouchEff().HandleHover(HoverStatus.Entered);
+            if (_pressed)
+                Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+        }
+
+        private void OnPointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            _inrange = false;
+            if (_pressed)
+                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+            Element.GetTouchEff().HandleHover(HoverStatus.Exited);
         }
 
         protected override void OnDetached()
@@ -46,8 +65,11 @@ namespace TouchEffect.UWP
                 Container.PointerPressed -= OnPointerPressed;
                 Container.PointerReleased -= OnPointerReleased;
                 Container.PointerCanceled -= OnPointerCanceled;
+                Container.PointerExited -= OnPointerExited;
+                Container.PointerEntered -= OnPointerEntered;
 
                 _pressed = false;
+                _inrange = false;
             }
         }
 
@@ -60,15 +82,20 @@ namespace TouchEffect.UWP
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            if (_pressed)
+            _pressed = false;
+            if (_pressed && _inrange)
             {
-                _pressed = false;
                 Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
-            }            
+            }
+            else
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+            }
         }
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            Container.CapturePointer(e.Pointer);
             _pressed = true;
 
             Element.GetTouchEff().HandleTouch(TouchStatus.Started);
