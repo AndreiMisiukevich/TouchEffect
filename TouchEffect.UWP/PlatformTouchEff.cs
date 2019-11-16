@@ -21,9 +21,8 @@ namespace TouchEffect.UWP
 
         private TouchEff _effect;
 
-        //TODO: remove it
         private bool _pressed;
-        private bool _inRange = true;
+		private bool _isHoverSupported;
 
         protected override void OnAttached()
         {
@@ -54,27 +53,26 @@ namespace TouchEffect.UWP
 				Container.PointerEntered -= OnPointerEntered;
 
 				_pressed = false;
-				_inRange = true;
 			}
 		}
 
 		private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
+			_isHoverSupported = true;
 			if (_pressed)
 			{
 				Element.GetTouchEff().HandleTouch(TouchStatus.Started);
 			}
-			_inRange = true;
 			Element.GetTouchEff().HandleHover(HoverStatus.Entered);
 		}
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
+			_isHoverSupported = true;
 			if (_pressed)
 			{
 				Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
 			}
-			_inRange = false;
 			Element.GetTouchEff().HandleHover(HoverStatus.Exited);
 		}
 
@@ -87,7 +85,7 @@ namespace TouchEffect.UWP
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
 			_pressed = false;
-			Element.GetTouchEff().HandleTouch(_pressed && _inRange ? TouchStatus.Completed : TouchStatus.Canceled);
+			Element.GetTouchEff().HandleTouch(_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered || !_isHoverSupported) ? TouchStatus.Completed : TouchStatus.Canceled);
         }
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
