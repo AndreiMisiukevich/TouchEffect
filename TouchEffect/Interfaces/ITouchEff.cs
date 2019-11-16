@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.ComponentModel;
+using System.Windows.Input;
 using TouchEffect.Enums;
 using Xamarin.Forms;
 
@@ -66,18 +67,28 @@ namespace TouchEffect.Interfaces
 
         VisualElement Control { get; set; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void HandleTouch(TouchStatus status);
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void RaiseStateChanged();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void RaiseHoverStateChanged();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void RaiseStatusChanged();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void RaiseHoverStatusChanged();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void RaiseCompleted();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void RaiseAnimationStarted(TouchState state, int duration);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        void ForceUpdateState(bool animated = true);
     }
 }

@@ -7,7 +7,6 @@ namespace TouchEffect.iOS
     {
         public static void Preserve()
         {
-            TouchViewRenderer.Preserve();
             PlatformTouchEff.Preserve();
         }
     }
