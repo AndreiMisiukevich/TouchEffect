@@ -59,6 +59,7 @@ namespace TouchEffect.Android
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
+            e.Handled = true;
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
@@ -86,8 +87,10 @@ namespace TouchEffect.Android
                 case MotionEventActions.HoverExit:
                     Element.GetTouchEff().HandleHover(HoverStatus.Exited);
                     break;
+                default:
+                    e.Handled = false;
+                    break;
             }
-            e.Handled = true;
         }
     }
 }
