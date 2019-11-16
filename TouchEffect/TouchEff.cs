@@ -64,7 +64,6 @@ namespace TouchEffect
             TouchState.Regular,
             BindingMode.OneWayToSource);
 
-
         public static readonly BindableProperty HoverStatusProperty = BindableProperty.CreateAttached(
             nameof(Status),
             typeof(HoverStatus),

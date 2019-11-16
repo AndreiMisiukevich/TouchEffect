@@ -1,5 +1,4 @@
-﻿using TouchEffect.Droid;
-using Android.Runtime;
+﻿using Android.Runtime;
 
 namespace TouchEffect.Android
 {
@@ -8,7 +7,6 @@ namespace TouchEffect.Android
     {
         public static void Preserve()
         {
-            TouchViewRenderer.Preserve();
             PlatformTouchEff.Preserve();
         }
     }

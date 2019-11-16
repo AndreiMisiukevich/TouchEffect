@@ -1,5 +1,4 @@
-﻿using System;
-using TouchEffect.EventArgs;
+﻿using TouchEffect.EventArgs;
 using Xamarin.Forms;
 
 namespace TouchEffect.Delegates
