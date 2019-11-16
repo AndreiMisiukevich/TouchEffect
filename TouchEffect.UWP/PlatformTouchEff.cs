@@ -21,6 +21,7 @@ namespace TouchEffect.UWP
 
         private TouchEff _effect;
 
+        //TODO: remove it
         private bool _pressed;
         private bool _inRange = true;
 
@@ -40,7 +41,24 @@ namespace TouchEffect.UWP
             }
         }
 
-        private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
+		protected override void OnDetached()
+		{
+			_effect.Control = null;
+			_effect = null;
+			if (Container != null)
+			{
+				Container.PointerPressed -= OnPointerPressed;
+				Container.PointerReleased -= OnPointerReleased;
+				Container.PointerCanceled -= OnPointerCanceled;
+				Container.PointerExited -= OnPointerExited;
+				Container.PointerEntered -= OnPointerEntered;
+
+				_pressed = false;
+				_inRange = true;
+			}
+		}
+
+		private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
 			if (_pressed)
 			{
@@ -59,23 +77,6 @@ namespace TouchEffect.UWP
 			_inRange = false;
 			Element.GetTouchEff().HandleHover(HoverStatus.Exited);
 		}
-
-        protected override void OnDetached()
-        {
-            _effect.Control = null;
-            _effect = null;
-            if (Container != null)
-            {
-                Container.PointerPressed -= OnPointerPressed;
-                Container.PointerReleased -= OnPointerReleased;
-                Container.PointerCanceled -= OnPointerCanceled;
-                Container.PointerExited -= OnPointerExited;
-                Container.PointerEntered -= OnPointerEntered;
-
-                _pressed = false;
-                _inRange = true;
-            }
-        }
 
         private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
         {

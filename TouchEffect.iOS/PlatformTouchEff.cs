@@ -67,6 +67,12 @@ namespace TouchEffect.iOS
             base.TouchesCancelled(touches, evt);
         }
 
+        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        {
+            //TODO: implement me
+            base.TouchesMoved(touches, evt);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if(disposing)
