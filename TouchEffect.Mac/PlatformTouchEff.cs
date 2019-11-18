@@ -18,6 +18,7 @@ namespace TouchEffect.Mac
 
         private NSGestureRecognizer _gesture;
         private TouchEff _effect;
+        private MouseTrackingView _mouseTrackingView;
 
         protected override void OnAttached()
         {
@@ -28,11 +29,14 @@ namespace TouchEffect.Mac
             {
                 _gesture = new TouchNSClickGestureRecognizer(_effect, Container);
                 Container.AddGestureRecognizer(_gesture);
+                //Container.AddSubview(_mouseTrackingView = new MouseTrackingView());
             }
         }
 
         protected override void OnDetached()
         {
+            _mouseTrackingView?.RemoveFromSuperview();
+            _mouseTrackingView = null;
             _effect.Control = null;
             _effect = null;
             Container?.RemoveGestureRecognizer(_gesture);
@@ -40,20 +44,40 @@ namespace TouchEffect.Mac
             _gesture = null;
         }
     }
+
+    internal sealed class MouseTrackingView : NSView
+    {
+        public MouseTrackingView()
+        {
+            AutoresizingMask = NSViewResizingMask.HeightSizable | NSViewResizingMask.WidthSizable;
+        }
+
+        public override void ViewWillMoveToWindow(NSWindow newWindow)
+        {
+            var trackingArea = new NSTrackingArea(Bounds, NSTrackingAreaOptions.MouseEnteredAndExited, this, null);
+            AddTrackingArea(trackingArea);
+        }
+
+        public override void MouseEntered(NSEvent theEvent)
+        {
+            base.MouseEntered(theEvent);
+        }
+
+        public override void MouseExited(NSEvent theEvent)
+        {
+            base.MouseExited(theEvent);
+        }
+    }
+
     internal sealed class TouchNSClickGestureRecognizer : NSGestureRecognizer
     {
         private TouchEff _effect;
         private NSView _container;
-        /*private NSTrackingArea _trackingarea;*/
 
         public TouchNSClickGestureRecognizer(TouchEff effect, NSView container)
         {
             _effect = effect;
             _container = container;
-            /*
-            _trackingarea = new NSTrackingArea(container.Frame, NSTrackingAreaOptions.MouseEnteredAndExited, container, null);
-            _container.AddTrackingArea(_trackingarea);
-            */
         }
 
         private Rectangle ViewRect

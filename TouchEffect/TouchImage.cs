@@ -12,9 +12,7 @@ namespace TouchEffect
         private readonly object _setImageLocker = new object();
 
         public TouchImage()
-        {
-            Effects.Add(new TouchEff(GetAnimationTask));
-        }
+            => Effects.Add(new TouchEff(GetAnimationTask));
 
         public static readonly BindableProperty RegularBackgroundImageSourceProperty = BindableProperty.Create(
             nameof(RegularBackgroundImageSource),

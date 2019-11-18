@@ -57,7 +57,7 @@ namespace TouchEffect.iOS
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
-            _effect.HandleTouch(TouchStatus.Completed);
+            _effect.HandleTouch(_effect.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
             base.TouchesEnded(touches, evt);
         }
 
@@ -65,6 +65,21 @@ namespace TouchEffect.iOS
         {
             _effect.HandleTouch(TouchStatus.Canceled);
             base.TouchesCancelled(touches, evt);
+        }
+
+        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        {
+            var touch = touches?.AnyObject as UITouch;
+            var renderer = _effect.Control.GetRenderer() as UIView;
+            var point = renderer != null ? touch?.LocationInView(renderer) : null;
+
+            var status = point != null && renderer.Bounds.Contains(point.Value) ? TouchStatus.Started : TouchStatus.Canceled;
+            if (_effect.Status != status)
+            {
+                _effect.HandleTouch(status);
+            }
+
+            base.TouchesMoved(touches, evt);
         }
 
         protected override void Dispose(bool disposing)
