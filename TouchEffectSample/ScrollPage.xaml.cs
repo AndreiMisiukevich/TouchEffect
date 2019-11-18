@@ -27,32 +27,17 @@ namespace TouchEffectSample
 
         private void StateChanged(VisualElement sender, TouchEffect.EventArgs.TouchStateChangedEventArgs args)
         {
-            if(args.State == TouchEffect.Enums.TouchState.Pressed)
-            {
-                sender.BackgroundColor = Color.Red;
-            }
-            else
-            {
-                sender.BackgroundColor = Color.Black;
-            }
+            sender.BackgroundColor = args.State == TouchEffect.Enums.TouchState.Pressed ? Color.Red : Color.Black;
         }
 
         private void HoverStateChanged(VisualElement sender, TouchEffect.EventArgs.HoverStateChangedEventArgs args)
         {
-            if(args.State == TouchEffect.Enums.HoverState.Hovering)
-            {
-                sender.Opacity = 0.5;
-            }
-            else
-            {
-                sender.Opacity = 1;
-            }
+            sender.Opacity = args.State == TouchEffect.Enums.HoverState.Hovering ? 0.5 : 1;
         }
 
-        private async void Completed(VisualElement sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
+        private void Completed(VisualElement sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
         {
-            await sender.ScaleTo(1.1, 120);
-            await sender.ScaleTo(1, 120);
+            Application.Current.MainPage.DisplayAlert("Clicked on a square", "The Completed event was fired", "Cancel");
         }
     }
 }
