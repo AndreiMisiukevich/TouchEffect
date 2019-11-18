@@ -41,6 +41,11 @@ namespace TouchEffectSample
                             {
                                 Text = "(Hover sample)",
                                 Command = new Command(() => MainPage.Navigation.PushAsync(new HoverPage()))
+                            },
+                            new Button
+                            {
+                                Text = "(Scroll sample)",
+                                Command = new Command(() => MainPage.Navigation.PushAsync(new ScrollPage()))
                             }
                         }
 					}
