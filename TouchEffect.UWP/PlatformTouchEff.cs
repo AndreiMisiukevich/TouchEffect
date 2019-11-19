@@ -22,7 +22,7 @@ namespace TouchEffect.UWP
         private TouchEff _effect;
 
         private bool _pressed;
-		private bool _isHoverSupported;
+        private bool _isHoverSupported;
         private bool _intentionalCaptureLoss;
 
         protected override void OnAttached()
@@ -42,44 +42,42 @@ namespace TouchEffect.UWP
             }
         }
 
-		protected override void OnDetached()
-		{
-			_effect.Control = null;
-			_effect = null;
-			if (Container != null)
-			{
-				Container.PointerPressed -= OnPointerPressed;
-				Container.PointerReleased -= OnPointerReleased;
-				Container.PointerCanceled -= OnPointerCanceled;
-				Container.PointerExited -= OnPointerExited;
-				Container.PointerEntered -= OnPointerEntered;
-				Container.PointerCaptureLost -= OnPointerCaptureLost;
-
-				_pressed = false;
-			}
-		}
-
-		private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
+        protected override void OnDetached()
         {
-			_isHoverSupported = true;
-            _intentionalCaptureLoss = false;
+            _effect.Control = null;
+            _effect = null;
+            if (Container != null)
+            {
+                Container.PointerPressed -= OnPointerPressed;
+                Container.PointerReleased -= OnPointerReleased;
+                Container.PointerCanceled -= OnPointerCanceled;
+                Container.PointerExited -= OnPointerExited;
+                Container.PointerEntered -= OnPointerEntered;
+                Container.PointerCaptureLost -= OnPointerCaptureLost;
 
+                _pressed = false;
+            }
+        }
+
+        private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            _isHoverSupported = true;
             if (_pressed)
-			{
-				Element.GetTouchEff().HandleTouch(TouchStatus.Started);
-			}
-			Element.GetTouchEff().HandleHover(HoverStatus.Entered);
-		}
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+            }
+            Element.GetTouchEff().HandleHover(HoverStatus.Entered);
+        }
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
-			_isHoverSupported = true;
-			if (_pressed)
-			{
-				Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
-			}
-			Element.GetTouchEff().HandleHover(HoverStatus.Exited);
-		}
+            _isHoverSupported = true;
+            if (_pressed)
+            {
+                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+            }
+            Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+        }
 
         private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
         {
@@ -90,12 +88,10 @@ namespace TouchEffect.UWP
 
         private void OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
         {
-            if(!_intentionalCaptureLoss){
-                _pressed=false;
-                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
-                Element.GetTouchEff().HandleHover(HoverStatus.Exited);
-                _intentionalCaptureLoss = false;
-            }
+            if (_intentionalCaptureLoss) return;
+            _pressed = false;
+            Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+            Element.GetTouchEff().HandleHover(HoverStatus.Exited);
         }
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
@@ -107,9 +103,10 @@ namespace TouchEffect.UWP
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
-			_pressed = true;
-			Container.CapturePointer(e.Pointer);
+            _pressed = true;
+            Container.CapturePointer(e.Pointer);
             Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+            _intentionalCaptureLoss = false;
         }
     }
 }
