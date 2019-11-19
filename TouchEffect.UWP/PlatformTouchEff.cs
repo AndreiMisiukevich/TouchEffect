@@ -96,7 +96,11 @@ namespace TouchEffect.UWP
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
-            Element.GetTouchEff().HandleTouch(_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered || !_isHoverSupported) ? TouchStatus.Completed : TouchStatus.Canceled);
+
+            if(_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered || !_isHoverSupported))
+                Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
+            else if(_isHoverSupported && Element.GetTouchEff().HoverStatus != HoverStatus.Exited)
+                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
             _pressed = false;
             _intentionalCaptureLoss = true;
         }
