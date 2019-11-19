@@ -22,7 +22,6 @@ namespace TouchEffect.UWP
         private TouchEff _effect;
 
         private bool _pressed;
-        private bool _isHoverSupported;
         private bool _intentionalCaptureLoss;
 
         protected override void OnAttached()
@@ -61,7 +60,6 @@ namespace TouchEffect.UWP
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            _isHoverSupported = true;
             if (_pressed)
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Started);
@@ -71,7 +69,6 @@ namespace TouchEffect.UWP
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
-            _isHoverSupported = true;
             if (_pressed)
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
@@ -97,9 +94,9 @@ namespace TouchEffect.UWP
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
 
-            if(_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered || !_isHoverSupported))
+            if(_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered))
                 Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
-            else if(_isHoverSupported && Element.GetTouchEff().HoverStatus != HoverStatus.Exited)
+            else if(Element.GetTouchEff().HoverStatus != HoverStatus.Exited)
                 Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
             _pressed = false;
             _intentionalCaptureLoss = true;
