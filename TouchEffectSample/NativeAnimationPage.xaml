@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:toucheff="clr-namespace:TouchEffect;assembly=TouchEffect"
+             x:Class="TouchEffectSample.NativeAnimationPage">
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="Gray">
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="False">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label HorizontalTextAlignment="Center" Text="No native animation"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="True">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff  Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label HorizontalTextAlignment="Center" Text="Native animation"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="True"
+                         toucheff:TouchEff.NativeAnimationColor="Red">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
+                <Label HorizontalTextAlignment="Center" Text="NativeAnimationColor=Red"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="True"
+                         toucheff:TouchEff.AndroidRippleBounded="False"
+                         toucheff:TouchEff.AndroidRippleRadius="400">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
+                <Label HorizontalTextAlignment="Center" Text="AndroidRippleBounded=false"/>
+                <Label HorizontalTextAlignment="Center" Text="AndroidRippleRadius=400"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
