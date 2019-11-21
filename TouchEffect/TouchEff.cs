@@ -283,6 +283,62 @@ namespace TouchEffect
                 bindable.GetTouchEff()?.ForceUpdateState(false);
             });
 
+        public static readonly BindableProperty NativeAnimationProperty = BindableProperty.CreateAttached(
+            nameof(NativeAnimation),
+            typeof(bool),
+            typeof(TouchEff),
+            false,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty NativeAnimationColorProperty = BindableProperty.CreateAttached(
+            nameof(NativeAnimationColor),
+            typeof(Color),
+            typeof(TouchEff),
+            Color.Default,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty AndroidRippleProperty = BindableProperty.CreateAttached(
+            nameof(AndroidRipple),
+            typeof(bool),
+            typeof(TouchEff),
+            true,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty AndroidRippleColorProperty = BindableProperty.CreateAttached(
+            nameof(AndroidRippleColor),
+            typeof(Color),
+            typeof(TouchEff),
+            null,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty AndroidRippleZIndexProperty = BindableProperty.CreateAttached(
+            nameof(AndroidRippleZIndex),
+            typeof(ZIndex),
+            typeof(TouchEff),
+            ZIndex.Foreground,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty AndroidRippleRadiusProperty = BindableProperty.CreateAttached(
+            nameof(AndroidRippleRadius),
+            typeof(int),
+            typeof(TouchEff),
+            -1,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty AndroidRippleBoundedProperty = BindableProperty.CreateAttached(
+            nameof(AndroidRippleBounded),
+            typeof(bool),
+            typeof(TouchEff),
+            true,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty UWPTiltProperty = BindableProperty.CreateAttached(
+            nameof(UWPTilt),
+            typeof(bool),
+            typeof(TouchEff),
+            true,
+            BindingMode.OneWayToSource);
+
         public static ICommand GetCommand(BindableObject bindable)
             => bindable.GetValue(CommandProperty) as ICommand;
 
@@ -451,6 +507,54 @@ namespace TouchEffect
         public static void SetIsToggled(BindableObject bindable, bool? value)
             => bindable.SetValue(IsToggledProperty, value);
 
+        public static bool GetNativeAnimation(BindableObject bindable)
+            => (bool)bindable.GetValue(NativeAnimationProperty);
+
+        public static void SetNativeAnimation(BindableObject bindable, bool value)
+            => bindable.SetValue(NativeAnimationProperty, value);
+
+        public static Color GetNativeAnimationColor(BindableObject bindable)
+            => (Color)bindable.GetValue(NativeAnimationColorProperty);
+
+        public static void SetNativeAnimationColor(BindableObject bindable, Color value)
+            => bindable.SetValue(NativeAnimationColorProperty, value);
+
+        public static bool GetAndroidRipple(BindableObject bindable)
+            => (bool)bindable.GetValue(AndroidRippleProperty);
+
+        public static void SetAndroidRipple(BindableObject bindable, bool value)
+            => bindable.SetValue(AndroidRippleProperty, value);
+
+        public static Color GetAndroidRippleColor(BindableObject bindable)
+            => (Color)bindable.GetValue(AndroidRippleColorProperty);
+
+        public static void SetAndroidRippleColor(BindableObject bindable, Color value)
+            => bindable.SetValue(AndroidRippleColorProperty, value);
+
+        public static ZIndex GetAndroidRippleZIndex(BindableObject bindable)
+            => (ZIndex)bindable.GetValue(AndroidRippleZIndexProperty);
+
+        public static void SetAndroidRippleZIndex(BindableObject bindable, ZIndex value)
+            => bindable.SetValue(AndroidRippleZIndexProperty, value);
+
+        public static int GetAndroidRippleRadius(BindableObject bindable)
+            => (int)bindable.GetValue(AndroidRippleRadiusProperty);
+
+        public static void SetAndroidRippleRadius(BindableObject bindable, int value)
+            => bindable.SetValue(AndroidRippleRadiusProperty, value);
+
+        public static void SetAndroidRippleBounded(BindableObject bindable, bool value)
+            => bindable.SetValue(AndroidRippleBoundedProperty, value);
+
+        public static bool GetAndroidRippleBounded(BindableObject bindable)
+            => (bool)bindable.GetValue(AndroidRippleBoundedProperty);
+
+        public static void SetUWPTilt(BindableObject bindable, bool value)
+            => bindable.SetValue(UWPTiltProperty, value);
+
+        public static bool GetUWPTilt(BindableObject bindable)
+            => (bool)bindable.GetValue(UWPTiltProperty);
+
         public ICommand Command => GetCommand(Control);
 
         public object CommandParameter => GetCommandParameter(Control);
@@ -478,6 +582,22 @@ namespace TouchEffect
             get => GetHoverState(Control);
             set => SetHoverState(Control, value);
         }
+
+        public bool NativeAnimation => GetNativeAnimation(Control);
+
+        public Color NativeAnimationColor => GetNativeAnimationColor(Control);
+
+        public bool AndroidRipple => GetAndroidRipple(Control);
+
+        public Color AndroidRippleColor => GetAndroidRippleColor(Control);
+
+        public ZIndex AndroidRippleZIndex => GetAndroidRippleZIndex(Control);
+
+        public int AndroidRippleRadius => GetAndroidRippleRadius(Control);
+
+        public bool AndroidRippleBounded => GetAndroidRippleBounded(Control);
+
+        public bool UWPTilt => GetUWPTilt(Control);
 
         public Color RegularBackgroundColor => GetRegularBackgroundColor(Control);
 
