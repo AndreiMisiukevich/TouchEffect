@@ -29,13 +29,14 @@ namespace TouchEffect.Mac
             {
                 _gesture = new TouchNSClickGestureRecognizer(_effect, Container);
                 Container.AddGestureRecognizer(_gesture);
-                //Container.AddSubview(_mouseTrackingView = new MouseTrackingView());
+                Container.AddSubview(_mouseTrackingView = new MouseTrackingView(_effect));
             }
         }
 
         protected override void OnDetached()
         {
             _mouseTrackingView?.RemoveFromSuperview();
+            _mouseTrackingView?.Dispose();
             _mouseTrackingView = null;
             _effect.Control = null;
             _effect = null;
@@ -47,25 +48,42 @@ namespace TouchEffect.Mac
 
     internal sealed class MouseTrackingView : NSView
     {
-        public MouseTrackingView()
+        private NSTrackingArea _trackingArea;
+        private TouchEff _effect;
+
+        public MouseTrackingView(TouchEff effect)
         {
+            _effect = effect;
             AutoresizingMask = NSViewResizingMask.HeightSizable | NSViewResizingMask.WidthSizable;
         }
 
-        public override void ViewWillMoveToWindow(NSWindow newWindow)
+        public override void UpdateTrackingAreas()
         {
-            var trackingArea = new NSTrackingArea(Bounds, NSTrackingAreaOptions.MouseEnteredAndExited, this, null);
-            AddTrackingArea(trackingArea);
+            if (_trackingArea != null)
+            {
+                RemoveTrackingArea(_trackingArea);
+                _trackingArea.Dispose();
+            }
+            _trackingArea = new NSTrackingArea(Frame, NSTrackingAreaOptions.MouseEnteredAndExited | NSTrackingAreaOptions.ActiveAlways, this, null);
+            AddTrackingArea(_trackingArea);
         }
 
-        public override void MouseEntered(NSEvent theEvent)
-        {
-            base.MouseEntered(theEvent);
-        }
+        public override void MouseEntered(NSEvent theEvent) => _effect.HandleHover(HoverStatus.Entered);
 
-        public override void MouseExited(NSEvent theEvent)
+        public override void MouseExited(NSEvent theEvent) => _effect.HandleHover(HoverStatus.Exited);
+
+        protected override void Dispose(bool disposing)
         {
-            base.MouseExited(theEvent);
+            if(disposing)
+            {
+                if(_trackingArea != null)
+                {
+                    RemoveTrackingArea(_trackingArea);
+                    _trackingArea.Dispose();
+                }
+                _effect = null;
+            }
+            base.Dispose(disposing);
         }
     }
 
