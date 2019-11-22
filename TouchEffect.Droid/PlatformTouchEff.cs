@@ -19,6 +19,7 @@ namespace TouchEffect.Android
         public static void Preserve() { }
 
         private TouchEff _effect;
+        private bool _isHoverSupported;
 
         protected override void OnAttached()
         {
@@ -55,6 +56,7 @@ namespace TouchEffect.Android
             {
                 //suppress exception
             }
+            _isHoverSupported = false;
         }
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
@@ -76,15 +78,24 @@ namespace TouchEffect.Android
                     var screenPointerCoords = new Point(view.Left + e.Event.GetX(), view.Top + e.Event.GetY());
                     var viewRect = new Rectangle(view.Left, view.Top, view.Right - view.Left, view.Bottom - view.Top);
                     var status = viewRect.Contains(screenPointerCoords) ? TouchStatus.Started : TouchStatus.Canceled;
+
+                    if (_isHoverSupported && ((status == TouchStatus.Canceled && _effect.HoverStatus == HoverStatus.Entered) ||
+                        (status == TouchStatus.Started && _effect.HoverStatus == HoverStatus.Exited)))
+                    {
+                        _effect.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
+                    }
+
                     if (Element.GetTouchEff().Status != status)
                     {
                         Element.GetTouchEff().HandleTouch(status);
                     }
                     break;
                 case MotionEventActions.HoverEnter:
+                    _isHoverSupported = true;
                     Element.GetTouchEff().HandleHover(HoverStatus.Entered);
                     break;
                 case MotionEventActions.HoverExit:
+                    _isHoverSupported = true;
                     Element.GetTouchEff().HandleHover(HoverStatus.Exited);
                     break;
                 default:

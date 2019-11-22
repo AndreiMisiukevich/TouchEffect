@@ -121,18 +121,28 @@ namespace TouchEffect.Mac
 
         public override void MouseUp(NSEvent mouseEvent)
         {
-            var touchPoint = mouseEvent.LocationInWindow.ToPoint();
-            var status = ViewRect.Contains(touchPoint)
-                ? TouchStatus.Completed
-                : TouchStatus.Canceled;
+            if (_effect.HoverStatus == HoverStatus.Entered)
+            {
+                var touchPoint = mouseEvent.LocationInWindow.ToPoint();
+                var status = ViewRect.Contains(touchPoint)
+                    ? TouchStatus.Completed
+                    : TouchStatus.Canceled;
 
-            _effect.HandleTouch(status);
+                _effect.HandleTouch(status);
+            }
             base.MouseUp(mouseEvent);
         }
 
         public override void MouseDragged(NSEvent mouseEvent)
         {
             var status = ViewRect.Contains(mouseEvent.LocationInWindow.ToPoint()) ? TouchStatus.Started : TouchStatus.Canceled;
+
+            if ((status == TouchStatus.Canceled && _effect.HoverStatus == HoverStatus.Entered) ||
+                (status == TouchStatus.Started && _effect.HoverStatus == HoverStatus.Exited))
+            {
+                _effect.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
+            }
+
             if (_effect.Status != status)
             {
                 _effect.HandleTouch(status);
