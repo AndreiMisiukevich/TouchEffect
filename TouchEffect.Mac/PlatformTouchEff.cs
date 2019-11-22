@@ -104,7 +104,7 @@ namespace TouchEffect.Mac
             {
                 var frame = _container.Frame;
                 var parent = _container.Superview;
-                while(parent != null)
+                while (parent != null)
                 {
                     frame = new CoreGraphics.CGRect(frame.X + parent.Frame.X, frame.Y + parent.Frame.Y, frame.Width, frame.Height);
                     parent = parent.Superview;
@@ -128,6 +128,17 @@ namespace TouchEffect.Mac
 
             _effect.HandleTouch(status);
             base.MouseUp(mouseEvent);
+        }
+
+        public override void MouseDragged(NSEvent mouseEvent)
+        {
+            var status = ViewRect.Contains(mouseEvent.LocationInWindow.ToPoint()) ? TouchStatus.Started : TouchStatus.Canceled;
+            if (_effect.Status != status)
+            {
+                _effect.HandleTouch(status);
+            }
+
+            base.MouseDragged(mouseEvent);
         }
 
         protected override void Dispose(bool disposing)
