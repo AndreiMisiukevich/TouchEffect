@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml;
 using System;
 using System.Collections.Generic;
+using Windows.UI.Xaml.Media;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -40,28 +41,28 @@ namespace TouchEffect.UWP
             if (_effect.NativeAnimation && _effect.UWPTilt)
             {
                 Debug.WriteLine("PLAY NATIVE ANIMATION!!");
-
-                if (String.IsNullOrEmpty(Container.Name))
-                    Container.Name = Guid.NewGuid().ToString();
-                if (Container.Resources.ContainsKey("PointerDownAnimation"))
-                    _pointerDownStoryboard = (Storyboard)Container.Resources["PointerDownAnimation"];
+                var nativeControl = Container;
+                if (String.IsNullOrEmpty(nativeControl.Name))
+                    nativeControl.Name = Guid.NewGuid().ToString();
+                if (nativeControl.Resources.ContainsKey("PointerDownAnimation"))
+                    _pointerDownStoryboard = (Storyboard)nativeControl.Resources["PointerDownAnimation"];
                 else
                 {
                     _pointerDownStoryboard = new Storyboard();
                     var downThemeAnimation = new PointerDownThemeAnimation();
-                    Storyboard.SetTargetName(downThemeAnimation, Container.Name);
+                    Storyboard.SetTargetName(downThemeAnimation, nativeControl.Name);
                     _pointerDownStoryboard.Children.Add(downThemeAnimation);
-                    Container.Resources.Add(new KeyValuePair<object, object>("PointerDownAnimation", _pointerDownStoryboard));
+                    nativeControl.Resources.Add(new KeyValuePair<object, object>("PointerDownAnimation", _pointerDownStoryboard));
                 }
-                if (Container.Resources.ContainsKey("PointerUpAnimation"))
-                    _pointerUpStoryboard = (Storyboard)Container.Resources["PointerUpAnimation"];
+                if (nativeControl.Resources.ContainsKey("PointerUpAnimation"))
+                    _pointerUpStoryboard = (Storyboard)nativeControl.Resources["PointerUpAnimation"];
                 else
                 {
                     _pointerUpStoryboard = new Storyboard();
                     var upThemeAnimation = new PointerUpThemeAnimation();
-                    Storyboard.SetTargetName(upThemeAnimation, Container.Name);
+                    Storyboard.SetTargetName(upThemeAnimation, nativeControl.Name);
                     _pointerUpStoryboard.Children.Add(upThemeAnimation);
-                    Container.Resources.Add(new KeyValuePair<object, object>("PointerUpAnimation", _pointerUpStoryboard));
+                    nativeControl.Resources.Add(new KeyValuePair<object, object>("PointerUpAnimation", _pointerUpStoryboard));
                 }
             }
 
