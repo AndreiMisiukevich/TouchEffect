@@ -60,27 +60,27 @@ namespace TouchEffect.UWP
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
-			Element.GetTouchEff().HandleHover(HoverStatus.Entered);
+			_effect.HandleHover(HoverStatus.Entered);
 			if (_pressed)
             {
-                Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+				_effect.HandleTouch(TouchStatus.Started);
             }
         }
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
-			Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+			_effect.HandleHover(HoverStatus.Exited);
 			if (_pressed)
             {
-                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+				_effect.HandleTouch(TouchStatus.Canceled);
             }
         }
 
         private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
         {
             _pressed = false;
-			Element.GetTouchEff().HandleHover(HoverStatus.Exited);
-			Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+			_effect.HandleHover(HoverStatus.Exited);
+			_effect.HandleTouch(TouchStatus.Canceled);
         }
 
         private void OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
@@ -88,24 +88,24 @@ namespace TouchEffect.UWP
             if (_intentionalCaptureLoss) return;
             _pressed = false;
 
-			if (_effect.GetTouchEff().HoverStatus != HoverStatus.Exited)
+			if (_effect.HoverStatus != HoverStatus.Exited)
 			{
-				Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+				_effect.HandleHover(HoverStatus.Exited);
 			}
 
-			if (_effect.GetTouchEff().Status != TouchStatus.Canceled)
+			if (_effect.Status != TouchStatus.Canceled)
 			{
-				Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+				_effect.HandleTouch(TouchStatus.Canceled);
 			}
         }
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
 
-            if(_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered))
-                Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
-            else if(Element.GetTouchEff().HoverStatus != HoverStatus.Exited)
-                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+            if(_pressed && (_effect.HoverStatus == HoverStatus.Entered))
+				_effect.HandleTouch(TouchStatus.Completed);
+            else if(_effect.HoverStatus != HoverStatus.Exited)
+				_effect.HandleTouch(TouchStatus.Canceled);
             _pressed = false;
             _intentionalCaptureLoss = true;
         }
@@ -114,7 +114,7 @@ namespace TouchEffect.UWP
         {
             _pressed = true;
             Container.CapturePointer(e.Pointer);
-            Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+			_effect.HandleTouch(TouchStatus.Started);
             _intentionalCaptureLoss = false;
         }
     }
