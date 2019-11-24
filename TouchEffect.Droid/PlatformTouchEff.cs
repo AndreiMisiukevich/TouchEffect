@@ -146,10 +146,7 @@ namespace TouchEffect.Android
                 _viewOverlay.Pressed = true;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public bool EndRipple()
@@ -159,10 +156,7 @@ namespace TouchEffect.Android
                 _viewOverlay.Pressed = false;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         private RippleDrawable CreateRipple()
