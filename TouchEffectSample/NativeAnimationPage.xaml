@@ -42,6 +42,40 @@
                 <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="AndroidRippleRadius=400"/>
                 <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="AndroidRippleColor=White"/>
             </StackLayout>
+            <StackLayout>
+                <Grid HeightRequest="64" HorizontalOptions="Fill">
+                    <Grid BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.AndroidRippleRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="1" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.AndroidRippleRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="2" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.AndroidRippleRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="3" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.AndroidRippleRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="4" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.AndroidRippleRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="5" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.AndroidRippleRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                </Grid>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

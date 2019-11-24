@@ -14,7 +14,6 @@ namespace TouchEffectSample
         public ICommand Command { get; } = new Command(() =>
         {
             Application.Current.MainPage.DisplayAlert("BOOOM", ":(", "OOOOOPS");
-            TouchEff tef = new TouchEff()
         });
 
     }
