@@ -40,7 +40,10 @@ namespace TouchEffect.Mac
             _mouseTrackingView = null;
             _effect.Control = null;
             _effect = null;
-            Container?.RemoveGestureRecognizer(_gesture);
+            if (_gesture != null)
+            {
+                Container?.RemoveGestureRecognizer(_gesture);
+            }
             _gesture?.Dispose();
             _gesture = null;
         }
