@@ -73,11 +73,7 @@ namespace TouchEffect.Interfaces
         
         Color AndroidRippleColor { get; }
 
-        ZIndex AndroidRippleZIndex { get; }
-
         int AndroidRippleRadius { get; }
-
-        bool AndroidRippleBounded { get; }
 
         bool UWPTilt { get; }
 

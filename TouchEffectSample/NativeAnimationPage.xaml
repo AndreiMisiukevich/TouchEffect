@@ -13,14 +13,14 @@
                 <StackLayout.Effects>
                     <toucheff:TouchEff Completed="TouchEff_Completed"/>
                 </StackLayout.Effects>
-                <Label HorizontalTextAlignment="Center" Text="No native animation"/>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="No native animation"/>
             </StackLayout>
             <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
                          toucheff:TouchEff.NativeAnimation="True">
                 <StackLayout.Effects>
                     <toucheff:TouchEff  Completed="TouchEff_Completed"/>
                 </StackLayout.Effects>
-                <Label HorizontalTextAlignment="Center" Text="Native animation"/>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="Native animation"/>
             </StackLayout>
             <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
                          toucheff:TouchEff.NativeAnimation="True"
@@ -28,19 +28,19 @@
                 <StackLayout.Effects>
                     <toucheff:TouchEff Completed="TouchEff_Completed"/>
                 </StackLayout.Effects>
-                <Label HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
-                <Label HorizontalTextAlignment="Center" Text="NativeAnimationColor=Red"/>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimationColor=Red"/>
             </StackLayout>
             <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
                          toucheff:TouchEff.NativeAnimation="True"
-                         toucheff:TouchEff.AndroidRippleBounded="False"
-                         toucheff:TouchEff.AndroidRippleRadius="400">
+                         toucheff:TouchEff.AndroidRippleRadius="400"
+                         toucheff:TouchEff.AndroidRippleColor="White">
                 <StackLayout.Effects>
                     <toucheff:TouchEff Completed="TouchEff_Completed"/>
                 </StackLayout.Effects>
-                <Label HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
-                <Label HorizontalTextAlignment="Center" Text="AndroidRippleBounded=false"/>
-                <Label HorizontalTextAlignment="Center" Text="AndroidRippleRadius=400"/>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
+                <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="AndroidRippleRadius=400"/>
+                <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="AndroidRippleColor=White"/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
