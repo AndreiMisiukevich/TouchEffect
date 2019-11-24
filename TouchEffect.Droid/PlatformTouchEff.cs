@@ -7,6 +7,7 @@ using TouchEffect.Enums;
 using Android.Runtime;
 using Android.Views;
 using AView = Android.Views.View;
+using AndroidNative = Android;
 using System;
 using Android.Graphics.Drawables;
 using Android.Widget;
@@ -14,6 +15,8 @@ using Android.Animation;
 using Android.Graphics;
 using Color = Android.Graphics.Color;
 using Android.Content.Res;
+using static Android.Content.Res.Resources;
+using Android.Support.V4.Content;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -26,10 +29,10 @@ namespace TouchEffect.Android
 
         private TouchEff _effect;
         private Color _color;
-        private byte _alpha;
         private RippleDrawable _ripple;
         private FrameLayout _viewOverlay;
         private ObjectAnimator _animator;
+        public AView thisview => Control ?? Container;
 
         protected override void OnAttached()
         {
@@ -48,11 +51,8 @@ namespace TouchEffect.Android
 
             if(_effect.NativeAnimation && _effect.AndroidRipple)
             {
-                if (_effect.AndroidRippleColor == null)
-                    _color = _effect.AndroidRippleColor.ToAndroid();
-                else
-                    _color = _effect.NativeAnimationColor.ToAndroid();
-
+                thisview.Clickable = true;
+                thisview.LongClickable = true;
                 _viewOverlay = new FrameLayout(Container.Context)
                 {
                     LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
@@ -61,27 +61,12 @@ namespace TouchEffect.Android
                 };
                 Container.LayoutChange += LayoutChange;
 
-                var mask = new ColorDrawable(Color.Transparent);
-                _ripple = new RippleDrawable(GetPressedColorSelector(_color), null, mask);
-               // _ripple = new RippleDrawable(GetPressedColorSelector(_color), back, null);
-                _viewOverlay.Background = _ripple;
+                _ripple = CreateRipple();
+                _ripple.Radius = _effect.AndroidRippleRadius;
+
                 Container.AddView(_viewOverlay);
                 _viewOverlay.BringToFront();
             }
-        }
-        static ColorStateList GetPressedColorSelector(int pressedColor)
-        {
-            return new ColorStateList(
-                new[] { new int[] { } },
-                new[] { pressedColor, });
-        }
-
-        private void LayoutChange(object sender, AView.LayoutChangeEventArgs e)
-        {
-            var group = (ViewGroup)sender;
-            if (group == null || (Container as IVisualElementRenderer)?.Element == null) return;
-            _viewOverlay.Right = group.Width;
-            _viewOverlay.Bottom = group.Height;
         }
 
         protected override void OnDetached()
@@ -99,6 +84,14 @@ namespace TouchEffect.Android
                     Control.Touch -= OnTouch;
                 }
                 Container.LayoutChange -= LayoutChange;
+                if (_viewOverlay != null)
+                {
+                    Container.RemoveView(_viewOverlay);
+                    _viewOverlay.Pressed = false;
+                    _viewOverlay.Foreground = null;
+                    _viewOverlay.Dispose();
+                    _ripple?.Dispose();
+                }
             }
             catch (ObjectDisposedException)
             {
@@ -113,7 +106,7 @@ namespace TouchEffect.Android
             {
                 case MotionEventActions.Down:
                     Element.GetTouchEff().HandleTouch(TouchStatus.Started);
-                    StartRipple(e);
+                    StartRipple(e.Event.GetX(), e.Event.GetY());
                     break;
                 case MotionEventActions.Up:
                     Element.GetTouchEff().HandleTouch(Element.GetTouchEff().Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
@@ -132,7 +125,9 @@ namespace TouchEffect.Android
                     {
                         Element.GetTouchEff().HandleTouch(status);
                         if(status == TouchStatus.Started)
-                            StartRipple(e);
+                            StartRipple(e.Event.GetX(), e.Event.GetY());
+                        if (status == TouchStatus.Canceled)
+                            EndRipple();
                     }
                     break;
                 case MotionEventActions.HoverEnter:
@@ -147,21 +142,72 @@ namespace TouchEffect.Android
             }
         }
 
-        private void StartRipple(AView.TouchEventArgs e)
+        public void StartRipple(float x, float y)
         {
-            if(_effect.NativeAnimation && _effect.AndroidRipple)
+            if (_effect.NativeAnimation && _effect.AndroidRipple && _viewOverlay.Background is RippleDrawable)
             {
-
                 _viewOverlay.BringToFront();
-                _ripple.SetHotspot(e.Event.GetX(), e.Event.GetY());
+                _ripple.SetHotspot(x, y);
                 _viewOverlay.Pressed = true;
             }
         }
 
-        void EndRipple()
+        public void EndRipple()
         {
-            if(_viewOverlay != null)
-                _viewOverlay.Pressed = false;
+            if (_viewOverlay == null) return;
+            _viewOverlay.Pressed = false;
+        }
+
+        private RippleDrawable CreateRipple()
+        {
+            if (Element is Layout)
+            {
+                var mask = new ColorDrawable(Color.White);
+                return new RippleDrawable(GetColorStateList(), null, mask);
+            }
+
+            var background = (Control ?? Container).Background;
+            if (background == null)
+            {
+                var mask = new ColorDrawable(Color.White);
+                return new RippleDrawable(GetColorStateList(), null, mask);
+            }
+
+            if (background is RippleDrawable)
+            {
+                var ripple = (RippleDrawable)background.GetConstantState().NewDrawable();
+                ripple.SetColor(GetColorStateList());
+                return ripple;
+            }
+            return new RippleDrawable(GetColorStateList(), background, null);
+        }
+
+        private ColorStateList GetColorStateList()
+        {
+            int color;
+
+            var defaultcolor = TouchEff.GetNativeAnimationColor(Element);
+            var androidcolor = TouchEff.GetAndroidRippleColor(Element);
+
+            if (androidcolor != Xamarin.Forms.Color.Default && androidcolor != null)
+                color = androidcolor.ToAndroid();
+            else if (defaultcolor != Xamarin.Forms.Color.Default)
+                color = defaultcolor.ToAndroid();
+            else
+                color = Color.Argb(31, 0, 0, 0);
+
+
+            return new ColorStateList(
+                new[] { new int[] { } },
+                new[] { color, });
+        }
+
+        private void LayoutChange(object sender, AView.LayoutChangeEventArgs e)
+        {
+            var group = (ViewGroup)sender;
+            if (group == null || (Container as IVisualElementRenderer)?.Element == null) return;
+            _viewOverlay.Right = group.Width;
+            _viewOverlay.Bottom = group.Height;
         }
     }
 }
