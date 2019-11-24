@@ -7,7 +7,6 @@ using TouchEffect.Enums;
 using Android.Runtime;
 using Android.Views;
 using AView = Android.Views.View;
-using AndroidNative = Android;
 using System;
 using Android.Graphics.Drawables;
 using Android.Widget;
@@ -15,8 +14,6 @@ using Android.Animation;
 using Android.Graphics;
 using Color = Android.Graphics.Color;
 using Android.Content.Res;
-using static Android.Content.Res.Resources;
-using Android.Support.V4.Content;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -25,14 +22,9 @@ namespace TouchEffect.Android
     [Preserve(AllMembers = true)]
     public class PlatformTouchEff : PlatformEffect
     {
-        public static void Preserve() { }
-
         private TouchEff _effect;
-        private Color _color;
         private RippleDrawable _ripple;
         private FrameLayout _viewOverlay;
-        private ObjectAnimator _animator;
-        public AView thisview => Control ?? Container;
 
         protected override void OnAttached()
         {
@@ -51,8 +43,8 @@ namespace TouchEffect.Android
 
             if(_effect.NativeAnimation && _effect.AndroidRipple)
             {
-                thisview.Clickable = true;
-                thisview.LongClickable = true;
+                Container.Clickable = true;
+                Container.LongClickable = true;
                 _viewOverlay = new FrameLayout(Container.Context)
                 {
                     LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
