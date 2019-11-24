@@ -792,7 +792,7 @@ namespace TouchEffect
             {
                 return;
             }
-            _visualManager.ChangeStateAsync(this, State, animated);
+            _visualManager.ChangeStateAsync(this, animated);
         }
 
         protected override void OnDetached()
