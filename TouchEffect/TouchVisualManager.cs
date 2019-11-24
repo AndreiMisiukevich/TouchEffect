@@ -20,8 +20,6 @@ namespace TouchEffect
 
         private Func<ITouchEff, TouchState, int, CancellationToken, Task> _customAnimationTaskGetter;
 
-        private readonly HashSet<string> _skipTapHandlingPlatforms;
-
         private double? _durationMultiplier;
 
         private double _animationProgress;
@@ -31,10 +29,7 @@ namespace TouchEffect
         private bool CanExecuteAction(ITouchEff sender)
             => sender.Control.IsEnabled && ((sender.Command?.CanExecute(sender.CommandParameter) ?? false) || sender.IsCompletedSet);
 
-        internal TouchVisualManager(params string[] skipTapHandlingPlatforms)
-            => _skipTapHandlingPlatforms = new HashSet<string>(skipTapHandlingPlatforms);
-
-        public void HandleTouch(ITouchEff sender, TouchStatus status)
+        internal void HandleTouch(ITouchEff sender, TouchStatus status)
         {
             var canExecuteAction = CanExecuteAction(sender);
             if (status != TouchStatus.Started || canExecuteAction)
@@ -96,15 +91,15 @@ namespace TouchEffect
                 sender.RaiseStatusChanged();
             }
 
-            if (!_skipTapHandlingPlatforms.Contains(Device.RuntimePlatform) && status == TouchStatus.Completed)
+            if (status == TouchStatus.Completed)
             {
                 OnTapped(sender);
             }
         }
 
-        public void HandleHover(ITouchEff sender, HoverStatus status)
+        internal void HandleHover(ITouchEff sender, HoverStatus status)
         {
-            if (!(sender.Control?.IsEnabled ?? false)) {
+            if (!sender.Control.IsEnabled) {
                 return;
             }
 
@@ -122,8 +117,10 @@ namespace TouchEffect
             sender.RaiseHoverStatusChanged();
         }
 
-        public async void ChangeStateAsync(ITouchEff sender, TouchState state, bool animated)
+        internal async void ChangeStateAsync(ITouchEff sender, bool animated)
         {
+            var state = sender.State;
+
             AbortAnimations(sender);
             _animationTokenSource = new CancellationTokenSource();
             var token = _animationTokenSource.Token;
