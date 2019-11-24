@@ -43,9 +43,14 @@ namespace TouchEffect.UWP
                 Debug.WriteLine("PLAY NATIVE ANIMATION!!");
                 var nativeControl = Container;
                 if (String.IsNullOrEmpty(nativeControl.Name))
+                {
                     nativeControl.Name = Guid.NewGuid().ToString();
+                }
+
                 if (nativeControl.Resources.ContainsKey("PointerDownAnimation"))
+                {
                     _pointerDownStoryboard = (Storyboard)nativeControl.Resources["PointerDownAnimation"];
+                }
                 else
                 {
                     _pointerDownStoryboard = new Storyboard();
@@ -54,8 +59,11 @@ namespace TouchEffect.UWP
                     _pointerDownStoryboard.Children.Add(downThemeAnimation);
                     nativeControl.Resources.Add(new KeyValuePair<object, object>("PointerDownAnimation", _pointerDownStoryboard));
                 }
+
                 if (nativeControl.Resources.ContainsKey("PointerUpAnimation"))
+                {
                     _pointerUpStoryboard = (Storyboard)nativeControl.Resources["PointerUpAnimation"];
+                }
                 else
                 {
                     _pointerUpStoryboard = new Storyboard();
@@ -126,12 +134,11 @@ namespace TouchEffect.UWP
         {
             if (_intentionalCaptureLoss) return;
             _pressed = false;
-
-			if (_effect.GetTouchEff().Status != TouchStatus.Canceled)
+			if (_effect.Status != TouchStatus.Canceled)
 			{
 				Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
 			}
-            if (_effect.GetTouchEff().HoverStatus != HoverStatus.Exited)
+            if (_effect.HoverStatus != HoverStatus.Exited)
 			{
 				Element.GetTouchEff().HandleHover(HoverStatus.Exited);
 			}
