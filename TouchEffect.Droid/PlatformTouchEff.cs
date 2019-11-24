@@ -22,9 +22,11 @@ namespace TouchEffect.Android
     [Preserve(AllMembers = true)]
     public class PlatformTouchEff : PlatformEffect
     {
+        public static void Preserve() { }
         private TouchEff _effect;
         private RippleDrawable _ripple;
         private FrameLayout _viewOverlay;
+        public AView _view => Control ?? Container;
 
         protected override void OnAttached()
         {
@@ -43,8 +45,8 @@ namespace TouchEffect.Android
 
             if(_effect.NativeAnimation && _effect.AndroidRipple)
             {
-                Container.Clickable = true;
-                Container.LongClickable = true;
+                _view.Clickable = true;
+                _view.LongClickable = true;
                 _viewOverlay = new FrameLayout(Container.Context)
                 {
                     LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
@@ -55,6 +57,7 @@ namespace TouchEffect.Android
 
                 _ripple = CreateRipple();
                 _ripple.Radius = _effect.AndroidRippleRadius;
+                _viewOverlay.Background = _ripple;
 
                 Container.AddView(_viewOverlay);
                 _viewOverlay.BringToFront();
@@ -134,20 +137,32 @@ namespace TouchEffect.Android
             }
         }
 
-        public void StartRipple(float x, float y)
+        public bool StartRipple(float x, float y)
         {
             if (_effect.NativeAnimation && _effect.AndroidRipple && _viewOverlay.Background is RippleDrawable)
             {
                 _viewOverlay.BringToFront();
                 _ripple.SetHotspot(x, y);
                 _viewOverlay.Pressed = true;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public void EndRipple()
+        public bool EndRipple()
         {
-            if (_viewOverlay == null) return;
-            _viewOverlay.Pressed = false;
+            if (_viewOverlay != null && _viewOverlay.Pressed)
+            {
+                _viewOverlay.Pressed = false;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private RippleDrawable CreateRipple()

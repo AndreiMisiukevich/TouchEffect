@@ -1,5 +1,6 @@
 ﻿using Xamarin.Forms;
 using System.Windows.Input;
+using TouchEffect;
 
 namespace TouchEffectSample
 {
@@ -13,6 +14,7 @@ namespace TouchEffectSample
         public ICommand Command { get; } = new Command(() =>
         {
             Application.Current.MainPage.DisplayAlert("BOOOM", ":(", "OOOOOPS");
+            TouchEff tef = new TouchEff()
         });
 
     }
