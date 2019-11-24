@@ -29,7 +29,7 @@ namespace TouchEffect.Android
         private bool _isHoverSupported;
         private RippleDrawable _ripple;
         private FrameLayout _viewOverlay;
-        public AView _view => Control ?? Container;
+        private AView View => Control ?? Container;
 
         protected override void OnAttached()
         {
@@ -48,15 +48,15 @@ namespace TouchEffect.Android
 
             if(_effect.NativeAnimation && _effect.AndroidRipple)
             {
-                _view.Clickable = true;
-                _view.LongClickable = true;
+                View.Clickable = true;
+                View.LongClickable = true;
                 _viewOverlay = new FrameLayout(Container.Context)
                 {
                     LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
                     Clickable = false,
                     Focusable = false,
                 };
-                Container.LayoutChange += LayoutChange;
+                View.LayoutChange += LayoutChange;
 
                 _ripple = CreateRipple();
                 _ripple.Radius = _effect.AndroidRippleRadius;

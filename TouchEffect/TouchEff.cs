@@ -287,43 +287,37 @@ namespace TouchEffect
             nameof(NativeAnimation),
             typeof(bool),
             typeof(TouchEff),
-            false,
-            BindingMode.OneWayToSource);
+            false);
 
         public static readonly BindableProperty NativeAnimationColorProperty = BindableProperty.CreateAttached(
             nameof(NativeAnimationColor),
             typeof(Color),
             typeof(TouchEff),
-            Color.Default,
-            BindingMode.OneWayToSource);
+            Color.Default);
 
         public static readonly BindableProperty AndroidRippleProperty = BindableProperty.CreateAttached(
             nameof(AndroidRipple),
             typeof(bool),
             typeof(TouchEff),
-            true,
-            BindingMode.OneWayToSource);
+            true);
 
         public static readonly BindableProperty AndroidRippleColorProperty = BindableProperty.CreateAttached(
             nameof(AndroidRippleColor),
             typeof(Color),
             typeof(TouchEff),
-            Color.Default,
-            BindingMode.OneWayToSource);
+            Color.Default);
 
         public static readonly BindableProperty AndroidRippleRadiusProperty = BindableProperty.CreateAttached(
             nameof(AndroidRippleRadius),
             typeof(int),
             typeof(TouchEff),
-            -1,
-            BindingMode.OneWayToSource);
+            -1);
 
         public static readonly BindableProperty UWPTiltProperty = BindableProperty.CreateAttached(
             nameof(UWPTilt),
             typeof(bool),
             typeof(TouchEff),
-            true,
-            BindingMode.OneWayToSource);
+            true);
 
         public static ICommand GetCommand(BindableObject bindable)
             => bindable.GetValue(CommandProperty) as ICommand;
