@@ -65,6 +65,18 @@ namespace TouchEffect.Interfaces
 
         bool IsCompletedSet { get; }
 
+        bool NativeAnimation { get; }
+
+        Color NativeAnimationColor { get; }
+        
+        bool AndroidRipple { get; }
+        
+        Color AndroidRippleColor { get; }
+
+        int AndroidRippleRadius { get; }
+
+        bool UWPTilt { get; }
+
         VisualElement Control { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
