@@ -142,10 +142,7 @@ RippleCount | `int` | 0 | This property allows to set ripple of animation (Press
 IsToggled | `bool?` | null | This property allows to achieve "switch" behavior. **null** means that feature is disabled and view will return to inital state after touch releasing
 NativeAnimation | `bool` | false | If native platform touch feedback animations are present (Tilt on UWP, Ripple on Android)
 NativeAnimationColor | `Color` | Color.Default | The color used for the native touch feedback animation
-AndroidRipple | `bool` | true | If NativeAnimation enables the ripple effect on Android
-UWPTilt | `bool` | true | If NativeAnimation enables the tilt effect on UWP
-AndroidRippleColor | `Color` | Color.Default | An override for NativeAnimationColor on Android
-AndroidRippleRadius | `int` | -1 | The radius of the ripple animation on Android (by default, extends to the entire control)
+NativeAnimationRadius | `int` | -1 | The radius of the native ripple animation on Android
 
 ### TouchEff Attached events
 Event | Type | Default | Description

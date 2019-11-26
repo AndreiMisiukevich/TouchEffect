@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using System.Threading;
 using TouchEffect.Interfaces;
+using System.ComponentModel;
 
 namespace TouchEffect
 {
@@ -24,6 +25,17 @@ namespace TouchEffect
                 bindable.GetTouchEff()?.ForceUpdateState();
             });
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static readonly BindableProperty HoveredBackgroundImageSourceProperty = BindableProperty.Create(
+            nameof(HoveredBackgroundImageSource),
+            typeof(ImageSource),
+            typeof(TouchImage),
+            default(ImageSource),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+            });
+
         public static readonly BindableProperty PressedBackgroundImageSourceProperty = BindableProperty.Create(
             nameof(PressedBackgroundImageSource),
             typeof(ImageSource),
@@ -36,6 +48,17 @@ namespace TouchEffect
 
         public static readonly BindableProperty RegularBackgroundImageAspectProperty = BindableProperty.Create(
             nameof(RegularBackgroundImageAspect),
+            typeof(Aspect),
+            typeof(TouchImage),
+            default(Aspect),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+            });
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static readonly BindableProperty HoveredBackgroundImageAspectProperty = BindableProperty.Create(
+            nameof(HoveredBackgroundImageAspect),
             typeof(Aspect),
             typeof(TouchImage),
             default(Aspect),
@@ -66,6 +89,13 @@ namespace TouchEffect
             set => SetValue(RegularBackgroundImageSourceProperty, value);
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public ImageSource HoveredBackgroundImageSource
+        {
+            get => GetValue(HoveredBackgroundImageSourceProperty) as ImageSource;
+            set => SetValue(HoveredBackgroundImageSourceProperty, value);
+        }
+
         public ImageSource PressedBackgroundImageSource
         {
             get => GetValue(PressedBackgroundImageSourceProperty) as ImageSource;
@@ -76,6 +106,13 @@ namespace TouchEffect
         {
             get => (Aspect)GetValue(RegularBackgroundImageAspectProperty);
             set => SetValue(RegularBackgroundImageAspectProperty, value);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Aspect HoveredBackgroundImageAspect
+        {
+            get => (Aspect)GetValue(HoveredBackgroundImageAspectProperty);
+            set => SetValue(HoveredBackgroundImageAspectProperty, value);
         }
 
         public Aspect PressedBackgroundImageAspect
