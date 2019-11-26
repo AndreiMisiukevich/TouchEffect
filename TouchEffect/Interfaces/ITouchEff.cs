@@ -68,14 +68,8 @@ namespace TouchEffect.Interfaces
         bool NativeAnimation { get; }
 
         Color NativeAnimationColor { get; }
-        
-        bool AndroidRipple { get; }
-        
-        Color AndroidRippleColor { get; }
 
-        int AndroidRippleRadius { get; }
-
-        bool UWPTilt { get; }
+        int NativeAnimationRadius { get; }
 
         VisualElement Control { get; set; }
 

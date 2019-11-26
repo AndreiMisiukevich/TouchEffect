@@ -38,7 +38,7 @@ namespace TouchEffect.UWP
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
             _effect.ForceUpdateState(false);
-            if (_effect.NativeAnimation && _effect.UWPTilt)
+            if (_effect.NativeAnimation)
             {
                 Debug.WriteLine("PLAY NATIVE ANIMATION!!");
                 var nativeControl = Container;
@@ -175,7 +175,7 @@ namespace TouchEffect.UWP
 
         private void AnimateTilt(Storyboard storyboard)
         {
-            if (_effect.NativeAnimation && _effect.UWPTilt && storyboard != null) {
+            if (_effect.NativeAnimation && storyboard != null) {
                 storyboard.Stop();
                 storyboard.Begin();
             }

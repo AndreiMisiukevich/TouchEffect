@@ -295,29 +295,11 @@ namespace TouchEffect
             typeof(TouchEff),
             Color.Default);
 
-        public static readonly BindableProperty AndroidRippleProperty = BindableProperty.CreateAttached(
-            nameof(AndroidRipple),
-            typeof(bool),
-            typeof(TouchEff),
-            true);
-
-        public static readonly BindableProperty AndroidRippleColorProperty = BindableProperty.CreateAttached(
-            nameof(AndroidRippleColor),
-            typeof(Color),
-            typeof(TouchEff),
-            Color.Default);
-
-        public static readonly BindableProperty AndroidRippleRadiusProperty = BindableProperty.CreateAttached(
-            nameof(AndroidRippleRadius),
+        public static readonly BindableProperty NativeAnimationRadiusProperty = BindableProperty.CreateAttached(
+            nameof(NativeAnimationRadius),
             typeof(int),
             typeof(TouchEff),
             -1);
-
-        public static readonly BindableProperty UWPTiltProperty = BindableProperty.CreateAttached(
-            nameof(UWPTilt),
-            typeof(bool),
-            typeof(TouchEff),
-            true);
 
         public static ICommand GetCommand(BindableObject bindable)
             => bindable.GetValue(CommandProperty) as ICommand;
@@ -499,29 +481,11 @@ namespace TouchEffect
         public static void SetNativeAnimationColor(BindableObject bindable, Color value)
             => bindable.SetValue(NativeAnimationColorProperty, value);
 
-        public static bool GetAndroidRipple(BindableObject bindable)
-            => (bool)bindable.GetValue(AndroidRippleProperty);
+        public static int GetNativeAnimationRadius(BindableObject bindable)
+            => (int)bindable.GetValue(NativeAnimationRadiusProperty);
 
-        public static void SetAndroidRipple(BindableObject bindable, bool value)
-            => bindable.SetValue(AndroidRippleProperty, value);
-
-        public static Color GetAndroidRippleColor(BindableObject bindable)
-            => (Color)bindable.GetValue(AndroidRippleColorProperty);
-
-        public static void SetAndroidRippleColor(BindableObject bindable, Color value)
-            => bindable.SetValue(AndroidRippleColorProperty, value);
-
-        public static int GetAndroidRippleRadius(BindableObject bindable)
-            => (int)bindable.GetValue(AndroidRippleRadiusProperty);
-
-        public static void SetAndroidRippleRadius(BindableObject bindable, int value)
-            => bindable.SetValue(AndroidRippleRadiusProperty, value);
-
-        public static void SetUWPTilt(BindableObject bindable, bool value)
-            => bindable.SetValue(UWPTiltProperty, value);
-
-        public static bool GetUWPTilt(BindableObject bindable)
-            => (bool)bindable.GetValue(UWPTiltProperty);
+        public static void SetNativeAnimationRadius(BindableObject bindable, int value)
+            => bindable.SetValue(NativeAnimationRadiusProperty, value);
 
         public ICommand Command => GetCommand(Control);
 
@@ -555,13 +519,7 @@ namespace TouchEffect
 
         public Color NativeAnimationColor => GetNativeAnimationColor(Control);
 
-        public bool AndroidRipple => GetAndroidRipple(Control);
-
-        public Color AndroidRippleColor => GetAndroidRippleColor(Control);
-
-        public int AndroidRippleRadius => GetAndroidRippleRadius(Control);
-
-        public bool UWPTilt => GetUWPTilt(Control);
+        public int NativeAnimationRadius => GetNativeAnimationRadius(Control);
 
         public Color RegularBackgroundColor => GetRegularBackgroundColor(Control);
 

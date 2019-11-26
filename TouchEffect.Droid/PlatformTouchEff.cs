@@ -46,7 +46,7 @@ namespace TouchEffect.Android
                 Control.Touch += OnTouch;
             }
 
-            if(_effect.NativeAnimation && _effect.AndroidRipple)
+            if(_effect.NativeAnimation)
             {
                 View.Clickable = true;
                 View.LongClickable = true;
@@ -59,7 +59,7 @@ namespace TouchEffect.Android
                 View.LayoutChange += LayoutChange;
 
                 _ripple = CreateRipple();
-                _ripple.Radius = _effect.AndroidRippleRadius;
+                _ripple.Radius = _effect.NativeAnimationRadius;
                 _viewOverlay.Background = _ripple;
 
                 Container.AddView(_viewOverlay);
@@ -152,7 +152,7 @@ namespace TouchEffect.Android
 
         public bool StartRipple(float x, float y)
         {
-            if (_effect.NativeAnimation && _effect.AndroidRipple && _viewOverlay.Background is RippleDrawable)
+            if (_effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
             {
                 _viewOverlay.BringToFront();
                 _ripple.SetHotspot(x, y);
@@ -199,17 +199,11 @@ namespace TouchEffect.Android
         private ColorStateList GetColorStateList()
         {
             int color;
-
             var defaultcolor = TouchEff.GetNativeAnimationColor(Element);
-            var androidcolor = TouchEff.GetAndroidRippleColor(Element);
-
-            if (androidcolor != Xamarin.Forms.Color.Default && androidcolor != null)
-                color = androidcolor.ToAndroid();
-            else if (defaultcolor != Xamarin.Forms.Color.Default)
+            if (defaultcolor != Xamarin.Forms.Color.Default)
                 color = defaultcolor.ToAndroid();
             else
                 color = Color.Argb(31, 0, 0, 0);
-
 
             return new ColorStateList(
                 new[] { new int[] { } },
