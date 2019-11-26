@@ -6,12 +6,9 @@ using TouchEffect.UWP;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.UWP;
-using System.Diagnostics;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml;
 using System;
 using System.Collections.Generic;
-using Windows.UI.Xaml.Media;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -40,7 +37,6 @@ namespace TouchEffect.UWP
             _effect.ForceUpdateState(false);
             if (_effect.NativeAnimation)
             {
-                Debug.WriteLine("PLAY NATIVE ANIMATION!!");
                 var nativeControl = Container;
                 if (String.IsNullOrEmpty(nativeControl.Name))
                 {
