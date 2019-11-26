@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:toucheff="clr-namespace:TouchEffect;assembly=TouchEffect"
+             x:Class="TouchEffectSample.NativeAnimationPage">
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="Gray">
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="False">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="No native animation"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="True">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff  Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="Native animation"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="True"
+                         toucheff:TouchEff.NativeAnimationColor="Red">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimationColor=Red"/>
+            </StackLayout>
+            <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
+                         toucheff:TouchEff.NativeAnimation="True"
+                         toucheff:TouchEff.NativeAnimationRadius="400"
+                         toucheff:TouchEff.NativeAnimationColor="White">
+                <StackLayout.Effects>
+                    <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                </StackLayout.Effects>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
+                <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="NativeAnimationRadius=400"/>
+                <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="NativeAnimationColor=White"/>
+            </StackLayout>
+            <StackLayout>
+                <Grid HeightRequest="64" HorizontalOptions="Fill">
+                    <Grid BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="1" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="2" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="3" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="4" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                    <Grid Grid.Column="5" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                        <Grid.Effects>
+                            <toucheff:TouchEff Completed="TouchEff_Completed"/>
+                        </Grid.Effects>
+                    </Grid>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

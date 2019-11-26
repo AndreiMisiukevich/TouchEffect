@@ -385,6 +385,24 @@ namespace TouchEffect
                 bindable.GetTouchEff()?.ForceUpdateState(false);
             });
 
+        public static readonly BindableProperty NativeAnimationProperty = BindableProperty.CreateAttached(
+            nameof(NativeAnimation),
+            typeof(bool),
+            typeof(TouchEff),
+            false);
+
+        public static readonly BindableProperty NativeAnimationColorProperty = BindableProperty.CreateAttached(
+            nameof(NativeAnimationColor),
+            typeof(Color),
+            typeof(TouchEff),
+            Color.Default);
+
+        public static readonly BindableProperty NativeAnimationRadiusProperty = BindableProperty.CreateAttached(
+            nameof(NativeAnimationRadius),
+            typeof(int),
+            typeof(TouchEff),
+            -1);
+
         public static ICommand GetCommand(BindableObject bindable)
             => bindable.GetValue(CommandProperty) as ICommand;
 
@@ -633,6 +651,24 @@ namespace TouchEffect
         public static void SetIsToggled(BindableObject bindable, bool? value)
             => bindable.SetValue(IsToggledProperty, value);
 
+        public static bool GetNativeAnimation(BindableObject bindable)
+            => (bool)bindable.GetValue(NativeAnimationProperty);
+
+        public static void SetNativeAnimation(BindableObject bindable, bool value)
+            => bindable.SetValue(NativeAnimationProperty, value);
+
+        public static Color GetNativeAnimationColor(BindableObject bindable)
+            => (Color)bindable.GetValue(NativeAnimationColorProperty);
+
+        public static void SetNativeAnimationColor(BindableObject bindable, Color value)
+            => bindable.SetValue(NativeAnimationColorProperty, value);
+
+        public static int GetNativeAnimationRadius(BindableObject bindable)
+            => (int)bindable.GetValue(NativeAnimationRadiusProperty);
+
+        public static void SetNativeAnimationRadius(BindableObject bindable, int value)
+            => bindable.SetValue(NativeAnimationRadiusProperty, value);
+
         public ICommand Command => GetCommand(Control);
 
         public object CommandParameter => GetCommandParameter(Control);
@@ -660,6 +696,12 @@ namespace TouchEffect
             get => GetHoverState(Control);
             set => SetHoverState(Control, value);
         }
+
+        public bool NativeAnimation => GetNativeAnimation(Control);
+
+        public Color NativeAnimationColor => GetNativeAnimationColor(Control);
+
+        public int NativeAnimationRadius => GetNativeAnimationRadius(Control);
 
         public Color RegularBackgroundColor => GetRegularBackgroundColor(Control);
 

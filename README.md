@@ -1,5 +1,7 @@
 # TouchView control for Xamarin Forms (based on Xamarin Forms AbsoluteLayout)
-This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer
+This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer. It makes it possible to change the appearance of any control in response to touch events, either directly via xaml or with your custom logic hooked up to the events which this plugin exposes.
+
+With this plugin it is also possible to respond to hover events (if the platform exposes them) and to display native touch feedback events (Tilt on UWP, Ripple on Android).
 
 ### Build Status
 * Azure DevOps: [![Build status](https://dev.azure.com/andreimisiukevich/TouchView/_apis/build/status/TouchView-nuget-CI)](https://dev.azure.com/andreimisiukevich/TouchView/_build/latest?definitionId=1)
@@ -37,9 +39,9 @@ This plugin provides opportunity to create views with touch effects without usin
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
 
-**XAML:** use TouchEff for achieving responisve UI (Changing background image or/and background color or/and opacity or/and scale).
+**XAML:** use TouchEff for achieving repsonsive UI (Changing background image or/and background color or/and opacity or/and scale).
 
-Add TouchEff to element's Effects collection and use TouchEff attached propertis for setting up touc visual effect.
+Add TouchEff to element's Effects collection and use TouchEff attached properties for setting up touch visual effect.
 
 ```xaml
 ...
@@ -138,12 +140,17 @@ RegularAnimationDuration | `int` | 0 | The duration of animation by applying Reg
 RegularAnimationEasing | `Easing` | null | The easing of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
 RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
 IsToggled | `bool?` | null | This property allows to achieve "switch" behavior. **null** means that feature is disabled and view will return to inital state after touch releasing
+NativeAnimation | `bool` | false | If native platform touch feedback animations are present (Tilt on UWP, Ripple on Android)
+NativeAnimationColor | `Color` | Color.Default | The color used for the native touch feedback animation
+NativeAnimationRadius | `int` | -1 | The radius of the native ripple animation on Android
 
 ### TouchEff Attached events
 Event | Type | Default | Description
 --- | --- | --- | ---
 StatusChanged | `TEffectStatusChangedHandler` | null | Touch status changed
 StateChanged | `TEffectStateChangedHandler` | null | Touch state changed
+HoverStatusChanged | `TEffectHoverStatusChangedHandler` | null | Hover status changed
+HoverStateChanged | `TEffectHoverStateChangedHandler` | null | Hover state changed
 Completed | `TEffectCompletedHandler` | null | User tapped
 AnimationStarted | `AnimationStartedHandler` | null | Animation started
 

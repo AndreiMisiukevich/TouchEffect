@@ -96,6 +96,12 @@ namespace TouchEffect.Interfaces
         [EditorBrowsable(EditorBrowsableState.Never)]
         bool IsCompletedSet { get; }
 
+        bool NativeAnimation { get; }
+
+        Color NativeAnimationColor { get; }
+
+        int NativeAnimationRadius { get; }
+
         VisualElement Control { get; set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
