@@ -12,7 +12,6 @@
     <Folder Include="EventArgs\" />
     <Folder Include="Enums\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Controls\TouchColorView.cs" />

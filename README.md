@@ -140,6 +140,7 @@ RegularAnimationDuration | `int` | 0 | The duration of animation by applying Reg
 RegularAnimationEasing | `Easing` | null | The easing of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
 RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
 IsToggled | `bool?` | null | This property allows to achieve "switch" behavior. **null** means that feature is disabled and view will return to inital state after touch releasing
+DisallowTouchThreshold | `int` | 0 | Movement threshold for considering **android** touch as canceled
 NativeAnimation | `bool` | false | If native platform touch feedback animations are present (Tilt on UWP, Ripple on Android)
 NativeAnimationColor | `Color` | Color.Default | The color used for the native touch feedback animation
 NativeAnimationRadius | `int` | -1 | The radius of the native ripple animation on Android

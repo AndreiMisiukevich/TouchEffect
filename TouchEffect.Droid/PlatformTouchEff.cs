@@ -10,10 +10,9 @@ using AView = Android.Views.View;
 using System;
 using Android.Graphics.Drawables;
 using Android.Widget;
-using Android.Animation;
-using Android.Graphics;
 using Color = Android.Graphics.Color;
 using Android.Content.Res;
+using static System.Math;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -30,6 +29,9 @@ namespace TouchEffect.Android
         private RippleDrawable _ripple;
         private FrameLayout _viewOverlay;
         private AView View => Control ?? Container;
+        private float _startX;
+        private float _startY;
+        private bool _canceled;
 
         protected override void OnAttached()
         {
@@ -73,6 +75,7 @@ namespace TouchEffect.Android
             {
                 _effect.Control = null;
                 _effect = null;
+                Container.LayoutChange -= LayoutChange;
                 if (Container != null)
                 {
                     Container.Touch -= OnTouch;
@@ -81,7 +84,6 @@ namespace TouchEffect.Android
                 {
                     Control.Touch -= OnTouch;
                 }
-                Container.LayoutChange -= LayoutChange;
                 if (_viewOverlay != null)
                 {
                     Container.RemoveView(_viewOverlay);
@@ -104,18 +106,37 @@ namespace TouchEffect.Android
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
+                    _canceled = false;
+                    _startX = e.Event.GetX();
+                    _startY = e.Event.GetY();
                     Element.GetTouchEff().HandleTouch(TouchStatus.Started);
                     StartRipple(e.Event.GetX(), e.Event.GetY());
+                    if (_effect.DisallowTouchThreshold > 0)
+                    {
+                        Container.Parent?.RequestDisallowInterceptTouchEvent(true);
+                    }
                     break;
                 case MotionEventActions.Up:
-                    Element.GetTouchEff().HandleTouch(Element.GetTouchEff().Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
-                    EndRipple();
+                    HandleEnd(Element.GetTouchEff().Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
                     break;
                 case MotionEventActions.Cancel:
-                    Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
-                    EndRipple();
+                    HandleEnd(TouchStatus.Canceled);
                     break;
                 case MotionEventActions.Move:
+                    if(_canceled)
+                    {
+                        return;
+                    }
+                    var diffX = Abs(e.Event.GetX() - _startX) / Container.Context.Resources.DisplayMetrics.Density;
+                    var diffY = Abs(e.Event.GetY() - _startY) / Container.Context.Resources.DisplayMetrics.Density;
+                    var maxDiff = Max(diffX, diffY);
+                    var disallowTouchThreshold = _effect.DisallowTouchThreshold;
+                    if (disallowTouchThreshold > 0 && maxDiff > disallowTouchThreshold)
+                    {
+                        HandleEnd(TouchStatus.Canceled);
+                        _canceled = true;
+                        return;
+                    }
                     var view = sender as AView;
                     var screenPointerCoords = new Xamarin.Forms.Point(view.Left + e.Event.GetX(), view.Top + e.Event.GetY());
                     var viewRect = new Rectangle(view.Left, view.Top, view.Right - view.Left, view.Bottom - view.Top);
@@ -150,7 +171,21 @@ namespace TouchEffect.Android
             }
         }
 
-        public bool StartRipple(float x, float y)
+        private void HandleEnd(TouchStatus status)
+        {
+            if(_canceled)
+            {
+                return;
+            }
+            if (_effect.DisallowTouchThreshold > 0)
+            {
+                Container.Parent?.RequestDisallowInterceptTouchEvent(false);
+            }
+            Element.GetTouchEff().HandleTouch(status);
+            EndRipple();
+        }
+
+        private bool StartRipple(float x, float y)
         {
             if (_effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
             {
@@ -162,7 +197,7 @@ namespace TouchEffect.Android
             return false;
         }
 
-        public bool EndRipple()
+        private bool EndRipple()
         {
             if (_viewOverlay != null && _viewOverlay.Pressed)
             {

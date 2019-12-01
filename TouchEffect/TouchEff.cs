@@ -8,11 +8,10 @@ using System.ComponentModel;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
-using TouchEffect.Interfaces;
 
 namespace TouchEffect
 {
-    public class TouchEff : RoutingEffect, ITouchEff
+    public class TouchEff : RoutingEffect
     {
         private readonly TouchVisualManager _visualManager;
         private VisualElement _control;
@@ -23,7 +22,7 @@ namespace TouchEffect
             StateChanged += (sender, args) => ForceUpdateState();
         }
 
-        internal TouchEff(Func<ITouchEff, TouchState, int, CancellationToken, Task> animationTaskGetter) : this()
+        internal TouchEff(Func<TouchEff, TouchState, int, CancellationToken, Task> animationTaskGetter) : this()
             => _visualManager.SetCustomAnimationTask(animationTaskGetter);
 
         public event TEffectStatusChangedHandler StatusChanged;
@@ -385,6 +384,15 @@ namespace TouchEffect
                 bindable.GetTouchEff()?.ForceUpdateState(false);
             });
 
+        /// <summary>
+        /// Android only
+        /// </summary>
+        public static readonly BindableProperty DisallowTouchThresholdProperty = BindableProperty.CreateAttached(
+            nameof(DisallowTouchThreshold),
+            typeof(int),
+            typeof(TouchEff),
+            default(int));
+
         public static readonly BindableProperty NativeAnimationProperty = BindableProperty.CreateAttached(
             nameof(NativeAnimation),
             typeof(bool),
@@ -651,6 +659,18 @@ namespace TouchEffect
         public static void SetIsToggled(BindableObject bindable, bool? value)
             => bindable.SetValue(IsToggledProperty, value);
 
+        /// <summary>
+        /// Android only
+        /// </summary>
+        public static int GetDisallowTouchThreshold(BindableObject bindable)
+            => (int)bindable.GetValue(DisallowTouchThresholdProperty);
+
+        /// <summary>
+        /// Android only
+        /// </summary>
+        public static void SetDisallowTouchThreshold(BindableObject bindable, int value)
+            => bindable.SetValue(DisallowTouchThresholdProperty, value);
+
         public static bool GetNativeAnimation(BindableObject bindable)
             => (bool)bindable.GetValue(NativeAnimationProperty);
 
@@ -696,6 +716,11 @@ namespace TouchEffect
             get => GetHoverState(Control);
             set => SetHoverState(Control, value);
         }
+
+        /// <summary>
+        /// Android only
+        /// </summary>
+        public int DisallowTouchThreshold => GetDisallowTouchThreshold(Control);
 
         public bool NativeAnimation => GetNativeAnimation(Control);
 

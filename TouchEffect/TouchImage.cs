@@ -3,7 +3,6 @@ using TouchEffect.Extensions;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using System.Threading;
-using TouchEffect.Interfaces;
 using System.ComponentModel;
 
 namespace TouchEffect
@@ -127,7 +126,7 @@ namespace TouchEffect
             set => SetValue(ShouldSetImageOnAnimationEndProperty, value);
         }
 
-        private async Task GetAnimationTask(ITouchEff sender, TouchState state, int duration, CancellationToken token)
+        private async Task GetAnimationTask(TouchEff sender, TouchState state, int duration, CancellationToken token)
         {
             var regularBackgroundImageSource = RegularBackgroundImageSource;
             var pressedBackgroundImageSource = PressedBackgroundImageSource;

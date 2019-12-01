@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 using TouchEffect.Enums;
 using Xamarin.Forms;
 using static System.Math;
-using System.Collections.Generic;
 using TouchEffect.Extensions;
 using System;
-using TouchEffect.Interfaces;
 
 namespace TouchEffect
 {
@@ -18,7 +16,7 @@ namespace TouchEffect
 
         private CancellationTokenSource _animationTokenSource;
 
-        private Func<ITouchEff, TouchState, int, CancellationToken, Task> _customAnimationTaskGetter;
+        private Func<TouchEff, TouchState, int, CancellationToken, Task> _customAnimationTaskGetter;
 
         private double? _durationMultiplier;
 
@@ -26,10 +24,10 @@ namespace TouchEffect
 
         private TouchState _animationState;
 
-        private bool CanExecuteAction(ITouchEff sender)
+        private bool CanExecuteAction(TouchEff sender)
             => sender.Control.IsEnabled && ((sender.Command?.CanExecute(sender.CommandParameter) ?? false) || sender.IsCompletedSet);
 
-        internal void HandleTouch(ITouchEff sender, TouchStatus status)
+        internal void HandleTouch(TouchEff sender, TouchStatus status)
         {
             var canExecuteAction = CanExecuteAction(sender);
             if (status != TouchStatus.Started || canExecuteAction)
@@ -97,7 +95,7 @@ namespace TouchEffect
             }
         }
 
-        internal void HandleHover(ITouchEff sender, HoverStatus status)
+        internal void HandleHover(TouchEff sender, HoverStatus status)
         {
             if (!sender.Control.IsEnabled) {
                 return;
@@ -117,7 +115,7 @@ namespace TouchEffect
             sender.RaiseHoverStatusChanged();
         }
 
-        internal async void ChangeStateAsync(ITouchEff sender, bool animated)
+        internal async void ChangeStateAsync(TouchEff sender, bool animated)
         {
             var state = sender.State;
 
@@ -172,10 +170,10 @@ namespace TouchEffect
             } while (--rippleCount != 0);
         }
 
-        internal void SetCustomAnimationTask(Func<ITouchEff, TouchState, int, CancellationToken, Task> animationTaskGetter)
+        internal void SetCustomAnimationTask(Func<TouchEff, TouchState, int, CancellationToken, Task> animationTaskGetter)
             => _customAnimationTaskGetter = animationTaskGetter;
 
-        internal void OnTapped(ITouchEff sender)
+        internal void OnTapped(TouchEff sender)
         {
             if (!CanExecuteAction(sender))
             {
@@ -185,7 +183,7 @@ namespace TouchEffect
             sender.RaiseCompleted();
         }
 
-        internal void AbortAnimations(ITouchEff sender)
+        internal void AbortAnimations(TouchEff sender)
         {
             _animationTokenSource?.Cancel();
             var control = sender.Control;
@@ -197,7 +195,7 @@ namespace TouchEffect
             AnimationExtensions.AbortAnimation(control, ChangeBackgroundColorAnimationName);
         }
 
-        private async Task SetBackgroundColorAsync(ITouchEff sender, TouchState state, int duration)
+        private async Task SetBackgroundColorAsync(TouchEff sender, TouchState state, int duration)
         {
             var regularBackgroundColor = sender.RegularBackgroundColor;
             var pressedBackgroundColor = sender.PressedBackgroundColor;
@@ -234,7 +232,7 @@ namespace TouchEffect
             await animationCompletionSource.Task;
         }
 
-        private async Task SetOpacityAsync(ITouchEff sender, TouchState state, int duration)
+        private async Task SetOpacityAsync(TouchEff sender, TouchState state, int duration)
         {
             var regularOpacity = sender.RegularOpacity;
             var pressedOpacity = sender.PressedOpacity;
@@ -256,7 +254,7 @@ namespace TouchEffect
             await sender.Control.FadeTo(opacity, (uint)Abs(duration), easing);
         }
 
-        private async Task SetScaleAsync(ITouchEff sender, TouchState state, int duration)
+        private async Task SetScaleAsync(TouchEff sender, TouchState state, int duration)
         {
             var regularScale = sender.RegularScale;
             var pressedScale = sender.PressedScale;
@@ -278,7 +276,7 @@ namespace TouchEffect
             await sender.Control.ScaleTo(scale, (uint)Abs(duration), easing);
         }
 
-        private async Task SetTranslationAsync(ITouchEff sender, TouchState state, int duration)
+        private async Task SetTranslationAsync(TouchEff sender, TouchState state, int duration)
         {
             var regularTranslationX = sender.RegularTranslationX;
             var pressedTranslationX = sender.PressedTranslationX;
@@ -307,7 +305,7 @@ namespace TouchEffect
             await sender.Control.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationAsync(ITouchEff sender, TouchState state, int duration)
+        private async Task SetRotationAsync(TouchEff sender, TouchState state, int duration)
         {
             var regularRotation = sender.RegularRotation;
             var pressedRotation = sender.PressedRotation;
@@ -329,7 +327,7 @@ namespace TouchEffect
             await sender.Control.RotateTo(rotation, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationXAsync(ITouchEff sender, TouchState state, int duration)
+        private async Task SetRotationXAsync(TouchEff sender, TouchState state, int duration)
         {
             var regularRotationX = sender.RegularRotationX;
             var pressedRotationX = sender.PressedRotationX;
@@ -351,7 +349,7 @@ namespace TouchEffect
             await sender.Control.RotateXTo(rotationX, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationYAsync(ITouchEff sender, TouchState state, int duration)
+        private async Task SetRotationYAsync(TouchEff sender, TouchState state, int duration)
         {
             var regularRotationY = sender.RegularRotationY;
             var pressedRotationY = sender.PressedRotationY;
@@ -373,7 +371,7 @@ namespace TouchEffect
             await sender.Control.RotateYTo(rotationY, (uint)Abs(duration), easing);
         }
 
-        private Task GetAnimationTask(ITouchEff sender, TouchState state, double? durationMultiplier = null)
+        private Task GetAnimationTask(TouchEff sender, TouchState state, double? durationMultiplier = null)
         {
             if (sender.Control == null)
             {
