@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/AndreiMisiukevich/TouchEffect</projectUrl>
     <iconUrl>https://cdn0.iconfinder.com/data/icons/iphone-7-airpods-icons-solid-style/24/3d-touch-screen-512.png</iconUrl>
     <description>Touch handling for Xamarin Forms</description>
-    <summary>This plugin provides opportunity to achieve UI-repsonse during touch interaction</summary>
+    <summary>This plugin provides opportunity to achieve UI-response during touch and hover interaction</summary>
     <tags>touchView, touchImage, touchFadeView, touchColorView, touch, gesture, forms, xamarin forms, tapView, ripple</tags>
     <dependencies>
       <group>
