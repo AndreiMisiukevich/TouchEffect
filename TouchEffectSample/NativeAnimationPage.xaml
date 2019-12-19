@@ -24,52 +24,54 @@
             </StackLayout>
             <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
                          toucheff:TouchEff.NativeAnimation="True"
+                         toucheff:TouchEff.NativeAnimationShadowRadius="80"
                          toucheff:TouchEff.NativeAnimationColor="Red">
                 <StackLayout.Effects>
                     <toucheff:TouchEff Completed="TouchEff_Completed"/>
                 </StackLayout.Effects>
                 <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
                 <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimationColor=Red"/>
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimationShadowRadius=80"/>
             </StackLayout>
             <StackLayout HorizontalOptions="Fill" Padding="24" BackgroundColor="LightGray"
                          toucheff:TouchEff.NativeAnimation="True"
-                         toucheff:TouchEff.NativeAnimationRadius="400"
+                         toucheff:TouchEff.NativeAnimationRadius="50"
                          toucheff:TouchEff.NativeAnimationColor="White">
                 <StackLayout.Effects>
                     <toucheff:TouchEff Completed="TouchEff_Completed"/>
                 </StackLayout.Effects>
                 <Label TextColor="Black" HorizontalTextAlignment="Center" Text="NativeAnimation=true"/>
-                <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="NativeAnimationRadius=400"/>
+                <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="NativeAnimationRadius=50"/>
                 <Label TextColor="Black"  HorizontalTextAlignment="Center" Text="NativeAnimationColor=White"/>
             </StackLayout>
             <StackLayout>
                 <Grid HeightRequest="64" HorizontalOptions="Fill">
-                    <Grid BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                    <Grid BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="32">
                         <Grid.Effects>
                             <toucheff:TouchEff Completed="TouchEff_Completed"/>
                         </Grid.Effects>
                     </Grid>
-                    <Grid Grid.Column="1" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                    <Grid Grid.Column="1" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="32">
                         <Grid.Effects>
                             <toucheff:TouchEff Completed="TouchEff_Completed"/>
                         </Grid.Effects>
                     </Grid>
-                    <Grid Grid.Column="2" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                    <Grid Grid.Column="2" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="32">
                         <Grid.Effects>
                             <toucheff:TouchEff Completed="TouchEff_Completed"/>
                         </Grid.Effects>
                     </Grid>
-                    <Grid Grid.Column="3" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                    <Grid Grid.Column="3" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="32">
                         <Grid.Effects>
                             <toucheff:TouchEff Completed="TouchEff_Completed"/>
                         </Grid.Effects>
                     </Grid>
-                    <Grid Grid.Column="4" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                    <Grid Grid.Column="4" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="32">
                         <Grid.Effects>
                             <toucheff:TouchEff Completed="TouchEff_Completed"/>
                         </Grid.Effects>
                     </Grid>
-                    <Grid Grid.Column="5" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="64">
+                    <Grid Grid.Column="5" BackgroundColor="LightGray" toucheff:TouchEff.NativeAnimation="True" toucheff:TouchEff.NativeAnimationRadius="32">
                         <Grid.Effects>
                             <toucheff:TouchEff Completed="TouchEff_Completed"/>
                         </Grid.Effects>

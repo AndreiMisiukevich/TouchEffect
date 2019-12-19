@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using TouchEffect;
 using TouchEffect.Extensions;
 using TouchEffect.Enums;
+using CoreGraphics;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -46,24 +47,28 @@ namespace TouchEffect.iOS
     {
         private TouchEff _effect;
 
+        private float? _defaultRadius;
+        private float? _defaultShadowRadius;
+        private float? _defaultShadowOpacity;
+
         public TouchUITapGestureRecognizer(TouchEff effect)
             => _effect = effect;
 
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
-            _effect.HandleTouch(TouchStatus.Started);
+            HandleTouch(TouchStatus.Started);
             base.TouchesBegan(touches, evt);
         }
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
-            _effect.HandleTouch(_effect.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+            HandleTouch(_effect.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
             base.TouchesEnded(touches, evt);
         }
 
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {
-            _effect.HandleTouch(TouchStatus.Canceled);
+            HandleTouch(TouchStatus.Canceled);
             base.TouchesCancelled(touches, evt);
         }
 
@@ -76,7 +81,7 @@ namespace TouchEffect.iOS
             var status = point != null && renderer.Bounds.Contains(point.Value) ? TouchStatus.Started : TouchStatus.Canceled;
             if (_effect.Status != status)
             {
-                _effect.HandleTouch(status);
+                HandleTouch(status);
             }
 
             base.TouchesMoved(touches, evt);
@@ -89,6 +94,43 @@ namespace TouchEffect.iOS
                 _effect = null;
             }
             base.Dispose(disposing);
+        }
+
+        private void HandleTouch(TouchStatus status)
+        {
+            _effect.HandleTouch(status);
+            if (!_effect.NativeAnimation)
+            {
+                return;
+            }
+            var renderer = _effect.Control.GetRenderer() as UIView;
+            var color = _effect.NativeAnimationColor;
+            var radius = _effect.NativeAnimationRadius;
+            var shadowRadius = _effect.NativeAnimationShadowRadius;
+            var isStarted = status == TouchStatus.Started;
+            _defaultRadius = (float?)(_defaultRadius ?? renderer.Layer.CornerRadius);
+            _defaultShadowRadius = (float?)(_defaultShadowRadius ?? renderer.Layer.ShadowRadius);
+            _defaultShadowOpacity = _defaultShadowOpacity ?? renderer.Layer.ShadowOpacity;
+
+
+            UIView.AnimateAsync(.2, () =>
+            {
+                if (color == Color.Default)
+                {
+                    renderer.Layer.Opacity = isStarted ? 0.5f : (float)_effect.Control.Opacity;
+                }
+                else
+                {
+                    renderer.Layer.BackgroundColor = (isStarted ? color : _effect.Control.BackgroundColor).ToCGColor();
+                }
+                renderer.Layer.CornerRadius = isStarted ? radius : _defaultRadius.GetValueOrDefault();
+
+                if (shadowRadius >= 0)
+                {
+                    renderer.Layer.ShadowRadius = isStarted ? shadowRadius : _defaultShadowRadius.GetValueOrDefault();
+                    renderer.Layer.ShadowOpacity = isStarted ? 0.7f : _defaultShadowOpacity.GetValueOrDefault();
+                }
+            });
         }
     }
 }

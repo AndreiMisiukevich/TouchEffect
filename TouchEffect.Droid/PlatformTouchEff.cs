@@ -12,6 +12,7 @@ using Android.Graphics.Drawables;
 using Android.Widget;
 using Color = Android.Graphics.Color;
 using Android.Content.Res;
+using Android.Content;
 using static System.Math;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
@@ -61,7 +62,7 @@ namespace TouchEffect.Android
                 View.LayoutChange += LayoutChange;
 
                 _ripple = CreateRipple();
-                _ripple.Radius = _effect.NativeAnimationRadius;
+                _ripple.Radius = (int)(View.Context.Resources.DisplayMetrics.Density * _effect.NativeAnimationRadius);
                 _viewOverlay.Background = _ripple;
 
                 Container.AddView(_viewOverlay);

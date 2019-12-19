@@ -411,6 +411,12 @@ namespace TouchEffect
             typeof(TouchEff),
             -1);
 
+        public static readonly BindableProperty NativeAnimationShadowRadiusProperty = BindableProperty.CreateAttached(
+            nameof(NativeAnimationShadowRadius),
+            typeof(int),
+            typeof(TouchEff),
+            -1);
+
         public static ICommand GetCommand(BindableObject bindable)
             => bindable.GetValue(CommandProperty) as ICommand;
 
@@ -689,6 +695,12 @@ namespace TouchEffect
         public static void SetNativeAnimationRadius(BindableObject bindable, int value)
             => bindable.SetValue(NativeAnimationRadiusProperty, value);
 
+        public static int GetNativeAnimationShadowRadius(BindableObject bindable)
+            => (int)bindable.GetValue(NativeAnimationShadowRadiusProperty);
+
+        public static void SetNativeAnimationShadowRadius(BindableObject bindable, int value)
+            => bindable.SetValue(NativeAnimationShadowRadiusProperty, value);
+
         public ICommand Command => GetCommand(Control);
 
         public object CommandParameter => GetCommandParameter(Control);
@@ -727,6 +739,8 @@ namespace TouchEffect
         public Color NativeAnimationColor => GetNativeAnimationColor(Control);
 
         public int NativeAnimationRadius => GetNativeAnimationRadius(Control);
+
+        public int NativeAnimationShadowRadius => GetNativeAnimationShadowRadius(Control);
 
         public Color RegularBackgroundColor => GetRegularBackgroundColor(Control);
 
