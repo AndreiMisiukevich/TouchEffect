@@ -1,7 +1,7 @@
 # TouchView control for Xamarin Forms (based on Xamarin Forms AbsoluteLayout)
 This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer. It makes it possible to change the appearance of any control in response to touch events, either directly via xaml or with your custom logic hooked up to the events which this plugin exposes.
 
-With this plugin it is also possible to respond to hover events (if the platform exposes them) and to display native touch feedback events (Tilt on UWP, Ripple on Android).
+With this plugin it is also possible to respond to hover events (if the platform exposes them) and to display native touch feedback events (Tilt on UWP, Ripple on Android, Opacity/Color changing on iOS).
 
 ### Build Status
 * Azure DevOps: [![Build status](https://dev.azure.com/andreimisiukevich/TouchView/_apis/build/status/TouchView-nuget-CI)](https://dev.azure.com/andreimisiukevich/TouchView/_build/latest?definitionId=1)
@@ -141,9 +141,9 @@ RegularAnimationEasing | `Easing` | null | The easing of animation by applying R
 RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
 IsToggled | `bool?` | null | This property allows to achieve "switch" behavior. **null** means that feature is disabled and view will return to inital state after touch releasing
 DisallowTouchThreshold | `int` | 0 | Movement threshold for considering **android** touch as canceled
-NativeAnimation | `bool` | false | If native platform touch feedback animations are present (Tilt on UWP, Ripple on Android)
+NativeAnimation | `bool` | false | If native platform touch feedback animations are present (Tilt on UWP, Ripple on Android, Opacity/Color on iOS)
 NativeAnimationColor | `Color` | Color.Default | The color used for the native touch feedback animation
-NativeAnimationRadius | `int` | -1 | The radius of the native ripple animation on Android
+NativeAnimationRadius | `int` | -1 | The radius of the native ripple animation on Android or Layer radius on iOS
 
 ### TouchEff Attached events
 Event | Type | Default | Description
@@ -160,7 +160,7 @@ Property | Type | Default | Description
 --- | --- | --- | ---
 RegularBackgroundImageSource | `ImageSource` | null | Background image source of regular state
 PressedBackgroundImageSource | `ImageSource` | null | Background image source of pressed state
-RegularBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
+RegularBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of regular state
 PressedBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
 
 **If you want to customize/extend existing controls, you may observe State property via triggers**
