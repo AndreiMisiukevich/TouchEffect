@@ -16,7 +16,6 @@ using Android.Content;
 using static System.Math;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
-[assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))] 
 namespace TouchEffect.Android
 {
     [Preserve(AllMembers = true)]
