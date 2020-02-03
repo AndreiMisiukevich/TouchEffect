@@ -160,7 +160,6 @@
     <ProjectReference Include="..\TouchEffect.iOS\TouchEffect.iOS.csproj">
       <Project>{78144B76-1773-47C2-B4D1-5351BEC6867D}</Project>
       <Name>TouchEffect.iOS</Name>
-      <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\TouchEffect\TouchEffect.csproj">
