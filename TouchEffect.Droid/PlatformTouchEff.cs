@@ -24,7 +24,7 @@ namespace TouchEffect.Android
     {
         public static void Preserve() { }
 
-        
+
         private TouchEff _effect;
         private bool _isHoverSupported;
         private RippleDrawable _ripple;
@@ -49,7 +49,7 @@ namespace TouchEffect.Android
                 Control.Touch += OnTouch;
             }
 
-            if(_effect.NativeAnimation)
+            if (_effect.NativeAnimation)
             {
                 View.Clickable = true;
                 View.LongClickable = true;
@@ -64,8 +64,10 @@ namespace TouchEffect.Android
                 _ripple = CreateRipple();
                 _ripple.Radius = (int)(View.Context.Resources.DisplayMetrics.Density * _effect.NativeAnimationRadius);
                 _viewOverlay.Background = _ripple;
-
-                Container.AddView(_viewOverlay);
+                if (Container != null)
+                {
+                    Container.AddView(_viewOverlay);
+                }
                 _viewOverlay.BringToFront();
             }
         }
@@ -76,18 +78,26 @@ namespace TouchEffect.Android
             {
                 _effect.Control = null;
                 _effect = null;
-                Container.LayoutChange -= LayoutChange;
+
                 if (Container != null)
                 {
+                    Container.LayoutChange -= LayoutChange;
                     Container.Touch -= OnTouch;
                 }
+
                 if (Control != null)
                 {
+                    Control.LayoutChange -= LayoutChange;
                     Control.Touch -= OnTouch;
                 }
+
                 if (_viewOverlay != null)
                 {
-                    Container.RemoveView(_viewOverlay);
+                    if (Container != null)
+                    {
+                        Container.RemoveView(_viewOverlay);
+                    }
+
                     _viewOverlay.Pressed = false;
                     _viewOverlay.Foreground = null;
                     _viewOverlay.Dispose();
@@ -104,6 +114,7 @@ namespace TouchEffect.Android
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
             e.Handled = true;
+
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
@@ -124,12 +135,12 @@ namespace TouchEffect.Android
                     HandleEnd(TouchStatus.Canceled);
                     break;
                 case MotionEventActions.Move:
-                    if(_canceled)
+                    if (_canceled)
                     {
                         return;
                     }
-                    var diffX = Abs(e.Event.GetX() - _startX) / Container.Context.Resources.DisplayMetrics.Density;
-                    var diffY = Abs(e.Event.GetY() - _startY) / Container.Context.Resources.DisplayMetrics.Density;
+                    var diffX = Abs(e.Event.GetX() - _startX) / View.Context.Resources.DisplayMetrics.Density;
+                    var diffY = Abs(e.Event.GetY() - _startY) / View.Context.Resources.DisplayMetrics.Density;
                     var maxDiff = Max(diffX, diffY);
                     var disallowTouchThreshold = _effect.DisallowTouchThreshold;
                     if (disallowTouchThreshold > 0 && maxDiff > disallowTouchThreshold)
@@ -152,7 +163,7 @@ namespace TouchEffect.Android
                     if (Element.GetTouchEff().Status != status)
                     {
                         Element.GetTouchEff().HandleTouch(status);
-                        if(status == TouchStatus.Started)
+                        if (status == TouchStatus.Started)
                             StartRipple(e.Event.GetX(), e.Event.GetY());
                         if (status == TouchStatus.Canceled)
                             EndRipple();
@@ -174,7 +185,7 @@ namespace TouchEffect.Android
 
         private void HandleEnd(TouchStatus status)
         {
-            if(_canceled)
+            if (_canceled)
             {
                 return;
             }
