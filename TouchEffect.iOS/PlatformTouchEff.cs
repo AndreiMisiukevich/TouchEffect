@@ -35,18 +35,17 @@ namespace TouchEffect.iOS
 
         protected override void OnDetached()
         {
-            _effect.Control = null;
-            _effect = null;
             Container?.RemoveGestureRecognizer(_gesture);
             _gesture?.Dispose();
             _gesture = null;
+            _effect.Control = null;
+            _effect = null;
         }
     }
 
     internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
     {
         private TouchEff _effect;
-
         private float? _defaultRadius;
         private float? _defaultShadowRadius;
         private float? _defaultShadowOpacity;
@@ -62,7 +61,7 @@ namespace TouchEffect.iOS
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
-            HandleTouch(_effect.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+            HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
             base.TouchesEnded(touches, evt);
         }
 
@@ -75,11 +74,11 @@ namespace TouchEffect.iOS
         public override void TouchesMoved(NSSet touches, UIEvent evt)
         {
             var touch = touches?.AnyObject as UITouch;
-            var renderer = _effect.Control.GetRenderer() as UIView;
+            var renderer = _effect?.Control.GetRenderer() as UIView;
             var point = renderer != null ? touch?.LocationInView(renderer) : null;
 
             var status = point != null && renderer.Bounds.Contains(point.Value) ? TouchStatus.Started : TouchStatus.Canceled;
-            if (_effect.Status != status)
+            if (_effect?.Status != status)
             {
                 HandleTouch(status);
             }
@@ -89,7 +88,7 @@ namespace TouchEffect.iOS
 
         protected override void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing)
             {
                 _effect = null;
             }
@@ -98,8 +97,8 @@ namespace TouchEffect.iOS
 
         private void HandleTouch(TouchStatus status)
         {
-            _effect.HandleTouch(status);
-            if (!_effect.NativeAnimation)
+            _effect?.HandleTouch(status);
+            if (_effect?.NativeAnimation != true)
             {
                 return;
             }
