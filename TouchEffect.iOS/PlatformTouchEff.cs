@@ -7,6 +7,7 @@ using TouchEffect;
 using TouchEffect.Extensions;
 using TouchEffect.Enums;
 using CoreGraphics;
+using static System.Math;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -49,12 +50,18 @@ namespace TouchEffect.iOS
         private float? _defaultRadius;
         private float? _defaultShadowRadius;
         private float? _defaultShadowOpacity;
+        private CGPoint? _startPoint;
+        private bool _canceled;
 
         public TouchUITapGestureRecognizer(TouchEff effect)
             => _effect = effect;
 
+        private UIView Renderer => _effect?.Control.GetRenderer() as UIView;
+
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
+            _canceled = false;
+            _startPoint = GetTouchPoint(touches);
             HandleTouch(TouchStatus.Started);
             base.TouchesBegan(touches, evt);
         }
@@ -73,11 +80,26 @@ namespace TouchEffect.iOS
 
         public override void TouchesMoved(NSSet touches, UIEvent evt)
         {
-            var touch = touches?.AnyObject as UITouch;
-            var renderer = _effect?.Control.GetRenderer() as UIView;
-            var point = renderer != null ? touch?.LocationInView(renderer) : null;
+            var disallowTouchThreshold = _effect.DisallowTouchThreshold;
+            var point = GetTouchPoint(touches);
+            if (point != null && _startPoint != null && disallowTouchThreshold > 0)
+            {
+                var diffX = Abs(point.Value.X - _startPoint.Value.X);
+                var diffY = Abs(point.Value.Y - _startPoint.Value.Y);
+                var maxDiff = Max(diffX, diffY);
+                if (maxDiff > disallowTouchThreshold)
+                {
+                    HandleTouch(TouchStatus.Canceled);
+                    base.TouchesMoved(touches, evt);
+                    _canceled = true;
+                    return;
+                }
+            }
 
-            var status = point != null && renderer.Bounds.Contains(point.Value) ? TouchStatus.Started : TouchStatus.Canceled;
+            var status = point != null && Renderer.Bounds.Contains(point.Value)
+                ? TouchStatus.Started
+                : TouchStatus.Canceled;
+
             if (_effect?.Status != status)
             {
                 HandleTouch(status);
@@ -95,8 +117,15 @@ namespace TouchEffect.iOS
             base.Dispose(disposing);
         }
 
+        private CGPoint? GetTouchPoint(NSSet touches)
+            => Renderer != null ? (touches?.AnyObject as UITouch)?.LocationInView(Renderer) : null;
+
         private void HandleTouch(TouchStatus status)
         {
+            if (_canceled)
+            {
+                return;
+            }
             _effect?.HandleTouch(status);
             if (_effect?.NativeAnimation != true)
             {
