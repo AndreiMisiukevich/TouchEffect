@@ -30,30 +30,28 @@ namespace TouchEffect.Android
         private RippleDrawable _ripple;
         private FrameLayout _viewOverlay;
         private AView View => Control ?? Container;
+        private ViewGroup Group => Container ?? Control as ViewGroup;
         private float _startX;
         private float _startY;
         private bool _canceled;
 
         protected override void OnAttached()
         {
+            if (View == null)
+            {
+                return;
+            }
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
             _effect.ForceUpdateState(false);
 
-            if (Container != null)
-            {
-                Container.Touch += OnTouch;
-            }
-            else if (Control != null)
-            {
-                Control.Touch += OnTouch;
-            }
+            View.Touch += OnTouch;
 
-            if (_effect.NativeAnimation)
+            if (_effect.NativeAnimation && Group != null)
             {
                 View.Clickable = true;
                 View.LongClickable = true;
-                _viewOverlay = new FrameLayout(Container.Context)
+                _viewOverlay = new FrameLayout(Group.Context)
                 {
                     LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
                     Clickable = false,
@@ -64,10 +62,7 @@ namespace TouchEffect.Android
                 _ripple = CreateRipple();
                 _ripple.Radius = (int)(View.Context.Resources.DisplayMetrics.Density * _effect.NativeAnimationRadius);
                 _viewOverlay.Background = _ripple;
-                if (Container != null)
-                {
-                    Container.AddView(_viewOverlay);
-                }
+                Group.AddView(_viewOverlay);
                 _viewOverlay.BringToFront();
             }
         }
@@ -79,23 +74,17 @@ namespace TouchEffect.Android
                 _effect.Control = null;
                 _effect = null;
 
-                if (Container != null)
+                if (View != null)
                 {
-                    Container.LayoutChange -= LayoutChange;
-                    Container.Touch -= OnTouch;
-                }
-
-                if (Control != null)
-                {
-                    Control.LayoutChange -= LayoutChange;
-                    Control.Touch -= OnTouch;
+                    View.LayoutChange -= LayoutChange;
+                    View.Touch -= OnTouch;
                 }
 
                 if (_viewOverlay != null)
                 {
-                    if (Container != null)
+                    if (Group != null)
                     {
-                        Container.RemoveView(_viewOverlay);
+                        Group.RemoveView(_viewOverlay);
                     }
 
                     _viewOverlay.Pressed = false;
@@ -125,7 +114,7 @@ namespace TouchEffect.Android
                     StartRipple(e.Event.GetX(), e.Event.GetY());
                     if (_effect.DisallowTouchThreshold > 0)
                     {
-                        Container.Parent?.RequestDisallowInterceptTouchEvent(true);
+                        Group.Parent?.RequestDisallowInterceptTouchEvent(true);
                     }
                     break;
                 case MotionEventActions.Up:
@@ -191,7 +180,7 @@ namespace TouchEffect.Android
             }
             if (_effect.DisallowTouchThreshold > 0)
             {
-                Container.Parent?.RequestDisallowInterceptTouchEvent(false);
+                Group.Parent?.RequestDisallowInterceptTouchEvent(false);
             }
             Element.GetTouchEff().HandleTouch(status);
             EndRipple();
@@ -227,7 +216,7 @@ namespace TouchEffect.Android
                 return new RippleDrawable(GetColorStateList(), null, mask);
             }
 
-            var background = (Control ?? Container).Background;
+            var background = View.Background;
             if (background == null)
             {
                 var mask = new ColorDrawable(Color.White);
@@ -260,7 +249,7 @@ namespace TouchEffect.Android
         private void LayoutChange(object sender, AView.LayoutChangeEventArgs e)
         {
             var group = (ViewGroup)sender;
-            if (group == null || (Container as IVisualElementRenderer)?.Element == null) return;
+            if (group == null || (Group as IVisualElementRenderer)?.Element == null) return;
             _viewOverlay.Right = group.Width;
             _viewOverlay.Bottom = group.Height;
         }
