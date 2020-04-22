@@ -12,8 +12,9 @@ using Android.Graphics.Drawables;
 using Android.Widget;
 using Color = Android.Graphics.Color;
 using Android.Content.Res;
-using Android.Content;
 using static System.Math;
+using Android.Views.Accessibility;
+using Android.Content;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -24,7 +25,7 @@ namespace TouchEffect.Android
     {
         public static void Preserve() { }
 
-
+        private AccessibilityManager _accessibilityManager;
         private TouchEff _effect;
         private bool _isHoverSupported;
         private RippleDrawable _ripple;
@@ -35,17 +36,24 @@ namespace TouchEffect.Android
         private float _startY;
         private bool _canceled;
 
+        private bool IsAccessibilityMode =>
+            _accessibilityManager != null &&
+            _accessibilityManager.IsEnabled &&
+            _accessibilityManager.IsTouchExplorationEnabled;
+
         protected override void OnAttached()
         {
             if (View == null)
             {
                 return;
             }
+            _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
             _effect.ForceUpdateState(false);
 
             View.Touch += OnTouch;
+            View.Click += OnClick;
 
             if (_effect.NativeAnimation && Group != null)
             {
@@ -71,6 +79,7 @@ namespace TouchEffect.Android
         {
             try
             {
+                _accessibilityManager = null;
                 _effect.Control = null;
                 _effect = null;
 
@@ -78,6 +87,7 @@ namespace TouchEffect.Android
                 {
                     View.LayoutChange -= LayoutChange;
                     View.Touch -= OnTouch;
+                    View.Click -= OnClick;
                 }
 
                 if (_viewOverlay != null)
@@ -102,8 +112,11 @@ namespace TouchEffect.Android
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
+            if (IsAccessibilityMode)
+            {
+                return;
+            }
             e.Handled = true;
-
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
@@ -170,6 +183,15 @@ namespace TouchEffect.Android
                     e.Handled = false;
                     break;
             }
+        }
+
+        private void OnClick(object sender, System.EventArgs args)
+        {
+            if (!IsAccessibilityMode)
+            {
+                return;
+            }
+            HandleEnd(TouchStatus.Completed);
         }
 
         private void HandleEnd(TouchStatus status)
