@@ -51,16 +51,21 @@ namespace TouchEffect.iOS
         private float? _defaultShadowRadius;
         private float? _defaultShadowOpacity;
         private CGPoint? _startPoint;
-        private bool _canceled;
 
         public TouchUITapGestureRecognizer(TouchEff effect)
-            => _effect = effect;
+        {
+            _effect = effect;
+            CancelsTouchesInView = false;
+            Delegate = new TouchUITapGestureRecognizerDelegate();
+        }
+
+        public bool IsCanceled { get; set; } = true;
 
         private UIView Renderer => _effect?.Control.GetRenderer() as UIView;
 
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
-            _canceled = false;
+            IsCanceled = false;
             _startPoint = GetTouchPoint(touches);
             HandleTouch(TouchStatus.Started);
             base.TouchesBegan(touches, evt);
@@ -69,12 +74,14 @@ namespace TouchEffect.iOS
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
             HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+            IsCanceled = true;
             base.TouchesEnded(touches, evt);
         }
 
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {
             HandleTouch(TouchStatus.Canceled);
+            IsCanceled = true;
             base.TouchesCancelled(touches, evt);
         }
 
@@ -90,20 +97,19 @@ namespace TouchEffect.iOS
                 if (maxDiff > disallowTouchThreshold)
                 {
                     HandleTouch(TouchStatus.Canceled);
-                    _canceled = true;
+                    IsCanceled = true;
+                    base.TouchesMoved(touches, evt);
+                    return;
                 }
             }
 
-            if (!_canceled)
-            {
-                var status = point != null && Renderer.Bounds.Contains(point.Value)
-                    ? TouchStatus.Started
-                    : TouchStatus.Canceled;
+            var status = point != null && Renderer.Bounds.Contains(point.Value)
+                     ? TouchStatus.Started
+                     : TouchStatus.Canceled;
 
-                if (_effect?.Status != status)
-                {
-                    HandleTouch(status);
-                }
+            if (_effect?.Status != status)
+            {
+                HandleTouch(status);
             }
 
             base.TouchesMoved(touches, evt);
@@ -114,6 +120,7 @@ namespace TouchEffect.iOS
             if (disposing)
             {
                 _effect = null;
+                Delegate = null;
             }
             base.Dispose(disposing);
         }
@@ -121,9 +128,9 @@ namespace TouchEffect.iOS
         private CGPoint? GetTouchPoint(NSSet touches)
             => Renderer != null ? (touches?.AnyObject as UITouch)?.LocationInView(Renderer) : null;
 
-        private void HandleTouch(TouchStatus status)
+        public void HandleTouch(TouchStatus status)
         {
-            if (_canceled)
+            if (IsCanceled)
             {
                 return;
             }
@@ -160,6 +167,22 @@ namespace TouchEffect.iOS
                     renderer.Layer.ShadowOpacity = isStarted ? 0.7f : _defaultShadowOpacity.GetValueOrDefault();
                 }
             });
+        }
+    }
+
+    internal class TouchUITapGestureRecognizerDelegate : UIGestureRecognizerDelegate
+    {
+        public override bool ShouldRecognizeSimultaneously(UIGestureRecognizer gestureRecognizer,
+            UIGestureRecognizer otherGestureRecognizer)
+        {
+            if (gestureRecognizer is TouchUITapGestureRecognizer touchGesture && otherGestureRecognizer is UIPanGestureRecognizer &&
+                otherGestureRecognizer.State == UIGestureRecognizerState.Began)
+            {
+                touchGesture.HandleTouch(TouchStatus.Canceled);
+                touchGesture.IsCanceled = true;
+            }
+
+            return true;
         }
     }
 }
