@@ -90,19 +90,20 @@ namespace TouchEffect.iOS
                 if (maxDiff > disallowTouchThreshold)
                 {
                     HandleTouch(TouchStatus.Canceled);
-                    base.TouchesMoved(touches, evt);
                     _canceled = true;
-                    return;
                 }
             }
 
-            var status = point != null && Renderer.Bounds.Contains(point.Value)
-                ? TouchStatus.Started
-                : TouchStatus.Canceled;
-
-            if (_effect?.Status != status)
+            if (!_canceled)
             {
-                HandleTouch(status);
+                var status = point != null && Renderer.Bounds.Contains(point.Value)
+                    ? TouchStatus.Started
+                    : TouchStatus.Canceled;
+
+                if (_effect?.Status != status)
+                {
+                    HandleTouch(status);
+                }
             }
 
             base.TouchesMoved(touches, evt);
