@@ -34,7 +34,8 @@ namespace TouchEffect.Android
         private ViewGroup Group => Container ?? Control as ViewGroup;
         private float _startX;
         private float _startY;
-        private bool _canceled;
+
+        internal bool IsCanceled { get; set; }
 
         private bool IsAccessibilityMode =>
             _accessibilityManager != null &&
@@ -120,7 +121,7 @@ namespace TouchEffect.Android
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
-                    _canceled = false;
+                    IsCanceled = false;
                     _startX = e.Event.GetX();
                     _startY = e.Event.GetY();
                     Element.GetTouchEff().HandleTouch(TouchStatus.Started);
@@ -137,7 +138,7 @@ namespace TouchEffect.Android
                     HandleEnd(TouchStatus.Canceled);
                     break;
                 case MotionEventActions.Move:
-                    if (_canceled)
+                    if (IsCanceled)
                     {
                         return;
                     }
@@ -148,7 +149,6 @@ namespace TouchEffect.Android
                     if (disallowTouchThreshold > 0 && maxDiff > disallowTouchThreshold)
                     {
                         HandleEnd(TouchStatus.Canceled);
-                        _canceled = true;
                         return;
                     }
                     var view = sender as AView;
@@ -191,15 +191,17 @@ namespace TouchEffect.Android
             {
                 return;
             }
+            IsCanceled = false;
             HandleEnd(TouchStatus.Completed);
         }
 
         private void HandleEnd(TouchStatus status)
         {
-            if (_canceled)
+            if (IsCanceled)
             {
                 return;
             }
+            IsCanceled = true;
             if (_effect.DisallowTouchThreshold > 0)
             {
                 Group.Parent?.RequestDisallowInterceptTouchEvent(false);
