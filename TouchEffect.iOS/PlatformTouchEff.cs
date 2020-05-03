@@ -25,6 +25,10 @@ namespace TouchEffect.iOS
         {
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
+            if (_effect.IsDisabled)
+            {
+                return;
+            }
             _effect.ForceUpdateState(false);
             _gesture = new TouchUITapGestureRecognizer(_effect);
             if (Container != null)
@@ -135,7 +139,7 @@ namespace TouchEffect.iOS
                 return;
             }
             _effect.HandleTouch(status);
-            if (!_effect.NativeAnimation || !_effect.IsEnabled)
+            if (_effect.IsDisabled || !_effect.NativeAnimation || !_effect.CanExecute)
             {
                 return;
             }

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Linq;
 
 namespace TouchEffect
 {
@@ -37,17 +38,37 @@ namespace TouchEffect
 
         public event AnimationStartedHandler AnimationStarted;
 
+        public static readonly BindableProperty IsAvailableProperty = BindableProperty.CreateAttached(
+            nameof(IsAvailable),
+            typeof(bool),
+            typeof(TouchEff),
+            true,
+            propertyChanged: TryGenerateEffect);
+
+        public static readonly BindableProperty ShouldMakeChildrenInputTransparentProperty = BindableProperty.CreateAttached(
+            nameof(ShouldMakeChildrenInputTransparent),
+            typeof(bool),
+            typeof(TouchEff),
+            true,
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.SetChildrenInputTransparent(true);
+                TryGenerateEffect(bindable, oldValue, newValue);
+            });
+
         public static readonly BindableProperty CommandProperty = BindableProperty.CreateAttached(
             nameof(Command),
             typeof(ICommand),
             typeof(TouchEff),
-            default(ICommand));
+            default(ICommand),
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty CommandParameterProperty = BindableProperty.CreateAttached(
             nameof(CommandParameter),
             typeof(object),
             typeof(TouchEff),
-            default(object));
+            default(object),
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty StatusProperty = BindableProperty.CreateAttached(
             nameof(Status),
@@ -85,6 +106,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -96,6 +118,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedBackgroundColorProperty = BindableProperty.CreateAttached(
@@ -106,6 +129,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty RegularOpacityProperty = BindableProperty.CreateAttached(
@@ -116,6 +140,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -127,6 +152,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedOpacityProperty = BindableProperty.CreateAttached(
@@ -137,6 +163,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty RegularScaleProperty = BindableProperty.CreateAttached(
@@ -147,6 +174,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -158,6 +186,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedScaleProperty = BindableProperty.CreateAttached(
@@ -168,6 +197,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty RegularTranslationXProperty = BindableProperty.CreateAttached(
@@ -178,6 +208,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -189,6 +220,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedTranslationXProperty = BindableProperty.CreateAttached(
@@ -199,6 +231,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty RegularTranslationYProperty = BindableProperty.CreateAttached(
@@ -209,6 +242,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -220,6 +254,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedTranslationYProperty = BindableProperty.CreateAttached(
@@ -230,6 +265,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty RegularRotationProperty = BindableProperty.CreateAttached(
@@ -240,6 +276,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -251,6 +288,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedRotationProperty = BindableProperty.CreateAttached(
@@ -261,6 +299,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty RegularRotationXProperty = BindableProperty.CreateAttached(
@@ -271,6 +310,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -282,6 +322,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedRotationXProperty = BindableProperty.CreateAttached(
@@ -292,6 +333,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty RegularRotationYProperty = BindableProperty.CreateAttached(
@@ -302,6 +344,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -313,6 +356,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedRotationYProperty = BindableProperty.CreateAttached(
@@ -323,45 +367,52 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty PressedAnimationDurationProperty = BindableProperty.CreateAttached(
             nameof(PressedAnimationDuration),
             typeof(int),
             typeof(TouchEff),
-            default(int));
+            default(int),
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty PressedAnimationEasingProperty = BindableProperty.CreateAttached(
             nameof(PressedAnimationEasing),
             typeof(Easing),
             typeof(TouchEff),
-            null);
+            null,
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty RegularAnimationDurationProperty = BindableProperty.CreateAttached(
             nameof(RegularAnimationDuration),
             typeof(int),
             typeof(TouchEff),
-            default(int));
+            default(int),
+            propertyChanged: TryGenerateEffect);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly BindableProperty HoveredAnimationDurationProperty = BindableProperty.CreateAttached(
             nameof(HoveredAnimationDuration),
             typeof(int),
             typeof(TouchEff),
-            default(int));
+            default(int),
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty RegularAnimationEasingProperty = BindableProperty.CreateAttached(
             nameof(RegularAnimationEasing),
             typeof(Easing),
             typeof(TouchEff),
-            null);
+            null,
+            propertyChanged: TryGenerateEffect);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly BindableProperty HoveredAnimationEasingProperty = BindableProperty.CreateAttached(
             nameof(HoveredAnimationEasing),
             typeof(Easing),
             typeof(TouchEff),
-            null);
+            null,
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty RippleCountProperty = BindableProperty.CreateAttached(
             nameof(RippleCount),
@@ -371,6 +422,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         public static readonly BindableProperty IsToggledProperty = BindableProperty.CreateAttached(
@@ -382,6 +434,7 @@ namespace TouchEffect
             propertyChanged: (bindable, oldValue, newValue) =>
             {
                 bindable.GetTouchEff()?.ForceUpdateState(false);
+                TryGenerateEffect(bindable, oldValue, newValue);
             });
 
         /// <summary>
@@ -391,31 +444,48 @@ namespace TouchEffect
             nameof(DisallowTouchThreshold),
             typeof(int),
             typeof(TouchEff),
-            default(int));
+            default(int),
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty NativeAnimationProperty = BindableProperty.CreateAttached(
             nameof(NativeAnimation),
             typeof(bool),
             typeof(TouchEff),
-            false);
+            false,
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty NativeAnimationColorProperty = BindableProperty.CreateAttached(
             nameof(NativeAnimationColor),
             typeof(Color),
             typeof(TouchEff),
-            Color.Default);
+            Color.Default,
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty NativeAnimationRadiusProperty = BindableProperty.CreateAttached(
             nameof(NativeAnimationRadius),
             typeof(int),
             typeof(TouchEff),
-            -1);
+            -1,
+            propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty NativeAnimationShadowRadiusProperty = BindableProperty.CreateAttached(
             nameof(NativeAnimationShadowRadius),
             typeof(int),
             typeof(TouchEff),
-            -1);
+            -1,
+            propertyChanged: TryGenerateEffect);
+
+        public static bool GetIsAvailable(BindableObject bindable)
+            => (bool)bindable.GetValue(IsAvailableProperty);
+
+        public static void SetIsAvailable(BindableObject bindable, bool value)
+            => bindable.SetValue(IsAvailableProperty, value);
+
+        public static bool GetShouldMakeChildrenInputTransparent(BindableObject bindable)
+            => (bool)bindable.GetValue(ShouldMakeChildrenInputTransparentProperty);
+
+        public static void SetShouldMakeChildrenInputTransparent(BindableObject bindable, bool value)
+            => bindable.SetValue(ShouldMakeChildrenInputTransparentProperty, value);
 
         public static ICommand GetCommand(BindableObject bindable)
             => bindable.GetValue(CommandProperty) as ICommand;
@@ -701,6 +771,24 @@ namespace TouchEffect
         public static void SetNativeAnimationShadowRadius(BindableObject bindable, int value)
             => bindable.SetValue(NativeAnimationShadowRadiusProperty, value);
 
+        private static void TryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (!(bindable is VisualElement view) || view.Effects.OfType<TouchEff>().Any())
+            {
+                return;
+            }
+            view.Effects.Add(new TouchEff { IsAutoGenerated = true });
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool IsDisabled { get; set; }
+
+        internal bool IsAutoGenerated { get; set; }
+
+        public bool IsAvailable => GetIsAvailable(Control);
+
+        public bool ShouldMakeChildrenInputTransparent => GetShouldMakeChildrenInputTransparent(Control);
+
         public ICommand Command => GetCommand(Control);
 
         public object CommandParameter => GetCommandParameter(Control);
@@ -821,8 +909,9 @@ namespace TouchEffect
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public bool IsEnabled
-            => (Control?.IsEnabled ?? false) &&
+        public bool CanExecute
+            => IsAvailable &&
+            Control.IsEnabled &&
             ((Command?.CanExecute(CommandParameter) ?? false) || Completed != null);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -831,8 +920,24 @@ namespace TouchEffect
             get => _control;
             set
             {
+                if (_control != null)
+                {
+                    _visualManager.SetCustomAnimationTask(null);
+                    SetChildrenInputTransparent(false);
+                }
                 _visualManager.AbortAnimations(this);
                 _control = value;
+                if (value != null)
+                {
+                    SetChildrenInputTransparent(true);
+                    if(!IsAutoGenerated)
+                    {
+                        foreach(var effect in value.Effects.OfType<TouchEff>().Where(x => x.IsAutoGenerated))
+                        {
+                            effect.IsDisabled = true;
+                        }
+                    }
+                }
             }
         }
 
@@ -878,10 +983,37 @@ namespace TouchEffect
             _visualManager.ChangeStateAsync(this, animated);
         }
 
-        protected override void OnDetached()
+        private void SetChildrenInputTransparent(bool value)
         {
-            base.OnDetached();
-            _visualManager.SetCustomAnimationTask(null);
+            if (!(Control is Layout layout))
+            {
+                return;
+            }
+
+            layout.ChildAdded -= OnLayoutChildAdded;
+
+            if (!value)
+            {
+                return;
+            }
+
+            layout.InputTransparent = false;
+            foreach (var view in layout.Children)
+            {
+                OnLayoutChildAdded(layout, new ElementEventArgs(view));
+            }
+
+            layout.ChildAdded += OnLayoutChildAdded;
+        }
+
+        private void OnLayoutChildAdded(object sender, ElementEventArgs e)
+        {
+            if (!(e.Element is View view))
+            {
+                return;
+            }
+            view.InputTransparent = ShouldMakeChildrenInputTransparent &&
+                !(view.GetTouchEff()?.IsAvailable ?? false);
         }
     }
 }

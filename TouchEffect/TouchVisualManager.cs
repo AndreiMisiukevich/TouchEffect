@@ -26,7 +26,12 @@ namespace TouchEffect
 
         internal void HandleTouch(TouchEff sender, TouchStatus status)
         {
-            var canExecuteAction = sender.IsEnabled;
+            if(sender.IsDisabled)
+            {
+                return;
+            }
+
+            var canExecuteAction = sender.CanExecute;
             if (status != TouchStatus.Started || canExecuteAction)
             {
                 if (!canExecuteAction)
@@ -172,7 +177,7 @@ namespace TouchEffect
 
         internal void OnTapped(TouchEff sender)
         {
-            if (!sender.IsEnabled)
+            if (!sender.CanExecute)
             {
                 return;
             }

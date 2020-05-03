@@ -3,28 +3,70 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
              mc:Ignorable="d"
              x:Class="TouchEffectSample.ScrollPage">
     <ContentPage.Content>
-        <ScrollView Orientation="Horizontal" VerticalOptions="Center">
-            <StackLayout x:Name="boxstack" HorizontalOptions="Start" Spacing="24" Orientation="Horizontal">
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-                <BoxView WidthRequest="48" HeightRequest="48" BackgroundColor="Black"/>
-            </StackLayout>
-        </ScrollView>
+        <StackLayout VerticalOptions="Center">
+
+            <ScrollView Orientation="Horizontal" VerticalOptions="Center">
+                <StackLayout HorizontalOptions="Start" Spacing="10" Orientation="Horizontal">
+                    <FlexLayout 
+                        touch:TouchEff.NativeAnimation="True"
+                        touch:TouchEff.NativeAnimationColor="Red"
+                        Direction="Column">
+                        <FlexLayout.Effects>
+                            <touch:TouchEff Completed="Completed"/>
+                        </FlexLayout.Effects>
+                        <BoxView WidthRequest="142" HeightRequest="80" BackgroundColor="DarkGray">
+
+                        </BoxView>
+                        <Label MaxLines="1" Padding="5" Text="content" Opacity="0.6" BackgroundColor="Black"/>
+                    </FlexLayout>
+
+                    <FlexLayout 
+                        touch:TouchEff.NativeAnimation="True"
+                        touch:TouchEff.NativeAnimationColor="Red"
+                        Direction="Column">
+                        <FlexLayout.Effects>
+                            <touch:TouchEff Completed="Completed"/>
+                        </FlexLayout.Effects>
+                        <BoxView WidthRequest="142" HeightRequest="80" BackgroundColor="DarkGray">
+
+                        </BoxView>
+                        <Label MaxLines="1" Padding="5" Text="content" Opacity="0.6" BackgroundColor="Black"/>
+                    </FlexLayout>
+
+                    <FlexLayout 
+                        touch:TouchEff.NativeAnimation="True"
+                        touch:TouchEff.NativeAnimationColor="Red"
+                        Direction="Column">
+                        <FlexLayout.Effects>
+                            <touch:TouchEff Completed="Completed"/>
+                        </FlexLayout.Effects>
+                        <BoxView WidthRequest="142" HeightRequest="80" BackgroundColor="DarkGray">
+
+                        </BoxView>
+                        <Label MaxLines="1" Padding="5" Text="content" Opacity="0.6" BackgroundColor="Black"/>
+                    </FlexLayout>
+
+                    <FlexLayout 
+                        touch:TouchEff.NativeAnimation="True"
+                        touch:TouchEff.NativeAnimationColor="Red"
+                        Direction="Column">
+                        <FlexLayout.Effects>
+                            <touch:TouchEff Completed="Completed"/>
+                        </FlexLayout.Effects>
+                        <BoxView WidthRequest="142" HeightRequest="80" BackgroundColor="DarkGray">
+
+                        </BoxView>
+                        <Label MaxLines="1" Padding="5" Text="content" Opacity="0.6" BackgroundColor="Black"/>
+                    </FlexLayout>
+
+                </StackLayout>
+            </ScrollView>
+
+        </StackLayout>
 
     </ContentPage.Content>
 </ContentPage>

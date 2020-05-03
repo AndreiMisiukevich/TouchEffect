@@ -5,29 +5,29 @@
              x:Class="TouchEffectSample.TouchColorViewPage"
              BackgroundColor="White"
              Title="TouchColorViewPage">
-            <StackLayout
-                Grid.Row="1">
-                <Frame
-                    Margin="20"
-                    HasShadow="True"
-                    IsClippedToBounds="True"
-                    CornerRadius="5"
-                    touch:TouchEff.NativeAnimation="True">
-                    <Frame.Effects>
-                        <touch:TouchEff/>
-                    </Frame.Effects>
-                    
-                    <StackLayout>
-                        <Label
-                            Text="Header"
-                            FontSize="Medium"
-                            Margin="0,0,0,10"/>
+    <StackLayout>
+       <ContentView
+            touch:TouchEff.RegularBackgroundColor="Green"
+            touch:TouchEff.PressedBackgroundColor="Red"
+            touch:TouchEff.PressedScale="1.2"
+            touch:TouchEff.RippleCount="1"
+            touch:TouchEff.PressedRotation="10"
+            touch:TouchEff.PressedRotationX="15"
+            touch:TouchEff.PressedRotationY="15"
+            touch:TouchEff.PressedTranslationX="5"
+            touch:TouchEff.PressedTranslationY="5"
+            touch:TouchEff.PressedAnimationDuration="500"
+            touch:TouchEff.RegularAnimationDuration="500"
+            Padding="10, 5"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand">
+            <ContentView.Effects>
+                <touch:TouchEff Completed="Handle_TouchCompleted" />
+            </ContentView.Effects>
 
-                        <Grid
-                            Grid.Row="1">
-                            
-                        </Grid>
-                    </StackLayout>
-                </Frame>
-            </StackLayout>
+            <Label Text="CLICK ME" 
+                   TextColor="Black" 
+                   FontSize="60"/>
+        </ContentView>
+    </StackLayout>
 </ContentPage>

@@ -54,6 +54,10 @@ namespace TouchEffect.Android
             _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
+            if(_effect.IsDisabled)
+            {
+                return;
+            }
             _effect.ForceUpdateState(false);
 
             View.Touch += OnTouch;
@@ -214,7 +218,7 @@ namespace TouchEffect.Android
 
         private void StartRipple(float x, float y)
         {
-            if (_effect.IsEnabled && _effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
+            if (!_effect.IsDisabled && _effect.CanExecute && _effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
             {
                 UpdateRipple();
                 _viewOverlay.BringToFront();
@@ -225,7 +229,7 @@ namespace TouchEffect.Android
 
         private void EndRipple()
         {
-            if (_viewOverlay?.Pressed ?? false)
+            if (!_effect.IsDisabled && (_viewOverlay?.Pressed ?? false))
             {
                 _viewOverlay.Pressed = false;
             }
@@ -242,8 +246,8 @@ namespace TouchEffect.Android
             }
             else
             {
-                var isLayout = Element is Layout;
-                _ripple = new RippleDrawable(GetColorStateList(), isLayout ? null : background, isLayout ? new ColorDrawable(Color.White) : null);
+                var noBackground = Element is Layout || background == null;
+                _ripple = new RippleDrawable(GetColorStateList(), noBackground ? null : background, noBackground ? new ColorDrawable(Color.White) : null);
             }
             UpdateRipple();
         }

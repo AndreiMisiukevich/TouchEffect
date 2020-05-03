@@ -4,7 +4,8 @@
              xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
              x:Class="TouchEffectSample.TouchFadeViewPage"
              BackgroundColor="White"
-             Title="TouchFadeViewPage">
+             Title="TouchFadeViewPage"
+             x:Name="root">
     <StackLayout>
        <ContentView
             touch:TouchEff.PressedAnimationDuration="800"
@@ -12,14 +13,11 @@
             touch:TouchEff.PressedScale="0.9"
             touch:TouchEff.PressedOpacity="0.6"
             touch:TouchEff.RippleCount="-1"
+            touch:TouchEff.Command="{Binding Command, Source={x:Reference root}}"
             Padding="10, 5"
             BackgroundColor="Black"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand">
-            
-            <ContentView.Effects>
-                <touch:TouchEff Completed="Handle_TouchCompleted"/>
-            </ContentView.Effects>
             
             <Label Text="CLICK ME" 
                    TextColor="White" 
