@@ -24,12 +24,9 @@ namespace TouchEffect
 
         private TouchState _animationState;
 
-        private bool CanExecuteAction(TouchEff sender)
-            => sender.Control.IsEnabled && ((sender.Command?.CanExecute(sender.CommandParameter) ?? false) || sender.IsCompletedSet);
-
         internal void HandleTouch(TouchEff sender, TouchStatus status)
         {
-            var canExecuteAction = CanExecuteAction(sender);
+            var canExecuteAction = sender.IsEnabled;
             if (status != TouchStatus.Started || canExecuteAction)
             {
                 if (!canExecuteAction)
@@ -175,7 +172,7 @@ namespace TouchEffect
 
         internal void OnTapped(TouchEff sender)
         {
-            if (!CanExecuteAction(sender))
+            if (!sender.IsEnabled)
             {
                 return;
             }

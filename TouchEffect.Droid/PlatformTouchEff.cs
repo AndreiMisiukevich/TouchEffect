@@ -15,6 +15,7 @@ using Android.Content.Res;
 using static System.Math;
 using Android.Views.Accessibility;
 using Android.Content;
+using AndroidOS = Android.OS;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -34,6 +35,8 @@ namespace TouchEffect.Android
         private ViewGroup Group => Container ?? Control as ViewGroup;
         private float _startX;
         private float _startY;
+        private Xamarin.Forms.Color _rippleColor;
+        private int _rippleRadius = -1;
 
         internal bool IsCanceled { get; set; }
 
@@ -56,7 +59,7 @@ namespace TouchEffect.Android
             View.Touch += OnTouch;
             View.Click += OnClick;
 
-            if (_effect.NativeAnimation && Group != null)
+            if (_effect.NativeAnimation && Group != null && AndroidOS.Build.VERSION.SdkInt >= AndroidOS.BuildVersionCodes.Lollipop)
             {
                 View.Clickable = true;
                 View.LongClickable = true;
@@ -68,8 +71,7 @@ namespace TouchEffect.Android
                 };
                 View.LayoutChange += LayoutChange;
 
-                _ripple = CreateRipple();
-                _ripple.Radius = (int)(View.Context.Resources.DisplayMetrics.Density * _effect.NativeAnimationRadius);
+                CreateRipple();
                 _viewOverlay.Background = _ripple;
                 Group.AddView(_viewOverlay);
                 _viewOverlay.BringToFront();
@@ -212,8 +214,9 @@ namespace TouchEffect.Android
 
         private bool StartRipple(float x, float y)
         {
-            if (_effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
+            if (_effect.IsEnabled && _effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
             {
+                UpdateRipple();
                 _viewOverlay.BringToFront();
                 _ripple.SetHotspot(x, y);
                 _viewOverlay.Pressed = true;
@@ -224,7 +227,7 @@ namespace TouchEffect.Android
 
         private bool EndRipple()
         {
-            if (_viewOverlay != null && _viewOverlay.Pressed)
+            if (_viewOverlay?.Pressed ?? false)
             {
                 _viewOverlay.Pressed = false;
                 return true;
@@ -232,34 +235,39 @@ namespace TouchEffect.Android
             return false;
         }
 
-        private RippleDrawable CreateRipple()
+        private void CreateRipple()
         {
-            if (Element is Layout)
-            {
-                var mask = new ColorDrawable(Color.White);
-                return new RippleDrawable(GetColorStateList(), null, mask);
-            }
-
-            var background = View.Background;
-            if (background == null)
-            {
-                var mask = new ColorDrawable(Color.White);
-                return new RippleDrawable(GetColorStateList(), null, mask);
-            }
+            var background = View?.Background;
 
             if (background is RippleDrawable)
             {
-                var ripple = (RippleDrawable)background.GetConstantState().NewDrawable();
-                ripple.SetColor(GetColorStateList());
-                return ripple;
+                _ripple = (RippleDrawable)background.GetConstantState().NewDrawable();
+                return;
             }
-            return new RippleDrawable(GetColorStateList(), background, null);
+            else
+            {
+                var isLayout = Element is Layout;
+                _ripple = new RippleDrawable(GetColorStateList(), isLayout ? null : background, isLayout ? new ColorDrawable(Color.White) : null);
+            }
+            UpdateRipple();
+        }
+
+        private void UpdateRipple()
+        {
+            if(_effect.NativeAnimationColor == _rippleColor && _effect.NativeAnimationRadius == _rippleRadius)
+            {
+                return;
+            }
+            _rippleColor = _effect.NativeAnimationColor;
+            _rippleRadius = _effect.NativeAnimationRadius;
+            _ripple.SetColor(GetColorStateList());
+            _ripple.Radius = (int)(View.Context.Resources.DisplayMetrics.Density * _effect.NativeAnimationRadius);
         }
 
         private ColorStateList GetColorStateList()
         {
             int color;
-            var defaultcolor = TouchEff.GetNativeAnimationColor(Element);
+            var defaultcolor = _effect.NativeAnimationColor;
             if (defaultcolor != Xamarin.Forms.Color.Default)
                 color = defaultcolor.ToAndroid();
             else

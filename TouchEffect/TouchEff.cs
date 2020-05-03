@@ -821,7 +821,9 @@ namespace TouchEffect
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public bool IsCompletedSet => Completed != null;
+        public bool IsEnabled
+            => (Control?.IsEnabled ?? false) &&
+            ((Command?.CanExecute(CommandParameter) ?? false) || Completed != null);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public VisualElement Control

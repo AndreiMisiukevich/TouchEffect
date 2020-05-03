@@ -130,12 +130,12 @@ namespace TouchEffect.iOS
 
         public void HandleTouch(TouchStatus status)
         {
-            if (IsCanceled)
+            if (IsCanceled || _effect == null)
             {
                 return;
             }
-            _effect?.HandleTouch(status);
-            if (_effect?.NativeAnimation != true)
+            _effect.HandleTouch(status);
+            if (!_effect.NativeAnimation || !_effect.IsEnabled)
             {
                 return;
             }
