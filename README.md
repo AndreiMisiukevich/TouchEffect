@@ -41,7 +41,7 @@ The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/t
 
 **XAML:** use TouchEff for achieving repsonsive UI (Changing background image or/and background color or/and opacity or/and scale).
 
-Add TouchEff to element's Effects collection and use TouchEff attached properties for setting up touch visual effect.
+Use TouchEff attached properties for setting up touch visual effect.
 
 ```xaml
 ...
@@ -53,15 +53,12 @@ Add TouchEff to element's Effects collection and use TouchEff attached propertie
             touch:TouchEff.PressedScale="0.9"
             touch:TouchEff.PressedOpacity="0.6"
             touch:TouchEff.RippleCount="-1"
+            touch.TouchEff.Command={Binding Command}
             
             Padding="10, 5"
             BackgroundColor="Black"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand">
-            
-            <ContentView.Effects>
-                <touch:TouchEff Completed="Handle_TouchCompleted"/>
-            </ContentView.Effects>
             
             <Label Text="CLICK ME" 
                    TextColor="White" 
@@ -81,12 +78,11 @@ Add TouchEff to element's Effects collection and use TouchEff attached propertie
             touch:TouchEff.PressedTranslationY="5"
             touch:TouchEff.PressedAnimationDuration="500"
             touch:TouchEff.RegularAnimationDuration="500"
+            touch.TouchEff.Command={Binding Command}
+
             Padding="10, 5"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand">
-            <StackLayout.Effects>
-                <touch:TouchEff Completed="Handle_TouchCompleted" />
-            </StackLayout.Effects>
 
             <Label Text="CLICK ME" 
                    TextColor="Black" 
@@ -114,6 +110,8 @@ If you wish to change Image Source on touch, you should use TouchImage control. 
 ### TouchEff Attached Properties
 Property | Type | Default | Description
 --- | --- | --- | ---
+IsAvailableProperty | `bool` | true | Makes effect available
+ShouldMakeChildrenInputTransparentProperty | `bool` | true | Makes layout's children input trasparent
 Command | `ICommand` | null | Touch Command handler
 CommandParameter | `object` | null | Touch Command handler parameter
 Status | `TouchStatus` | Completed | Current touch status
