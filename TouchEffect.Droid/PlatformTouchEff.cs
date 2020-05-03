@@ -212,7 +212,7 @@ namespace TouchEffect.Android
             EndRipple();
         }
 
-        private bool StartRipple(float x, float y)
+        private void StartRipple(float x, float y)
         {
             if (_effect.IsEnabled && _effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
             {
@@ -220,19 +220,15 @@ namespace TouchEffect.Android
                 _viewOverlay.BringToFront();
                 _ripple.SetHotspot(x, y);
                 _viewOverlay.Pressed = true;
-                return true;
             }
-            return false;
         }
 
-        private bool EndRipple()
+        private void EndRipple()
         {
             if (_viewOverlay?.Pressed ?? false)
             {
                 _viewOverlay.Pressed = false;
-                return true;
             }
-            return false;
         }
 
         private void CreateRipple()
