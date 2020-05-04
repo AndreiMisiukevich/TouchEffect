@@ -34,6 +34,8 @@ namespace TouchEffect.UWP
         {
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
+            if (_effect.IsDisabled) return;
+
             _effect.ForceUpdateState(false);
             if (_effect.NativeAnimation)
             {
@@ -100,6 +102,8 @@ namespace TouchEffect.UWP
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs e)
         {
+            if (_effect.IsDisabled) return;
+
             Element.GetTouchEff().HandleHover(HoverStatus.Entered);
             if (_pressed)
             {
@@ -110,6 +114,8 @@ namespace TouchEffect.UWP
 
         private void OnPointerExited(object sender, PointerRoutedEventArgs e)
         {
+            if (_effect.IsDisabled) return;
+            
             if (_pressed)
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
@@ -120,6 +126,8 @@ namespace TouchEffect.UWP
 
         private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
         {
+            if (_effect.IsDisabled) return;
+
             _pressed = false;
             Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
             Element.GetTouchEff().HandleHover(HoverStatus.Exited);
@@ -128,6 +136,8 @@ namespace TouchEffect.UWP
 
         private void OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
         {
+            if (_effect.IsDisabled) return;
+
             if (_intentionalCaptureLoss) return;
             _pressed = false;
 			if (_effect.Status != TouchStatus.Canceled)
@@ -144,8 +154,9 @@ namespace TouchEffect.UWP
 
         private void OnPointerReleased(object sender, PointerRoutedEventArgs e)
         {
+            if (_effect.IsDisabled) return;
 
-            if(_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered))
+            if (_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered))
             {
                 Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
                 AnimateTilt(_pointerUpStoryboard);
@@ -162,6 +173,8 @@ namespace TouchEffect.UWP
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            if (_effect.IsDisabled) return;
+
             _pressed = true;
             Container.CapturePointer(e.Pointer);
             Element.GetTouchEff().HandleTouch(TouchStatus.Started);

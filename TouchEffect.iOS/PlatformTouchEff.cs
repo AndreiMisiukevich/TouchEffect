@@ -25,10 +25,8 @@ namespace TouchEffect.iOS
         {
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
-            if (_effect.IsDisabled)
-            {
-                return;
-            }
+            if (_effect.IsDisabled) return;
+
             _effect.ForceUpdateState(false);
             _gesture = new TouchUITapGestureRecognizer(_effect);
             if (Container != null)
@@ -69,6 +67,8 @@ namespace TouchEffect.iOS
 
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
+            if (_effect.IsDisabled) return;
+
             IsCanceled = false;
             _startPoint = GetTouchPoint(touches);
             HandleTouch(TouchStatus.Started);
@@ -77,6 +77,8 @@ namespace TouchEffect.iOS
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
+            if (_effect.IsDisabled) return;
+
             HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
             IsCanceled = true;
             base.TouchesEnded(touches, evt);
@@ -84,6 +86,8 @@ namespace TouchEffect.iOS
 
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {
+            if (_effect.IsDisabled) return;
+
             HandleTouch(TouchStatus.Canceled);
             IsCanceled = true;
             base.TouchesCancelled(touches, evt);
@@ -91,6 +95,8 @@ namespace TouchEffect.iOS
 
         public override void TouchesMoved(NSSet touches, UIEvent evt)
         {
+            if (_effect.IsDisabled) return;
+
             var disallowTouchThreshold = _effect.DisallowTouchThreshold;
             var point = GetTouchPoint(touches);
             if (point != null && _startPoint != null && disallowTouchThreshold > 0)
@@ -134,12 +140,14 @@ namespace TouchEffect.iOS
 
         public void HandleTouch(TouchStatus status)
         {
+            if (_effect.IsDisabled) return;
+
             if (IsCanceled || _effect == null)
             {
                 return;
             }
             _effect.HandleTouch(status);
-            if (_effect.IsDisabled || !_effect.NativeAnimation || !_effect.CanExecute)
+            if (!_effect.NativeAnimation || !_effect.CanExecute)
             {
                 return;
             }

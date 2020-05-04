@@ -51,13 +51,11 @@ namespace TouchEffect.Android
             {
                 return;
             }
-            _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
-            if(_effect.IsDisabled)
-            {
-                return;
-            }
+            if (_effect.IsDisabled) return;
+            _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
+
             _effect.ForceUpdateState(false);
 
             View.Touch += OnTouch;
@@ -218,7 +216,9 @@ namespace TouchEffect.Android
 
         private void StartRipple(float x, float y)
         {
-            if (!_effect.IsDisabled && _effect.CanExecute && _effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
+            if (_effect.IsDisabled) return;
+
+            if (_effect.CanExecute && _effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
             {
                 UpdateRipple();
                 _viewOverlay.BringToFront();
@@ -229,7 +229,9 @@ namespace TouchEffect.Android
 
         private void EndRipple()
         {
-            if (!_effect.IsDisabled && (_viewOverlay?.Pressed ?? false))
+            if (_effect.IsDisabled) return;
+
+            if (_viewOverlay?.Pressed ?? false)
             {
                 _viewOverlay.Pressed = false;
             }
@@ -254,7 +256,9 @@ namespace TouchEffect.Android
 
         private void UpdateRipple()
         {
-            if(_effect.NativeAnimationColor == _rippleColor && _effect.NativeAnimationRadius == _rippleRadius)
+            if (_effect.IsDisabled) return;
+
+            if (_effect.NativeAnimationColor == _rippleColor && _effect.NativeAnimationRadius == _rippleRadius)
             {
                 return;
             }

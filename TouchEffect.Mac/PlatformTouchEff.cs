@@ -24,6 +24,8 @@ namespace TouchEffect.Mac
         {
             _effect = Element.GetTouchEff();
             _effect.Control = Element as VisualElement;
+            if (_effect.IsDisabled) return;
+
             _effect.ForceUpdateState(false);
             if (Container != null)
             {
@@ -71,9 +73,19 @@ namespace TouchEffect.Mac
             AddTrackingArea(_trackingArea);
         }
 
-        public override void MouseEntered(NSEvent theEvent) => _effect.HandleHover(HoverStatus.Entered);
+        public override void MouseEntered(NSEvent theEvent)
+        {
+            if (_effect.IsDisabled) return;
 
-        public override void MouseExited(NSEvent theEvent) => _effect.HandleHover(HoverStatus.Exited);
+            _effect.HandleHover(HoverStatus.Entered);
+        }
+
+        public override void MouseExited(NSEvent theEvent)
+        {
+            if (_effect.IsDisabled) return;
+
+            _effect.HandleHover(HoverStatus.Exited);
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -118,12 +130,16 @@ namespace TouchEffect.Mac
 
         public override void MouseDown(NSEvent mouseEvent)
         {
+            if (_effect.IsDisabled) return;
+
             _effect.HandleTouch(TouchStatus.Started);
             base.MouseDown(mouseEvent);
         }
 
         public override void MouseUp(NSEvent mouseEvent)
         {
+            if (_effect.IsDisabled) return;
+
             if (_effect.HoverStatus == HoverStatus.Entered)
             {
                 var touchPoint = mouseEvent.LocationInWindow.ToPoint();
@@ -138,6 +154,8 @@ namespace TouchEffect.Mac
 
         public override void MouseDragged(NSEvent mouseEvent)
         {
+            if (_effect.IsDisabled) return;
+
             var status = ViewRect.Contains(mouseEvent.LocationInWindow.ToPoint()) ? TouchStatus.Started : TouchStatus.Canceled;
 
             if ((status == TouchStatus.Canceled && _effect.HoverStatus == HoverStatus.Entered) ||
