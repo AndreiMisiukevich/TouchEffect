@@ -51,9 +51,11 @@ namespace TouchEffect.Android
             {
                 return;
             }
-            _effect = Element.GetTouchEff();
-            _effect.Control = Element as VisualElement;
+            _effect = Element.PickTouchEff();
             if (_effect.IsDisabled) return;
+
+            _effect.Control = Element as VisualElement;
+
             _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
 
             _effect.ForceUpdateState(false);
@@ -82,6 +84,7 @@ namespace TouchEffect.Android
 
         protected override void OnDetached()
         {
+            if (_effect.Control == null) return;
             try
             {
                 _accessibilityManager = null;
@@ -117,6 +120,8 @@ namespace TouchEffect.Android
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
+            if (_effect.IsDisabled) return;
+
             if (IsAccessibilityMode)
             {
                 return;
@@ -128,7 +133,7 @@ namespace TouchEffect.Android
                     IsCanceled = false;
                     _startX = e.Event.GetX();
                     _startY = e.Event.GetY();
-                    Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+                    _effect.HandleTouch(TouchStatus.Started);
                     StartRipple(e.Event.GetX(), e.Event.GetY());
                     if (_effect.DisallowTouchThreshold > 0)
                     {
@@ -136,7 +141,7 @@ namespace TouchEffect.Android
                     }
                     break;
                 case MotionEventActions.Up:
-                    HandleEnd(Element.GetTouchEff().Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+                    HandleEnd(_effect.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
                     break;
                 case MotionEventActions.Cancel:
                     HandleEnd(TouchStatus.Canceled);
@@ -166,9 +171,9 @@ namespace TouchEffect.Android
                         _effect.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
                     }
 
-                    if (Element.GetTouchEff().Status != status)
+                    if (_effect.Status != status)
                     {
-                        Element.GetTouchEff().HandleTouch(status);
+                        _effect.HandleTouch(status);
                         if (status == TouchStatus.Started)
                             StartRipple(e.Event.GetX(), e.Event.GetY());
                         if (status == TouchStatus.Canceled)
@@ -177,11 +182,11 @@ namespace TouchEffect.Android
                     break;
                 case MotionEventActions.HoverEnter:
                     _isHoverSupported = true;
-                    Element.GetTouchEff().HandleHover(HoverStatus.Entered);
+                    _effect.HandleHover(HoverStatus.Entered);
                     break;
                 case MotionEventActions.HoverExit:
                     _isHoverSupported = true;
-                    Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+                    _effect.HandleHover(HoverStatus.Exited);
                     break;
                 default:
                     e.Handled = false;
@@ -191,6 +196,8 @@ namespace TouchEffect.Android
 
         private void OnClick(object sender, System.EventArgs args)
         {
+            if (_effect.IsDisabled) return;
+
             if (!IsAccessibilityMode)
             {
                 return;
@@ -210,7 +217,7 @@ namespace TouchEffect.Android
             {
                 Group.Parent?.RequestDisallowInterceptTouchEvent(false);
             }
-            Element.GetTouchEff().HandleTouch(status);
+            _effect.HandleTouch(status);
             EndRipple();
         }
 

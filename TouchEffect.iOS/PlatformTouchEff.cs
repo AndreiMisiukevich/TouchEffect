@@ -23,9 +23,10 @@ namespace TouchEffect.iOS
 
         protected override void OnAttached()
         {
-            _effect = Element.GetTouchEff();
-            _effect.Control = Element as VisualElement;
+            _effect = Element.PickTouchEff();
             if (_effect.IsDisabled) return;
+
+            _effect.Control = Element as VisualElement;
 
             _effect.ForceUpdateState(false);
             _gesture = new TouchUITapGestureRecognizer(_effect);
@@ -38,6 +39,8 @@ namespace TouchEffect.iOS
 
         protected override void OnDetached()
         {
+            if (_effect.Control == null) return;
+
             Container?.RemoveGestureRecognizer(_gesture);
             _gesture?.Dispose();
             _gesture = null;

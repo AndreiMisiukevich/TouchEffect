@@ -32,9 +32,10 @@ namespace TouchEffect.UWP
 
         protected override void OnAttached()
         {
-            _effect = Element.GetTouchEff();
-            _effect.Control = Element as VisualElement;
+            _effect = Element.PickTouchEff();
             if (_effect.IsDisabled) return;
+
+            _effect.Control = Element as VisualElement;
 
             _effect.ForceUpdateState(false);
             if (_effect.NativeAnimation)
@@ -85,6 +86,8 @@ namespace TouchEffect.UWP
 
         protected override void OnDetached()
         {
+            if (_effect.Control == null) return;
+
             _effect.Control = null;
             _effect = null;
             if (Container != null)
@@ -104,10 +107,10 @@ namespace TouchEffect.UWP
         {
             if (_effect.IsDisabled) return;
 
-            Element.GetTouchEff().HandleHover(HoverStatus.Entered);
+            _effect.HandleHover(HoverStatus.Entered);
             if (_pressed)
             {
-                Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+                _effect.HandleTouch(TouchStatus.Started);
                 AnimateTilt(_pointerDownStoryboard);
             }
         }
@@ -118,10 +121,10 @@ namespace TouchEffect.UWP
             
             if (_pressed)
             {
-                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                _effect.HandleTouch(TouchStatus.Canceled);
                 AnimateTilt(_pointerUpStoryboard);
             }
-            Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+            _effect.HandleHover(HoverStatus.Exited);
         }
 
         private void OnPointerCanceled(object sender, PointerRoutedEventArgs e)
@@ -129,8 +132,8 @@ namespace TouchEffect.UWP
             if (_effect.IsDisabled) return;
 
             _pressed = false;
-            Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
-            Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+            _effect.HandleTouch(TouchStatus.Canceled);
+            _effect.HandleHover(HoverStatus.Exited);
             AnimateTilt(_pointerUpStoryboard);
         }
 
@@ -142,11 +145,11 @@ namespace TouchEffect.UWP
             _pressed = false;
 			if (_effect.Status != TouchStatus.Canceled)
 			{
-				Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                _effect.HandleTouch(TouchStatus.Canceled);
 			}
             if (_effect.HoverStatus != HoverStatus.Exited)
 			{
-				Element.GetTouchEff().HandleHover(HoverStatus.Exited);
+                _effect.HandleHover(HoverStatus.Exited);
 			}
 
             AnimateTilt(_pointerUpStoryboard);
@@ -156,14 +159,14 @@ namespace TouchEffect.UWP
         {
             if (_effect.IsDisabled) return;
 
-            if (_pressed && (Element.GetTouchEff().HoverStatus == HoverStatus.Entered))
+            if (_pressed && (_effect.HoverStatus == HoverStatus.Entered))
             {
-                Element.GetTouchEff().HandleTouch(TouchStatus.Completed);
+                _effect.HandleTouch(TouchStatus.Completed);
                 AnimateTilt(_pointerUpStoryboard);
             }
-            else if(Element.GetTouchEff().HoverStatus != HoverStatus.Exited)
+            else if(_effect.HoverStatus != HoverStatus.Exited)
             {
-                Element.GetTouchEff().HandleTouch(TouchStatus.Canceled);
+                _effect.HandleTouch(TouchStatus.Canceled);
                 AnimateTilt(_pointerUpStoryboard);
             }
                
@@ -177,7 +180,7 @@ namespace TouchEffect.UWP
 
             _pressed = true;
             Container.CapturePointer(e.Pointer);
-            Element.GetTouchEff().HandleTouch(TouchStatus.Started);
+            _effect.HandleTouch(TouchStatus.Started);
             AnimateTilt(_pointerDownStoryboard);
             _intentionalCaptureLoss = false;
         }
