@@ -1,4 +1,4 @@
-# TouchView control for Xamarin Forms (based on Xamarin Forms AbsoluteLayout)
+# TouchEff effect for Xamarin Forms (Repsonisve touches without TapGestureRecognizer)
 This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer. It makes it possible to change the appearance of any control in response to touch events, either directly via xaml or with your custom logic hooked up to the events which this plugin exposes.
 
 With this plugin it is also possible to respond to hover events (if the platform exposes them) and to display native touch feedback events (Tilt on UWP, Ripple on Android, Opacity/Color changing on iOS).
@@ -53,7 +53,7 @@ Use TouchEff attached properties for setting up touch visual effect.
             touch:TouchEff.PressedScale="0.9"
             touch:TouchEff.PressedOpacity="0.6"
             touch:TouchEff.RippleCount="-1"
-            touch.TouchEff.Command={Binding Command}
+            touch.TouchEff.Command="{Binding Command}">
             
             Padding="10, 5"
             BackgroundColor="Black"
@@ -78,7 +78,7 @@ Use TouchEff attached properties for setting up touch visual effect.
             touch:TouchEff.PressedTranslationY="5"
             touch:TouchEff.PressedAnimationDuration="500"
             touch:TouchEff.RegularAnimationDuration="500"
-            touch.TouchEff.Command={Binding Command}
+            touch.TouchEff.Command="{Binding Command}">
 
             Padding="10, 5"
             VerticalOptions="CenterAndExpand"
