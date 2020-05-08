@@ -143,18 +143,22 @@ namespace TouchEffect.iOS
 
         public void HandleTouch(TouchStatus status)
         {
-            if (_effect.IsDisabled) return;
-
             if (IsCanceled || _effect == null)
             {
                 return;
             }
-            _effect.HandleTouch(status);
-            if (!_effect.NativeAnimation || !_effect.CanExecute)
+
+            if (_effect.IsDisabled) return;
+
+            _effect?.HandleTouch(status);
+            if (_effect == null || !_effect.NativeAnimation || !_effect.CanExecute)
             {
                 return;
             }
-            var renderer = _effect.Control.GetRenderer() as UIView;
+            var control = _effect.Control;
+            var renderer = control?.GetRenderer() as UIView;
+            if (renderer == null) return;
+
             var color = _effect.NativeAnimationColor;
             var radius = _effect.NativeAnimationRadius;
             var shadowRadius = _effect.NativeAnimationShadowRadius;
@@ -168,11 +172,11 @@ namespace TouchEffect.iOS
             {
                 if (color == Color.Default)
                 {
-                    renderer.Layer.Opacity = isStarted ? 0.5f : (float)_effect.Control.Opacity;
+                    renderer.Layer.Opacity = isStarted ? 0.5f : (float)control.Opacity;
                 }
                 else
                 {
-                    renderer.Layer.BackgroundColor = (isStarted ? color : _effect.Control.BackgroundColor).ToCGColor();
+                    renderer.Layer.BackgroundColor = (isStarted ? color : control.BackgroundColor).ToCGColor();
                 }
                 renderer.Layer.CornerRadius = isStarted ? radius : _defaultRadius.GetValueOrDefault();
 
