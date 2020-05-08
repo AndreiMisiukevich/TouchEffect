@@ -53,7 +53,7 @@ Use TouchEff attached properties for setting up touch visual effect.
             touch:TouchEff.PressedScale="0.9"
             touch:TouchEff.PressedOpacity="0.6"
             touch:TouchEff.RippleCount="-1"
-            touch.TouchEff.Command="{Binding Command}">
+            touch:TouchEff.Command="{Binding Command}">
             
             Padding="10, 5"
             BackgroundColor="Black"
@@ -78,7 +78,7 @@ Use TouchEff attached properties for setting up touch visual effect.
             touch:TouchEff.PressedTranslationY="5"
             touch:TouchEff.PressedAnimationDuration="500"
             touch:TouchEff.RegularAnimationDuration="500"
-            touch.TouchEff.Command="{Binding Command}">
+            touch:TouchEff.Command="{Binding Command}">
 
             Padding="10, 5"
             VerticalOptions="CenterAndExpand"
