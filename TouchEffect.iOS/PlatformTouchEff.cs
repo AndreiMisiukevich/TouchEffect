@@ -24,11 +24,10 @@ namespace TouchEffect.iOS
         protected override void OnAttached()
         {
             _effect = Element.PickTouchEff();
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             _effect.Control = Element as VisualElement;
 
-            _effect.ForceUpdateState(false);
             _gesture = new TouchUITapGestureRecognizer(_effect);
             if (Container != null)
             {
@@ -39,7 +38,7 @@ namespace TouchEffect.iOS
 
         protected override void OnDetached()
         {
-            if (_effect.Control == null) return;
+            if (_effect?.Control == null) return;
 
             Container?.RemoveGestureRecognizer(_gesture);
             _gesture?.Dispose();
@@ -70,7 +69,7 @@ namespace TouchEffect.iOS
 
         public override void TouchesBegan(NSSet touches, UIEvent evt)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             IsCanceled = false;
             _startPoint = GetTouchPoint(touches);
@@ -80,7 +79,7 @@ namespace TouchEffect.iOS
 
         public override void TouchesEnded(NSSet touches, UIEvent evt)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
             IsCanceled = true;
@@ -89,7 +88,7 @@ namespace TouchEffect.iOS
 
         public override void TouchesCancelled(NSSet touches, UIEvent evt)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             HandleTouch(TouchStatus.Canceled);
             IsCanceled = true;
@@ -98,7 +97,7 @@ namespace TouchEffect.iOS
 
         public override void TouchesMoved(NSSet touches, UIEvent evt)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             var disallowTouchThreshold = _effect.DisallowTouchThreshold;
             var point = GetTouchPoint(touches);
@@ -148,7 +147,7 @@ namespace TouchEffect.iOS
                 return;
             }
 
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             _effect?.HandleTouch(status);
             if (_effect == null || !_effect.NativeAnimation || !_effect.CanExecute)

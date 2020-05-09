@@ -23,11 +23,10 @@ namespace TouchEffect.Mac
         protected override void OnAttached()
         {
             _effect = Element.PickTouchEff();
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             _effect.Control = Element as VisualElement;
 
-            _effect.ForceUpdateState(false);
             if (Container != null)
             {
                 _gesture = new TouchNSClickGestureRecognizer(_effect, Container);
@@ -38,7 +37,7 @@ namespace TouchEffect.Mac
 
         protected override void OnDetached()
         {
-            if (_effect.Control == null) return;
+            if (_effect?.Control == null) return;
 
             _mouseTrackingView?.RemoveFromSuperview();
             _mouseTrackingView?.Dispose();
@@ -78,16 +77,16 @@ namespace TouchEffect.Mac
 
         public override void MouseEntered(NSEvent theEvent)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
-            _effect.HandleHover(HoverStatus.Entered);
+            _effect?.HandleHover(HoverStatus.Entered);
         }
 
         public override void MouseExited(NSEvent theEvent)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
-            _effect.HandleHover(HoverStatus.Exited);
+            _effect?.HandleHover(HoverStatus.Exited);
         }
 
         protected override void Dispose(bool disposing)
@@ -133,15 +132,15 @@ namespace TouchEffect.Mac
 
         public override void MouseDown(NSEvent mouseEvent)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
-            _effect.HandleTouch(TouchStatus.Started);
+            _effect?.HandleTouch(TouchStatus.Started);
             base.MouseDown(mouseEvent);
         }
 
         public override void MouseUp(NSEvent mouseEvent)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             if (_effect.HoverStatus == HoverStatus.Entered)
             {
@@ -150,26 +149,26 @@ namespace TouchEffect.Mac
                     ? TouchStatus.Completed
                     : TouchStatus.Canceled;
 
-                _effect.HandleTouch(status);
+                _effect?.HandleTouch(status);
             }
             base.MouseUp(mouseEvent);
         }
 
         public override void MouseDragged(NSEvent mouseEvent)
         {
-            if (_effect.IsDisabled) return;
+            if (_effect?.IsDisabled ?? true) return;
 
             var status = ViewRect.Contains(mouseEvent.LocationInWindow.ToPoint()) ? TouchStatus.Started : TouchStatus.Canceled;
 
             if ((status == TouchStatus.Canceled && _effect.HoverStatus == HoverStatus.Entered) ||
                 (status == TouchStatus.Started && _effect.HoverStatus == HoverStatus.Exited))
             {
-                _effect.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
+                _effect?.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
             }
 
             if (_effect.Status != status)
             {
-                _effect.HandleTouch(status);
+                _effect?.HandleTouch(status);
             }
 
             base.MouseDragged(mouseEvent);

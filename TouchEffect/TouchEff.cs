@@ -941,6 +941,7 @@ namespace TouchEffect
                             effect.IsDisabled = effect != this;
                         }
                     }
+                    ForceUpdateState(false);
                 }
             }
         }
@@ -977,8 +978,7 @@ namespace TouchEffect
         public void RaiseAnimationStarted(TouchState state, int duration)
             => AnimationStarted?.Invoke(Control, new AnimationStartedEventArgs(state, duration));
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void ForceUpdateState(bool animated = true)
+        internal void ForceUpdateState(bool animated = true)
         {
             if (Control == null)
             {
