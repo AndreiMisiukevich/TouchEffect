@@ -270,7 +270,10 @@ namespace TouchEffect.Android
             _rippleColor = _effect.NativeAnimationColor;
             _rippleRadius = _effect.NativeAnimationRadius;
             _ripple.SetColor(GetColorStateList());
-            _ripple.Radius = (int)(View.Context.Resources.DisplayMetrics.Density * _effect.NativeAnimationRadius);
+            if (AndroidOS.Build.VERSION.SdkInt >= AndroidOS.BuildVersionCodes.M)
+            {
+                _ripple.Radius = (int)(View.Context.Resources.DisplayMetrics.Density * _effect.NativeAnimationRadius);
+            }
         }
 
         private ColorStateList GetColorStateList()
