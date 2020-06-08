@@ -110,8 +110,8 @@ If you wish to change Image Source on touch, you should use TouchImage control. 
 ### TouchEff Attached Properties
 Property | Type | Default | Description
 --- | --- | --- | ---
-IsAvailableProperty | `bool` | true | Makes effect available
-ShouldMakeChildrenInputTransparentProperty | `bool` | true | Makes layout's children input trasparent
+IsAvailable | `bool` | true | Makes effect available
+ShouldMakeChildrenInputTransparent | `bool` | true | Makes layout's children input trasparent
 Command | `ICommand` | null | Touch Command handler
 CommandParameter | `object` | null | Touch Command handler parameter
 Status | `TouchStatus` | Completed | Current touch status
