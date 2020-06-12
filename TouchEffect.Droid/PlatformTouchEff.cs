@@ -223,7 +223,7 @@ namespace TouchEffect.Android
         {
             if (_effect?.IsDisabled ?? true) return;
 
-            if (_effect.CanExecute && _effect.NativeAnimation && _viewOverlay.Background is RippleDrawable)
+            if (_effect.CanExecute && _effect.NativeAnimation && _viewOverlay?.Background is RippleDrawable)
             {
                 UpdateRipple();
                 _viewOverlay.BringToFront();
