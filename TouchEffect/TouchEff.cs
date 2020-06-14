@@ -21,6 +21,7 @@ namespace TouchEffect
         {
             _visualManager = new TouchVisualManager();
             StateChanged += (sender, args) => ForceUpdateState();
+            HoverStateChanged += (sender, args) => ForceUpdateState();
         }
 
         internal TouchEff(Func<TouchEff, TouchState, int, CancellationToken, Task> animationTaskGetter) : this()

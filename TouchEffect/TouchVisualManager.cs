@@ -120,12 +120,15 @@ namespace TouchEffect
         internal async void ChangeStateAsync(TouchEff sender, bool animated)
         {
             var state = sender.State;
+            var hoverState = sender.HoverState;
 
             AbortAnimations(sender);
             _animationTokenSource = new CancellationTokenSource();
             var token = _animationTokenSource.Token;
 
             var isToggled = sender.IsToggled;
+
+            UpdateVisualState(sender.Control, state, hoverState);
 
             if (!animated)
             {
@@ -195,6 +198,22 @@ namespace TouchEffect
             }
             ViewExtensions.CancelAnimations(control);
             AnimationExtensions.AbortAnimation(control, ChangeBackgroundColorAnimationName);
+        }
+
+        private void UpdateVisualState(VisualElement visualElement, TouchState touchState, HoverState hoverState)
+        {
+            if (touchState == TouchState.Pressed)
+            {
+                VisualStateManager.GoToState(visualElement, nameof(TouchState.Pressed));
+            }
+            else if (hoverState == HoverState.Hovering)
+            {
+                VisualStateManager.GoToState(visualElement, nameof(HoverState.Hovering));
+            }
+            else
+            {
+                VisualStateManager.GoToState(visualElement, nameof(TouchState.Regular));
+            }
         }
 
         private async Task SetBackgroundColorAsync(TouchEff sender, TouchState state, int duration)
