@@ -4,13 +4,15 @@ namespace TouchEffect.EventArgs
 {
     public class AnimationStartedEventArgs : System.EventArgs
     {
-        public AnimationStartedEventArgs(TouchState state, int duration)
+        public AnimationStartedEventArgs(TouchState touchState, HoverState hoverState, int duration)
         {
-            State = state;
+            State = touchState;
+            HoverState = hoverState;
             Duration = duration;
         }
 
         public TouchState State { get; }
+        public HoverState HoverState { get; }
         public int Duration { get; }
     }
 }

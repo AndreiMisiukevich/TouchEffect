@@ -3,7 +3,6 @@ using TouchEffect.Extensions;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using System.Threading;
-using System.ComponentModel;
 
 namespace TouchEffect
 {
@@ -24,7 +23,6 @@ namespace TouchEffect
                 bindable.GetTouchEff()?.ForceUpdateState();
             });
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly BindableProperty HoveredBackgroundImageSourceProperty = BindableProperty.Create(
             nameof(HoveredBackgroundImageSource),
             typeof(ImageSource),
@@ -55,7 +53,6 @@ namespace TouchEffect
                 bindable.GetTouchEff()?.ForceUpdateState();
             });
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly BindableProperty HoveredBackgroundImageAspectProperty = BindableProperty.Create(
             nameof(HoveredBackgroundImageAspect),
             typeof(Aspect),
@@ -88,7 +85,6 @@ namespace TouchEffect
             set => SetValue(RegularBackgroundImageSourceProperty, value);
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public ImageSource HoveredBackgroundImageSource
         {
             get => GetValue(HoveredBackgroundImageSourceProperty) as ImageSource;
@@ -107,7 +103,6 @@ namespace TouchEffect
             set => SetValue(RegularBackgroundImageAspectProperty, value);
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public Aspect HoveredBackgroundImageAspect
         {
             get => (Aspect)GetValue(HoveredBackgroundImageAspectProperty);
@@ -126,10 +121,11 @@ namespace TouchEffect
             set => SetValue(ShouldSetImageOnAnimationEndProperty, value);
         }
 
-        private async Task GetAnimationTask(TouchEff sender, TouchState state, int duration, CancellationToken token)
+        private async Task GetAnimationTask(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, CancellationToken token)
         {
             var regularBackgroundImageSource = RegularBackgroundImageSource;
             var pressedBackgroundImageSource = PressedBackgroundImageSource;
+            var hoveredBackgroundImageSource = HoveredBackgroundImageSource;
 
             if (regularBackgroundImageSource == null &&
                 pressedBackgroundImageSource == null)
@@ -139,10 +135,15 @@ namespace TouchEffect
 
             var aspect = RegularBackgroundImageAspect;
             var source = regularBackgroundImageSource;
-            if (state == TouchState.Pressed)
+            if (touchState == TouchState.Pressed)
             {
                 aspect = PressedBackgroundImageAspect;
                 source = pressedBackgroundImageSource;
+            }
+            else if (hoverState == HoverState.Hovering)
+            {
+                aspect = HoveredBackgroundImageAspect;
+                source = hoveredBackgroundImageSource;
             }
 
             if (ShouldSetImageOnAnimationEnd)
