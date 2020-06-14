@@ -1,28 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
-             x:Class="TouchEffectSample.TouchFadeViewPage"
-             BackgroundColor="White"
-             Title="TouchFadeViewPage"
-             x:Name="root">
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="TouchEffectSample.TouchFadeViewPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
+    x:Name="root"
+    Title="TouchFadeViewPage"
+    BackgroundColor="White">
     <StackLayout>
-       <ContentView
-            touch:TouchEff.PressedAnimationDuration="800"
-            touch:TouchEff.RegularAnimationDuration="800"
-            touch:TouchEff.PressedScale="0.9"
-            touch:TouchEff.PressedOpacity="0.6"
-            touch:TouchEff.RippleCount="-1"
+        <ContentView
+            Padding="10,5"
             touch:TouchEff.Command="{Binding Command, Source={x:Reference root}}"
-            Padding="10, 5"
+            touch:TouchEff.PressedAnimationDuration="800"
+            touch:TouchEff.PressedOpacity="0.6"
+            touch:TouchEff.PressedScale="0.9"
+            touch:TouchEff.RegularAnimationDuration="800"
+            touch:TouchEff.RippleCount="-1"
             BackgroundColor="Black"
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="CenterAndExpand">
-            
-            <Label Text="CLICK ME" 
-                   TextColor="White" 
-                   FontSize="60"/>
-            
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand">
+            <Label
+                x:Name="ClickMeLabel"
+                FontSize="60"
+                Text="CLICK ME"
+                TextColor="White" />
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="TouchStates">
+                    <VisualState x:Name="Regular" />
+
+                    <VisualState x:Name="Hovering">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="DarkSlateGray" />
+                        </VisualState.Setters>
+                    </VisualState>
+
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter TargetName="ClickMeLabel" Property="Label.TextColor" Value="LightGray" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
         </ContentView>
     </StackLayout>
 </ContentPage>

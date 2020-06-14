@@ -128,6 +128,8 @@ namespace TouchEffect
 
             var isToggled = sender.IsToggled;
 
+            UpdateVisualState(sender.Control, state, hoverState);
+
             if (!animated)
             {
                 if (isToggled.HasValue)
@@ -196,6 +198,17 @@ namespace TouchEffect
             }
             ViewExtensions.CancelAnimations(control);
             AnimationExtensions.AbortAnimation(control, ChangeBackgroundColorAnimationName);
+        }
+
+        private void UpdateVisualState(VisualElement visualElement, TouchState touchState, HoverState hoverState)
+        {
+            var state = touchState == TouchState.Pressed
+                ? nameof(TouchState.Pressed)
+                : hoverState == HoverState.Hovering
+                    ? nameof(HoverState.Hovering)
+                    : nameof(TouchState.Regular);
+
+            VisualStateManager.GoToState(visualElement, state);
         }
 
         private async Task SetBackgroundColorAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
