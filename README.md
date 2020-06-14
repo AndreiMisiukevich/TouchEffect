@@ -118,25 +118,35 @@ Status | `TouchStatus` | Completed | Current touch status
 State | `TouchState` | Regular | Current touch state
 RegularBackgroundColor | `Color` | Default | Background color of regular state
 PressedBackgroundColor | `Color` | Default | Background color of pressed state
+HoveredBackgroundColor | `Color` | Default | Background color of hovered state
 RegularOpacity | `double` | 1.0 | Opacity of regular state
 PressedOpacity | `double` | 1.0 | Opacity of pressed state
+HoveredOpacity | `double` | 1.0 | Opacity of hovered state
 RegularScale | `double` | 1.0 | Scale of regular state
 PressedScale | `double` | 1.0 | Scale of pressed state
+HoveredScale | `double` | 1.0 | Scale of hovered state
 RegularTranslationX | `double` | 0.0 | TranslationX of regular state
 PressedTranslationX | `double` | 0.0 | TranslationX of pressed state
+HoveredTranslationX | `double` | 0.0 | TranslationX of hovered state
 RegularTranslationY | `double` | 0.0 | TranslationY of regular state
 PressedTranslationY | `double` | 0.0 | TranslationY of pressed state
+HoveredTranslationY | `double` | 0.0 | TranslationY of hovered state
 RegularRotation | `double` | 0.0 | Rotation of regular state
 PressedRotation | `double` | 0.0 | Rotation of pressed state
+HoveredRotation | `double` | 0.0 | Rotation of hovered state
 RegularRotationX | `double` | 0.0 | RotationX of regular state
 PressedRotationX | `double` | 0.0 | RotationX of pressed state
+HoveredRotationX | `double` | 0.0 | RotationX of hovered state
 RegularRotationY | `double` | 0.0 | RotationY of regular state
 PressedRotationY | `double` | 0.0 | RotationY of pressed state
+HoveredRotationY | `double` | 0.0 | RotationY of hovered state
 PressedAnimationDuration | `int` | 0 | The duration of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
 PressedAnimationEasing | `Easing` | null | The easing of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
+HoveredAnimationDuration | `int` | 0 | The duration of animation by applying HoveredOpacity and/or HoveredBackgroundColor and/or HoveredScale
+HoveredAnimationEasing | `Easing` | null | The easing of animation by applying HoveredOpacity and/or HoveredBackgroundColor and/or HoveredScale
 RegularAnimationDuration | `int` | 0 | The duration of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
 RegularAnimationEasing | `Easing` | null | The easing of animation by applying RegularOpacity and/or RegularBackgroundColor and/or RegularScale
-RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
+RippleCount | `int` | 0 | This property allows to set ripple of animation (Pressed/Hovered/Regular animation loop). '**0**: disabled'; '**-1**: infinite loop'; '**1, 2, 3 ... n**: Ripple's interations'
 IsToggled | `bool?` | null | This property allows to achieve "switch" behavior. **null** means that feature is disabled and view will return to inital state after touch releasing
 DisallowTouchThreshold | `int` | 0 | Movement threshold for considering **android** touch as canceled
 NativeAnimation | `bool` | false | If native platform touch feedback animations are present (Tilt on UWP, Ripple on Android, Opacity/Color on iOS)
@@ -158,8 +168,10 @@ Property | Type | Default | Description
 --- | --- | --- | ---
 RegularBackgroundImageSource | `ImageSource` | null | Background image source of regular state
 PressedBackgroundImageSource | `ImageSource` | null | Background image source of pressed state
+HoveredBackgroundImageSource | `ImageSource` | null | Background image source of hovered state
 RegularBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of regular state
 PressedBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of pressed state
+HoveredBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of hovered state
 
 **If you want to customize/extend existing controls, you may observe State property via triggers**
 
