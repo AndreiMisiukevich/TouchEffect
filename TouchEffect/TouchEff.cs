@@ -914,7 +914,7 @@ namespace TouchEffect
         public bool CanExecute
             => IsAvailable &&
             Control.IsEnabled &&
-            ((Command?.CanExecute(CommandParameter) ?? false) || Completed != null);
+            (Command?.CanExecute(CommandParameter) ?? true);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public VisualElement Control
