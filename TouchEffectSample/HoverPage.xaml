@@ -1,18 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
-             mc:Ignorable="d"
-             x:Class="TouchEffectSample.HoverPage">
+<ContentPage
+    x:Class="TouchEffectSample.HoverPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
+    mc:Ignorable="d">
     <ContentPage.Content>
         <Grid>
-            <Grid WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="100" BackgroundColor="Black">
-                <Grid.Effects>
-                    <touch:TouchEff HoverStateChanged="TouchEff_HoverStateChanged"/>
-                </Grid.Effects>
-                <Label Text="Hover me" HorizontalOptions="Center" VerticalOptions="Center" TextColor="White"/>
+            <Grid
+                touch:TouchEff.HoveredAnimationDuration="300"
+                touch:TouchEff.HoveredScale="0.9"
+                touch:TouchEff.HoveredOpacity="0.6"
+                touch:TouchEff.HoveredRotation="3"
+                touch:TouchEff.RippleCount="-1"
+                BackgroundColor="Black"
+                HeightRequest="100"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                WidthRequest="100">
+                <Label
+                    HorizontalOptions="Center"
+                    Text="Hover me"
+                    TextColor="White"
+                    VerticalOptions="Center" />
             </Grid>
         </Grid>
     </ContentPage.Content>
