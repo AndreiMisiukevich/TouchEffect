@@ -187,8 +187,15 @@ namespace TouchEffect.UWP
         {
             if ((_effect?.NativeAnimation ?? false) && storyboard != null)
             {
-                storyboard.Stop();
-                storyboard.Begin();
+                try
+                {
+                    storyboard.Stop();
+                    storyboard.Begin();
+                }
+                catch
+                {
+                    // Suppress
+                }
             }
         }
     }
