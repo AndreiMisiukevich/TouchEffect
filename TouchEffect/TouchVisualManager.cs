@@ -311,7 +311,17 @@ namespace TouchEffect
                 easing = sender.HoveredAnimationEasing;
             }
 
-            await sender.Control.ScaleTo(scale, (uint)Abs(duration), easing);
+            var control = sender.Control;
+            var tcs = new TaskCompletionSource<bool>();
+            control.Animate($"{nameof(SetScaleAsync)}{control.Id}", v =>
+            {
+                if (double.IsNaN(v))
+                {
+                    return;
+                }
+                control.Scale = v;
+            }, 16, (uint)Abs(duration), easing, (v, b) => tcs.SetResult(b));
+            await tcs.Task;
         }
 
         private async Task SetTranslationAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
