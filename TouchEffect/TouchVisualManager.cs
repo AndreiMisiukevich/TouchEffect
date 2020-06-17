@@ -320,7 +320,7 @@ namespace TouchEffect
                     return;
                 }
                 control.Scale = v;
-            }, 16, (uint)Abs(duration), easing, (v, b) => tcs.SetResult(b));
+            }, control.Scale, scale, 16, (uint)Abs(duration), easing, (v, b) => tcs.SetResult(b));
             await tcs.Task;
         }
 
