@@ -36,6 +36,20 @@ With this plugin it is also possible to respond to hover events (if the platform
 |Xamarin.Mac|All|
 |Xamarin.UWP|10+|
 
+##### Xamarin.UWP - Build on Release with .NET Native tool chain note
+````cs
+using System.Reflection;
+...
+var assembliesToInclude = new List<Assembly>
+{
+    typeof(PlatformTouchEff).GetTypeInfo().Assembly,
+    ...
+};
+Xamarin.Forms.Forms.Init(e, assembliesToInclude);
+
+TouchEffectPreserver.Preserve();
+````
+
 ## Samples
 The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
 

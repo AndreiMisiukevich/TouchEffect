@@ -5,6 +5,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using TouchEffect.UWP;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace TouchEffectSample.UWP
 {
@@ -41,7 +43,9 @@ namespace TouchEffectSample.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                Xamarin.Forms.Forms.Init(e);
+                var assembliesToInclude = new List<Assembly>();
+                assembliesToInclude.Add(typeof(PlatformTouchEff).GetTypeInfo().Assembly);
+                Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 
                 TouchEffectPreserver.Preserve();
 

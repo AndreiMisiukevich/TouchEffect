@@ -217,8 +217,9 @@ namespace TouchEffect
             var pressedBackgroundColor = sender.PressedBackgroundColor;
             var hoveredBackgroundColor = sender.HoveredBackgroundColor;
 
-            if (regularBackgroundColor == Color.Default &&
-               pressedBackgroundColor == Color.Default)
+            if (regularBackgroundColor == Color.Default && 
+                pressedBackgroundColor == Color.Default &&
+                hoveredBackgroundColor == Color.Default)
             {
                 return;
             }
@@ -280,7 +281,7 @@ namespace TouchEffect
                 opacity = hoveredOpacity;
                 easing = sender.HoveredAnimationEasing;
             }
-
+            
             await sender.Control.FadeTo(opacity, (uint)Abs(duration), easing);
         }
 
@@ -473,7 +474,7 @@ namespace TouchEffect
             }
             duration = duration.AdjustDurationMultiplier(durationMultiplier);
 
-            if (duration <= 0 && Device.RuntimePlatform == Device.Android)
+            if (duration <= 0 && (Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.UWP))
             {
                 duration = 1;
             }
