@@ -21,19 +21,27 @@
   <files>
     <!--Net Standard-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\netstandard2.0\TouchEffect.dll" />
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.pdb" target="lib\netstandard2.0\TouchEffect.pdb" />
     <!--Core PCL-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\portable-win+net45+wp80+win81+wpa81\TouchEffect.dll" />
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.pdb" target="lib\portable-win+net45+wp80+win81+wpa81\TouchEffect.pdb" />
     <!--Xamarin.Android-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\MonoAndroid10\TouchEffect.dll" />
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.pdb" target="lib\MonoAndroid10\TouchEffect.pdb" />
     <file src="TouchEffect.Droid\bin\Release\TouchEffect.Droid.dll" target="lib\MonoAndroid10\TouchEffect.Droid.dll" />
+    <file src="TouchEffect.Droid\bin\Release\TouchEffect.Droid.pdb" target="lib\MonoAndroid10\TouchEffect.Droid.pdb" />
     <!--Xamarin.iOS-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\Xamarin.iOS10\TouchEffect.dll" />
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.pdb" target="lib\Xamarin.iOS10\TouchEffect.pdb" />
     <file src="TouchEffect.iOS\bin\Release\TouchEffect.iOS.dll" target="lib\Xamarin.iOS10\TouchEffect.iOS.dll" />
+    <file src="TouchEffect.iOS\bin\Release\TouchEffect.iOS.pdb" target="lib\Xamarin.iOS10\TouchEffect.iOS.pdb" />
     <!--Windows WinUWP-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\uap\TouchEffect.dll" />
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.pdb" target="lib\uap\TouchEffect.pdb" />
     <file src="TouchEffect.UWP\bin\Release\TouchEffect.UWP.dll" target="lib\uap\TouchEffect.UWP.dll" />
     <!--Xamarin.Mac-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\Xamarin.Mac20\TouchEffect.dll" />
+    <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.pdb" target="lib\Xamarin.Mac20\TouchEffect.pdb" />
     <file src="TouchEffect.Mac\bin\Release\TouchEffect.Mac.dll" target="lib\Xamarin.Mac20\TouchEffect.Mac.dll" />
   </files>
 </package>
