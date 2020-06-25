@@ -1663,6 +1663,7 @@ namespace TouchEffectSample.Droid
 			global::TouchEffect.Droid.Resource.Style.Animation_AppCompat_DropDownUp = global::TouchEffectSample.Droid.Resource.Style.Animation_AppCompat_DropDownUp;
 			global::TouchEffect.Droid.Resource.Style.Animation_AppCompat_Tooltip = global::TouchEffectSample.Droid.Resource.Style.Animation_AppCompat_Tooltip;
 			global::TouchEffect.Droid.Resource.Style.Animation_Design_BottomSheetDialog = global::TouchEffectSample.Droid.Resource.Style.Animation_Design_BottomSheetDialog;
+			global::TouchEffect.Droid.Resource.Style.AppCompatDialogStyle = global::TouchEffectSample.Droid.Resource.Style.AppCompatDialogStyle;
 			global::TouchEffect.Droid.Resource.Style.Base_AlertDialog_AppCompat = global::TouchEffectSample.Droid.Resource.Style.Base_AlertDialog_AppCompat;
 			global::TouchEffect.Droid.Resource.Style.Base_AlertDialog_AppCompat_Light = global::TouchEffectSample.Droid.Resource.Style.Base_AlertDialog_AppCompat_Light;
 			global::TouchEffect.Droid.Resource.Style.Base_Animation_AppCompat_Dialog = global::TouchEffectSample.Droid.Resource.Style.Base_Animation_AppCompat_Dialog;
@@ -1855,6 +1856,8 @@ namespace TouchEffectSample.Droid
 			global::TouchEffect.Droid.Resource.Style.CardView_Dark = global::TouchEffectSample.Droid.Resource.Style.CardView_Dark;
 			global::TouchEffect.Droid.Resource.Style.CardView_Light = global::TouchEffectSample.Droid.Resource.Style.CardView_Light;
 			global::TouchEffect.Droid.Resource.Style.collectionViewStyle = global::TouchEffectSample.Droid.Resource.Style.collectionViewStyle;
+			global::TouchEffect.Droid.Resource.Style.MainTheme = global::TouchEffectSample.Droid.Resource.Style.MainTheme;
+			global::TouchEffect.Droid.Resource.Style.MainTheme_Base = global::TouchEffectSample.Droid.Resource.Style.MainTheme_Base;
 			global::TouchEffect.Droid.Resource.Style.Platform_AppCompat = global::TouchEffectSample.Droid.Resource.Style.Platform_AppCompat;
 			global::TouchEffect.Droid.Resource.Style.Platform_AppCompat_Light = global::TouchEffectSample.Droid.Resource.Style.Platform_AppCompat_Light;
 			global::TouchEffect.Droid.Resource.Style.Platform_MaterialComponents = global::TouchEffectSample.Droid.Resource.Style.Platform_MaterialComponents;
