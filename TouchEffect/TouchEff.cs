@@ -39,6 +39,10 @@ namespace TouchEffect
 
         public event AnimationStartedHandler AnimationStarted;
 
+        //The backdor for https://github.com/AndreiMisiukevich/TouchEffect/issues/71
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public static bool IsForceUpdateStateAnimatedForIsToggledProperty { get; set; }
+
         public static readonly BindableProperty IsAvailableProperty = BindableProperty.CreateAttached(
             nameof(IsAvailable),
             typeof(bool),
@@ -424,7 +428,7 @@ namespace TouchEffect
             BindingMode.TwoWay,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceUpdateState(false);
+                bindable.GetTouchEff()?.ForceUpdateState(IsForceUpdateStateAnimatedForIsToggledProperty);
                 TryGenerateEffect(bindable, oldValue, newValue);
             });
 
