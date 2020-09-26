@@ -118,13 +118,15 @@ namespace TouchEffect.Android
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
         {
+            e.Handled = false;
+
             if (_effect?.IsDisabled ?? true) return;
 
             if (IsAccessibilityMode)
             {
                 return;
             }
-            e.Handled = true;
+
             switch (e.Event.ActionMasked)
             {
                 case MotionEventActions.Down:
@@ -185,9 +187,6 @@ namespace TouchEffect.Android
                 case MotionEventActions.HoverExit:
                     _isHoverSupported = true;
                     _effect?.HandleHover(HoverStatus.Exited);
-                    break;
-                default:
-                    e.Handled = false;
                     break;
             }
         }
