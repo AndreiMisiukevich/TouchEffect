@@ -131,6 +131,7 @@ namespace TouchEffect.UWP
 
             _pressed = false;
             _effect?.HandleTouch(TouchStatus.Canceled);
+            _effect?.HandleUserInteraction(UserInteractionState.Idle);
             _effect?.HandleHover(HoverStatus.Exited);
             AnimateTilt(_pointerUpStoryboard);
         }
@@ -145,6 +146,7 @@ namespace TouchEffect.UWP
             {
                 _effect?.HandleTouch(TouchStatus.Canceled);
             }
+            _effect?.HandleUserInteraction(UserInteractionState.Idle);
             if (_effect.HoverStatus != HoverStatus.Exited)
             {
                 _effect?.HandleHover(HoverStatus.Exited);
@@ -168,6 +170,7 @@ namespace TouchEffect.UWP
                 AnimateTilt(_pointerUpStoryboard);
             }
 
+            _effect?.HandleUserInteraction(UserInteractionState.Idle);
             _pressed = false;
             _intentionalCaptureLoss = true;
         }
@@ -178,6 +181,7 @@ namespace TouchEffect.UWP
 
             _pressed = true;
             Container.CapturePointer(e.Pointer);
+            _effect?.HandleUserInteraction(UserInteractionState.Running);
             _effect?.HandleTouch(TouchStatus.Started);
             AnimateTilt(_pointerDownStoryboard);
             _intentionalCaptureLoss = false;

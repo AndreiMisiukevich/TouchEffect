@@ -10,6 +10,7 @@
     <StackLayout>
         <ContentView
             Padding="10,5"
+            touch:TouchEff.LongPressCommand="{Binding LongPressCommand, Source={x:Reference root}}"
             touch:TouchEff.Command="{Binding Command, Source={x:Reference root}}"
             touch:TouchEff.PressedAnimationDuration="800"
             touch:TouchEff.PressedOpacity="0.6"

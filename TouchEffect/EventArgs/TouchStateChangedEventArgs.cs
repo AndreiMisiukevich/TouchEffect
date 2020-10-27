@@ -10,4 +10,5 @@ namespace TouchEffect.EventArgs
 
         public TouchState State { get; }
     }
+
 }

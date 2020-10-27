@@ -18,11 +18,7 @@ namespace TouchEffect
         private VisualElement _control;
 
         public TouchEff() : base($"{nameof(TouchEffect)}.{nameof(TouchEff)}")
-        {
-            _visualManager = new TouchVisualManager();
-            StateChanged += (sender, args) => ForceUpdateState();
-            HoverStateChanged += (sender, args) => ForceUpdateState();
-        }
+            => _visualManager = new TouchVisualManager();
 
         internal TouchEff(Func<TouchEff, TouchState, HoverState, int, CancellationToken, Task> animationTaskGetter) : this()
             => _visualManager.SetCustomAnimationTask(animationTaskGetter);
@@ -30,6 +26,8 @@ namespace TouchEffect
         public event TEffectStatusChangedHandler StatusChanged;
 
         public event TEffectStateChangedHandler StateChanged;
+
+        public event TEffectUserInteractionStateChangedHandler UserInteractionStateChanged;
 
         public event TEffectHoverStatusChangedHandler HoverStatusChanged;
 
@@ -68,11 +66,33 @@ namespace TouchEffect
             default(ICommand),
             propertyChanged: TryGenerateEffect);
 
+        public static readonly BindableProperty LongPressCommandProperty = BindableProperty.CreateAttached(
+            nameof(LongPressCommand),
+            typeof(ICommand),
+            typeof(TouchEff),
+            default(ICommand),
+            propertyChanged: TryGenerateEffect);
+
         public static readonly BindableProperty CommandParameterProperty = BindableProperty.CreateAttached(
             nameof(CommandParameter),
             typeof(object),
             typeof(TouchEff),
             default(object),
+            propertyChanged: TryGenerateEffect);
+
+
+        public static readonly BindableProperty LongPressCommandParameterProperty = BindableProperty.CreateAttached(
+            nameof(LongPressCommandParameter),
+            typeof(object),
+            typeof(TouchEff),
+            default(object),
+            propertyChanged: TryGenerateEffect);
+
+        public static readonly BindableProperty LongPressDurationProperty = BindableProperty.CreateAttached(
+            nameof(LongPressDuration),
+            typeof(int),
+            typeof(TouchEff),
+            1500,
             propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty StatusProperty = BindableProperty.CreateAttached(
@@ -87,6 +107,13 @@ namespace TouchEffect
             typeof(TouchState),
             typeof(TouchEff),
             TouchState.Regular,
+            BindingMode.OneWayToSource);
+
+        public static readonly BindableProperty UserInteractionStateProperty = BindableProperty.CreateAttached(
+            nameof(UserInteractionState),
+            typeof(UserInteractionState),
+            typeof(TouchEff),
+            UserInteractionState.Idle,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty HoverStatusProperty = BindableProperty.CreateAttached(
@@ -488,12 +515,30 @@ namespace TouchEffect
         public static void SetCommand(BindableObject bindable, ICommand value)
             => bindable.SetValue(CommandProperty, value);
 
+        public static ICommand GetLongPressCommand(BindableObject bindable)
+            => bindable.GetValue(LongPressCommandProperty) as ICommand;
+
+        public static void SetLongPressCommand(BindableObject bindable, ICommand value)
+            => bindable.SetValue(LongPressCommandProperty, value);
+
         public static object GetCommandParameter(BindableObject bindable)
             => bindable.GetValue(CommandParameterProperty);
 
         public static void SetCommandParameter(BindableObject bindable, object value)
             => bindable.SetValue(CommandParameterProperty, value);
 
+        public static object GetLongPressCommandParameter(BindableObject bindable)
+            => bindable.GetValue(LongPressCommandParameterProperty);
+
+        public static void SetLongPressCommandParameter(BindableObject bindable, object value)
+            => bindable.SetValue(LongPressCommandParameterProperty, value);
+
+        public static int GetLongPressDuration(BindableObject bindable)
+            => (int)bindable.GetValue(LongPressDurationProperty);
+
+        public static void SetLongPressDuration(BindableObject bindable, int value)
+            => bindable.SetValue(LongPressDurationProperty, value);
+        
         public static TouchStatus GetStatus(BindableObject bindable)
             => (TouchStatus)bindable.GetValue(StatusProperty);
 
@@ -505,6 +550,12 @@ namespace TouchEffect
 
         public static void SetState(BindableObject bindable, TouchState value)
             => bindable.SetValue(StateProperty, value);
+
+        public static UserInteractionState GetUserInteractionState(BindableObject bindable)
+            => (UserInteractionState)bindable.GetValue(UserInteractionStateProperty);
+
+        public static void SetUserInteractionState(BindableObject bindable, UserInteractionState value)
+            => bindable.SetValue(UserInteractionStateProperty, value);
 
         public static HoverStatus GetHoverStatus(BindableObject bindable)
             => (HoverStatus)bindable.GetValue(HoverStatusProperty);
@@ -710,15 +761,9 @@ namespace TouchEffect
         public static void SetIsToggled(BindableObject bindable, bool? value)
             => bindable.SetValue(IsToggledProperty, value);
 
-        /// <summary>
-        /// Android only
-        /// </summary>
         public static int GetDisallowTouchThreshold(BindableObject bindable)
             => (int)bindable.GetValue(DisallowTouchThresholdProperty);
 
-        /// <summary>
-        /// Android only
-        /// </summary>
         public static void SetDisallowTouchThreshold(BindableObject bindable, int value)
             => bindable.SetValue(DisallowTouchThresholdProperty, value);
 
@@ -768,35 +813,44 @@ namespace TouchEffect
 
         public ICommand Command => GetCommand(Control);
 
+        public ICommand LongPressCommand => GetLongPressCommand(Control);
+
         public object CommandParameter => GetCommandParameter(Control);
+
+        public object LongPressCommandParameter => GetLongPressCommandParameter(Control);
+
+        public int LongPressDuration => GetLongPressDuration(Control);
 
         public TouchStatus Status
         {
             get => GetStatus(Control);
-            set => SetStatus(Control, value);
+            internal set => SetStatus(Control, value);
         }
 
         public TouchState State
         {
             get => GetState(Control);
-            set => SetState(Control, value);
+            internal set => SetState(Control, value);
+        }
+
+        public UserInteractionState UserInteractionState
+        {
+            get => GetUserInteractionState(Control);
+            internal set => SetUserInteractionState(Control, value);
         }
 
         public HoverStatus HoverStatus
         {
             get => GetHoverStatus(Control);
-            set => SetHoverStatus(Control, value);
+            internal set => SetHoverStatus(Control, value);
         }
 
         public HoverState HoverState
         {
             get => GetHoverState(Control);
-            set => SetHoverState(Control, value);
+            internal set => SetHoverState(Control, value);
         }
 
-        /// <summary>
-        /// Android only
-        /// </summary>
         public int DisallowTouchThreshold => GetDisallowTouchThreshold(Control);
 
         public bool NativeAnimation => GetNativeAnimation(Control);
@@ -872,7 +926,7 @@ namespace TouchEffect
         public bool? IsToggled
         {
             get => GetIsToggled(Control);
-            set => SetIsToggled(Control, value);
+            internal set => SetIsToggled(Control, value);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -916,12 +970,30 @@ namespace TouchEffect
             => _visualManager.HandleTouch(this, status);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
+        public void HandleUserInteraction(UserInteractionState userInteractionState)
+        {
+            if (UserInteractionState != userInteractionState)
+            {
+                UserInteractionState = userInteractionState;
+                RaiseUserInteractionStateChanged();
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void HandleHover(HoverStatus status)
             => _visualManager.HandleHover(this, status);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseStateChanged()
-            => StateChanged?.Invoke(Control, new TouchStateChangedEventArgs(State));
+        {
+            ForceUpdateState();
+            HandleLongPress();
+            StateChanged?.Invoke(Control, new TouchStateChangedEventArgs(State));
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void RaiseUserInteractionStateChanged()
+            => UserInteractionStateChanged?.Invoke(Control, new UserInteractionStateChangedEventArgs(UserInteractionState));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseStatusChanged()
@@ -929,7 +1001,10 @@ namespace TouchEffect
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseHoverStateChanged()
-            => HoverStateChanged?.Invoke(Control, new HoverStateChangedEventArgs(HoverState));
+        {
+            ForceUpdateState();
+            HoverStateChanged?.Invoke(Control, new HoverStateChangedEventArgs(HoverState));
+        }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseHoverStatusChanged()
@@ -950,6 +1025,15 @@ namespace TouchEffect
                 return;
             }
             _visualManager.ChangeStateAsync(this, animated);
+        }
+
+        internal void HandleLongPress()
+        {
+            if (Control == null)
+            {
+                return;
+            }
+            _visualManager.HandleLongPress(this);
         }
 
         private void SetChildrenInputTransparent(bool value)

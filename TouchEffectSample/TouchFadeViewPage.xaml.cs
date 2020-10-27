@@ -10,6 +10,11 @@ namespace TouchEffectSample
             InitializeComponent();
         }
 
+        public ICommand LongPressCommand { get; } = new Command(() =>
+        {
+            Application.Current.MainPage.DisplayAlert("Long Press", ":)", "OK");
+        });
+
         public ICommand Command { get; } = new Command(() =>
         {
             Application.Current.MainPage.DisplayAlert("Thank you", ":)", "OK");

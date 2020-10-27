@@ -134,6 +134,7 @@ namespace TouchEffect.Mac
         {
             if (_effect?.IsDisabled ?? true) return;
 
+            _effect?.HandleUserInteraction(UserInteractionState.Running);
             _effect?.HandleTouch(TouchStatus.Started);
             base.MouseDown(mouseEvent);
         }
@@ -151,6 +152,8 @@ namespace TouchEffect.Mac
 
                 _effect?.HandleTouch(status);
             }
+            _effect?.HandleUserInteraction(UserInteractionState.Idle);
+
             base.MouseUp(mouseEvent);
         }
 
