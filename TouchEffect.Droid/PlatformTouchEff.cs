@@ -58,14 +58,14 @@ namespace TouchEffect.Android
             _effect.Control = Element as VisualElement;
 
             View.Touch += OnTouch;
+            UpdateClickHandler();
 
             _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
             if (_accessibilityManager != null)
             {
-                _accessibilityManager.AccessibilityStateChange += OnAccessibilityChanged;
-                _accessibilityManager.TouchExplorationStateChange += OnAccessibilityChanged;
+                _accessibilityManager.AccessibilityStateChange += OnAccessibilityStateChange; ;
+                _accessibilityManager.TouchExplorationStateChange += OnTouchExplorationStateChange; ;
             }
-            OnAccessibilityChanged(_accessibilityManager, System.EventArgs.Empty);
 
             if (_effect.NativeAnimation && Group != null && AndroidOS.Build.VERSION.SdkInt >= AndroidOS.BuildVersionCodes.Lollipop)
             {
@@ -93,8 +93,8 @@ namespace TouchEffect.Android
             {
                 if (_accessibilityManager != null)
                 {
-                    _accessibilityManager.AccessibilityStateChange -= OnAccessibilityChanged;
-                    _accessibilityManager.TouchExplorationStateChange -= OnAccessibilityChanged;
+                    _accessibilityManager.AccessibilityStateChange -= OnAccessibilityStateChange;
+                    _accessibilityManager.TouchExplorationStateChange -= OnTouchExplorationStateChange;
                     _accessibilityManager = null;
                 }
 
@@ -134,11 +134,17 @@ namespace TouchEffect.Android
             if (args.PropertyName == TouchEff.IsAvailableProperty.PropertyName ||
                 args.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
             {
-                OnAccessibilityChanged(_accessibilityManager, System.EventArgs.Empty);
+                UpdateClickHandler();
             }
         }
 
-        private void OnAccessibilityChanged(object sender, System.EventArgs e)
+        private void OnTouchExplorationStateChange(object sender, AccessibilityManager.TouchExplorationStateChangeEventArgs e)
+            => UpdateClickHandler();
+
+        private void OnAccessibilityStateChange(object sender, AccessibilityManager.AccessibilityStateChangeEventArgs e)
+            => UpdateClickHandler();
+
+        private void UpdateClickHandler()
         {
             View.Click -= OnClick;
             if (IsAccessibilityMode || (_effect.IsAvailable && _effect.Control.IsEnabled))
