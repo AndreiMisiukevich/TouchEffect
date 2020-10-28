@@ -16,6 +16,7 @@ using static System.Math;
 using Android.Views.Accessibility;
 using Android.Content;
 using AndroidOS = Android.OS;
+using System.ComponentModel;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -56,10 +57,15 @@ namespace TouchEffect.Android
 
             _effect.Control = Element as VisualElement;
 
-            _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
-
             View.Touch += OnTouch;
-            View.Click += OnClick;
+
+            _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
+            if (_accessibilityManager != null)
+            {
+                _accessibilityManager.AccessibilityStateChange += OnAccessibilityChanged;
+                _accessibilityManager.TouchExplorationStateChange += OnAccessibilityChanged;
+            }
+            OnAccessibilityChanged(_accessibilityManager, System.EventArgs.Empty);
 
             if (_effect.NativeAnimation && Group != null && AndroidOS.Build.VERSION.SdkInt >= AndroidOS.BuildVersionCodes.Lollipop)
             {
@@ -85,6 +91,13 @@ namespace TouchEffect.Android
             if (_effect?.Control == null) return;
             try
             {
+                if (_accessibilityManager != null)
+                {
+                    _accessibilityManager.AccessibilityStateChange -= OnAccessibilityChanged;
+                    _accessibilityManager.TouchExplorationStateChange -= OnAccessibilityChanged;
+                    _accessibilityManager = null;
+                }
+
                 if (View != null)
                 {
                     View.LayoutChange -= LayoutChange;
@@ -92,7 +105,6 @@ namespace TouchEffect.Android
                     View.Click -= OnClick;
                 }
 
-                _accessibilityManager = null;
                 _effect.Control = null;
                 _effect = null;
 
@@ -114,6 +126,26 @@ namespace TouchEffect.Android
                 //suppress exception
             }
             _isHoverSupported = false;
+        }
+
+        protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
+        {
+            base.OnElementPropertyChanged(args);
+            if (args.PropertyName == TouchEff.IsAvailableProperty.PropertyName ||
+                args.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
+            {
+                OnAccessibilityChanged(_accessibilityManager, System.EventArgs.Empty);
+            }
+        }
+
+        private void OnAccessibilityChanged(object sender, System.EventArgs e)
+        {
+            View.Click -= OnClick;
+            if (IsAccessibilityMode || (_effect.IsAvailable && _effect.Control.IsEnabled))
+            {
+                View.Click += OnClick;
+                return;
+            }
         }
 
         private void OnTouch(object sender, AView.TouchEventArgs e)
