@@ -944,7 +944,7 @@ namespace TouchEffect
                 if (_control != null)
                 {
                     IsUsed = false;
-                    _visualManager.SetCustomAnimationTask(null);
+                    _visualManager.Reset();
                     SetChildrenInputTransparent(false);
                 }
                 _visualManager.AbortAnimations(this);

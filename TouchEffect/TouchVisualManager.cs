@@ -14,6 +14,8 @@ namespace TouchEffect
 
         private const int AnimationProgressDelay = 10;
 
+        private Color _defaultBackgroundColor;
+
         private CancellationTokenSource _longPressTokenSource;
 
         private CancellationTokenSource _animationTokenSource;
@@ -198,6 +200,12 @@ namespace TouchEffect
         internal void SetCustomAnimationTask(Func<TouchEff, TouchState, HoverState, int, CancellationToken, Task> animationTaskGetter)
             => _customAnimationTaskGetter = animationTaskGetter;
 
+        internal void Reset()
+        {
+            SetCustomAnimationTask(null);
+            _defaultBackgroundColor = default;
+        }
+
         internal void OnTapped(TouchEff sender)
         {
             if (!sender.CanExecute || (sender.LongPressCommand != null && sender.UserInteractionState == UserInteractionState.Idle))
@@ -255,21 +263,24 @@ namespace TouchEffect
                 return;
             }
 
-            var color = regularBackgroundColor;
+            var control = sender.Control;
+            if (_defaultBackgroundColor == default)
+                _defaultBackgroundColor = control.BackgroundColor;
+
+            var color = GetBackgroundColor(regularBackgroundColor);
             var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
-                color = pressedBackgroundColor;
+                color = GetBackgroundColor(pressedBackgroundColor);
                 easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
-                color = hoveredBackgroundColor;
+                color = GetBackgroundColor(hoveredBackgroundColor);
                 easing = sender.HoveredAnimationEasing;
             }
 
-            var control = sender.Control;
             if (duration <= 0)
             {
                 control.BackgroundColor = color;
@@ -486,6 +497,11 @@ namespace TouchEffect
             await sender.Control.RotateYTo(rotationY, (uint)Abs(duration), easing);
         }
 
+        private Color GetBackgroundColor(Color color)
+            => color != Color.Default
+                ? color
+                : _defaultBackgroundColor;
+
         private Task GetAnimationTask(TouchEff sender, TouchState touchState, HoverState hoverState, double? durationMultiplier = null)
         {
             if (sender.Control == null)
@@ -505,7 +521,9 @@ namespace TouchEffect
             }
             duration = duration.AdjustDurationMultiplier(durationMultiplier);
 
-            if (duration <= 0 && (Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.UWP))
+            if (duration <= 0 &&
+                Device.RuntimePlatform != Device.iOS &&
+                Device.RuntimePlatform != Device.macOS)
             {
                 duration = 1;
             }
