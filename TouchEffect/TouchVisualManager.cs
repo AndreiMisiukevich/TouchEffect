@@ -203,7 +203,7 @@ namespace TouchEffect
         internal void Reset()
         {
             SetCustomAnimationTask(null);
-            _defaultBackgroundColor = default;
+            _defaultBackgroundColor = default(Color);
         }
 
         internal void OnTapped(TouchEff sender)
@@ -264,7 +264,7 @@ namespace TouchEffect
             }
 
             var control = sender.Control;
-            if (_defaultBackgroundColor == default)
+            if (_defaultBackgroundColor == default(Color))
                 _defaultBackgroundColor = control.BackgroundColor;
 
             var color = GetBackgroundColor(regularBackgroundColor);
