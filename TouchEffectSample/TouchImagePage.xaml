@@ -22,6 +22,7 @@
                         <On Platform="Android" Value="button" />
                         <On Platform="macOS" Value="button" />
                         <On Platform="UWP" Value="Assets/button.png" />
+                        <On Platform="Tizen" Value="button.png" />
                     </OnPlatform.Platforms>
                 </OnPlatform>
             </touch:TouchImage.RegularBackgroundImageSource>
@@ -32,6 +33,7 @@
                         <On Platform="Android" Value="button_pressed" />
                         <On Platform="macOS" Value="button_pressed" />
                         <On Platform="UWP" Value="Assets/button_pressed.png" />
+                        <On Platform="Tizen" Value="button_pressed.png" />
                     </OnPlatform.Platforms>
                 </OnPlatform>
             </touch:TouchImage.PressedBackgroundImageSource>

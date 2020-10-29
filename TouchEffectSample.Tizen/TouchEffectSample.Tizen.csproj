@@ -1,0 +1,14 @@
+﻿<Project Sdk="Tizen.NET.Sdk/1.0.9">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>tizen40</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TouchEffect.Tizen\TouchEffect.Tizen.csproj" />
+    <ProjectReference Include="..\TouchEffectSample\TouchEffectSample.csproj" />
+    <ProjectReference Include="..\TouchEffect\TouchEffect.csproj" />
+  </ItemGroup>
+
+</Project>
