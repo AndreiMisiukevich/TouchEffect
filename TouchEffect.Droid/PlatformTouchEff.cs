@@ -17,6 +17,7 @@ using Android.Views.Accessibility;
 using Android.Content;
 using AndroidOS = Android.OS;
 using System.ComponentModel;
+using Java.Interop;
 
 [assembly: ResolutionGroupName(nameof(TouchEffect))]
 [assembly: ExportEffect(typeof(PlatformTouchEff), nameof(TouchEff))]
@@ -28,6 +29,7 @@ namespace TouchEffect.Android
         public static void Preserve() { }
 
         private AccessibilityManager _accessibilityManager;
+        private AccessibilityListener _accessibilityListener;
         private TouchEff _effect;
         private bool _isHoverSupported;
         private RippleDrawable _ripple;
@@ -63,8 +65,9 @@ namespace TouchEffect.Android
             _accessibilityManager = View.Context.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
             if (_accessibilityManager != null)
             {
-                _accessibilityManager.AccessibilityStateChange += OnAccessibilityStateChange; ;
-                _accessibilityManager.TouchExplorationStateChange += OnTouchExplorationStateChange; ;
+                _accessibilityListener = new AccessibilityListener(this);
+                _accessibilityManager.AddAccessibilityStateChangeListener(_accessibilityListener);
+                _accessibilityManager.AddTouchExplorationStateChangeListener(_accessibilityListener);
             }
 
             if (_effect.NativeAnimation && Group != null && AndroidOS.Build.VERSION.SdkInt >= AndroidOS.BuildVersionCodes.Lollipop)
@@ -93,8 +96,10 @@ namespace TouchEffect.Android
             {
                 if (_accessibilityManager != null)
                 {
-                    _accessibilityManager.AccessibilityStateChange -= OnAccessibilityStateChange;
-                    _accessibilityManager.TouchExplorationStateChange -= OnTouchExplorationStateChange;
+                    _accessibilityManager.RemoveAccessibilityStateChangeListener(_accessibilityListener);
+                    _accessibilityManager.RemoveTouchExplorationStateChangeListener(_accessibilityListener);
+                    _accessibilityListener.Dispose();
+                    _accessibilityManager = null;
                     _accessibilityManager = null;
                 }
 
@@ -137,12 +142,6 @@ namespace TouchEffect.Android
                 UpdateClickHandler();
             }
         }
-
-        private void OnTouchExplorationStateChange(object sender, AccessibilityManager.TouchExplorationStateChangeEventArgs e)
-            => UpdateClickHandler();
-
-        private void OnAccessibilityStateChange(object sender, AccessibilityManager.AccessibilityStateChangeEventArgs e)
-            => UpdateClickHandler();
 
         private void UpdateClickHandler()
         {
@@ -335,6 +334,22 @@ namespace TouchEffect.Android
             if (group == null || (Group as IVisualElementRenderer)?.Element == null) return;
             _viewOverlay.Right = group.Width;
             _viewOverlay.Bottom = group.Height;
+        }
+
+        private sealed class AccessibilityListener : Java.Lang.Object,
+                                             AccessibilityManager.IAccessibilityStateChangeListener,
+                                             AccessibilityManager.ITouchExplorationStateChangeListener
+        {
+            private readonly PlatformTouchEff _platformTouchEff;
+
+            internal AccessibilityListener(PlatformTouchEff platformTouchEff)
+                => _platformTouchEff = platformTouchEff;
+
+            public void OnAccessibilityStateChanged(bool enabled)
+                => _platformTouchEff.UpdateClickHandler();
+
+            public void OnTouchExplorationStateChanged(bool enabled)
+                => _platformTouchEff.UpdateClickHandler();
         }
     }
 }
