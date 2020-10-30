@@ -51,7 +51,7 @@
     <!--Tizen-->
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.dll" target="lib\tizen40\TouchEffect.dll" />
     <file src="TouchEffect\bin\Release\netstandard2.0\TouchEffect.pdb" target="lib\tizen40\TouchEffect.pdb" />
-    <file src="TouchEffect.Tizen\bin\Release\TouchEffect.Tizen.dll" target="lib\tizen40\TouchEffect.Tizen.dll" />
-    <file src="TouchEffect.Tizen\bin\Release\TouchEffect.Tizen.pdb" target="lib\tizen40\TouchEffect.Tizen.pdb" />
+    <file src="TouchEffect.Tizen\bin\Release\tizen40\TouchEffect.Tizen.dll" target="lib\tizen40\TouchEffect.Tizen.dll" />
+    <file src="TouchEffect.Tizen\bin\Release\tizen40\TouchEffect.Tizen.pdb" target="lib\tizen40\TouchEffect.Tizen.pdb" />
   </files>
 </package>
