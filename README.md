@@ -35,6 +35,7 @@ With this plugin it is also possible to respond to hover events (if the platform
 |Xamarin.Android|15+|
 |Xamarin.Mac|All|
 |Xamarin.UWP|10+|
+|Tizen.NET|4.0+|
 
 ##### Xamarin.UWP - Build on Release with .NET Native tool chain note
 ````cs
