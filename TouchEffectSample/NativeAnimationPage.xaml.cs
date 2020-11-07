@@ -21,5 +21,10 @@ namespace TouchEffectSample
         {
             Application.Current.MainPage.DisplayAlert("Tap!", "The Completed event was fired", "Cancel");
         }
+
+        private void RemoveEffect(VisualElement sender, TouchEffect.EventArgs.TouchCompletedEventArgs args)
+        {
+            removeEffectStack.Effects.Clear();
+        }
     }
 }

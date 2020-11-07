@@ -1624,7 +1624,6 @@ namespace TouchEffectSample.Droid
 			global::TouchEffect.Droid.Resource.String.fab_transformation_scrim_behavior = global::TouchEffectSample.Droid.Resource.String.fab_transformation_scrim_behavior;
 			global::TouchEffect.Droid.Resource.String.fab_transformation_sheet_behavior = global::TouchEffectSample.Droid.Resource.String.fab_transformation_sheet_behavior;
 			global::TouchEffect.Droid.Resource.String.hide_bottom_view_on_scroll_behavior = global::TouchEffectSample.Droid.Resource.String.hide_bottom_view_on_scroll_behavior;
-			global::TouchEffect.Droid.Resource.String.library_name = global::TouchEffectSample.Droid.Resource.String.library_name;
 			global::TouchEffect.Droid.Resource.String.mr_button_content_description = global::TouchEffectSample.Droid.Resource.String.mr_button_content_description;
 			global::TouchEffect.Droid.Resource.String.mr_cast_button_connected = global::TouchEffectSample.Droid.Resource.String.mr_cast_button_connected;
 			global::TouchEffect.Droid.Resource.String.mr_cast_button_connecting = global::TouchEffectSample.Droid.Resource.String.mr_cast_button_connecting;

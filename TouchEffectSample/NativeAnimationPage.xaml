@@ -78,6 +78,12 @@
                     </Grid>
                 </Grid>
             </StackLayout>
+            <StackLayout x:Name="removeEffectStack" Padding="24" BackgroundColor="LightGray" HorizontalOptions="Fill" toucheff:TouchEff.NativeAnimation="True">
+                <Label TextColor="Black" HorizontalTextAlignment="Center" Text="Remove effect" />
+                <StackLayout.Effects>
+                    <toucheff:TouchEff Completed="RemoveEffect" />
+                </StackLayout.Effects>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
