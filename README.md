@@ -27,7 +27,7 @@ With this plugin it is also possible to respond to hover events (if the platform
 ## Setup
 * Available on NuGet: [TouchView](http://www.nuget.org/packages/TouchView) [![NuGet](https://img.shields.io/nuget/v/TouchView.svg?label=NuGet)](https://www.nuget.org/packages/TouchView)
 * Add nuget package to your Xamarin.Forms .netStandard/PCL project and to your platform-specific projects (iOS and Android)
-* Add *TouchEffectPreserver.Preserve()* line to your AppDelegate and MainActivity (preserve from linker)
+* Add `TouchEffectPreserver.Preserve()` line to your AppDelegate and MainActivity (preserve from linker)
 
 |Platform|Version|
 | ------------------- | ------------------- |
