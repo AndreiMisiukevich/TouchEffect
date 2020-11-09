@@ -152,7 +152,7 @@ namespace TouchEffect.iOS
             _effect.HandleTouch(status);
             if (userInteractionState.HasValue)
             {
-                _effect.HandleUserInteraction(userInteractionState.Value);
+                _effect?.HandleUserInteraction(userInteractionState.Value);
             }
 
             if (_effect == null || !_effect.NativeAnimation || !_effect.CanExecute)

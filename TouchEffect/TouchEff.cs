@@ -20,7 +20,7 @@ namespace TouchEffect
         public TouchEff() : base($"{nameof(TouchEffect)}.{nameof(TouchEff)}")
             => _visualManager = new TouchVisualManager();
 
-        internal TouchEff(Func<TouchEff, TouchState, HoverState, int, CancellationToken, Task> animationTaskGetter) : this()
+        internal TouchEff(Func<TouchEff, TouchState, HoverState, int, Easing, CancellationToken, Task> animationTaskGetter) : this()
             => _visualManager.SetCustomAnimationTask(animationTaskGetter);
 
         public event TEffectStatusChangedHandler StatusChanged;
@@ -38,7 +38,7 @@ namespace TouchEffect
         public event AnimationStartedHandler AnimationStarted;
 
         //The backdor for https://github.com/AndreiMisiukevich/TouchEffect/issues/71
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool IsForceUpdateStateAnimatedForIsToggledProperty { get; set; }
 
         public static readonly BindableProperty IsAvailableProperty = BindableProperty.CreateAttached(
@@ -79,7 +79,6 @@ namespace TouchEffect
             typeof(TouchEff),
             default(object),
             propertyChanged: TryGenerateEffect);
-
 
         public static readonly BindableProperty LongPressCommandParameterProperty = BindableProperty.CreateAttached(
             nameof(LongPressCommandParameter),
@@ -394,6 +393,20 @@ namespace TouchEffect
                 TryGenerateEffect(bindable, oldValue, newValue);
             });
 
+        public static readonly BindableProperty AnimationDurationProperty = BindableProperty.CreateAttached(
+            nameof(AnimationDuration),
+            typeof(int),
+            typeof(TouchEff),
+            default(int),
+            propertyChanged: TryGenerateEffect);
+
+        public static readonly BindableProperty AnimationEasingProperty = BindableProperty.CreateAttached(
+            nameof(AnimationEasing),
+            typeof(Easing),
+            typeof(TouchEff),
+            null,
+            propertyChanged: TryGenerateEffect);
+
         public static readonly BindableProperty PressedAnimationDurationProperty = BindableProperty.CreateAttached(
             nameof(PressedAnimationDuration),
             typeof(int),
@@ -415,18 +428,18 @@ namespace TouchEffect
             default(int),
             propertyChanged: TryGenerateEffect);
 
-        public static readonly BindableProperty HoveredAnimationDurationProperty = BindableProperty.CreateAttached(
-            nameof(HoveredAnimationDuration),
-            typeof(int),
-            typeof(TouchEff),
-            default(int),
-            propertyChanged: TryGenerateEffect);
-
         public static readonly BindableProperty RegularAnimationEasingProperty = BindableProperty.CreateAttached(
             nameof(RegularAnimationEasing),
             typeof(Easing),
             typeof(TouchEff),
             null,
+            propertyChanged: TryGenerateEffect);
+
+        public static readonly BindableProperty HoveredAnimationDurationProperty = BindableProperty.CreateAttached(
+            nameof(HoveredAnimationDuration),
+            typeof(int),
+            typeof(TouchEff),
+            default(int),
             propertyChanged: TryGenerateEffect);
 
         public static readonly BindableProperty HoveredAnimationEasingProperty = BindableProperty.CreateAttached(
@@ -459,9 +472,6 @@ namespace TouchEffect
                 TryGenerateEffect(bindable, oldValue, newValue);
             });
 
-        /// <summary>
-        /// Android only
-        /// </summary>
         public static readonly BindableProperty DisallowTouchThresholdProperty = BindableProperty.CreateAttached(
             nameof(DisallowTouchThreshold),
             typeof(int),
@@ -713,23 +723,35 @@ namespace TouchEffect
         public static void SetPressedRotationY(BindableObject bindable, double value)
             => bindable.SetValue(PressedRotationYProperty, value);
 
+        public static int GetAnimationDuration(BindableObject bindable)
+            => (int)bindable.GetValue(AnimationDurationProperty);
+
+        public static void SetAnimationDuration(BindableObject bindable, int value)
+            => bindable.SetValue(AnimationDurationProperty, value);
+
+        public static Easing GetAnimationEasing(BindableObject bindable)
+            => bindable.GetValue(AnimationEasingProperty) as Easing;
+
+        public static void SetAnimationEasing(BindableObject bindable, Easing value)
+            => bindable.SetValue(AnimationEasingProperty, value);
+
+        public static int GetPressedAnimationDuration(BindableObject bindable)
+           => (int)bindable.GetValue(PressedAnimationDurationProperty);
+
+        public static void SetPressedAnimationDuration(BindableObject bindable, int value)
+            => bindable.SetValue(PressedAnimationDurationProperty, value);
+
+        public static Easing GetPressedAnimationEasing(BindableObject bindable)
+            => bindable.GetValue(PressedAnimationEasingProperty) as Easing;
+
+        public static void SetPressedAnimationEasing(BindableObject bindable, Easing value)
+            => bindable.SetValue(PressedAnimationEasingProperty, value);
+
         public static int GetRegularAnimationDuration(BindableObject bindable)
             => (int)bindable.GetValue(RegularAnimationDurationProperty);
 
         public static void SetRegularAnimationDuration(BindableObject bindable, int value)
             => bindable.SetValue(RegularAnimationDurationProperty, value);
-
-        public static int GetHoveredAnimationDuration(BindableObject bindable)
-            => (int)bindable.GetValue(HoveredAnimationDurationProperty);
-
-        public static void SetHoveredAnimationDuration(BindableObject bindable, int value)
-            => bindable.SetValue(HoveredAnimationDurationProperty, value);
-
-        public static int GetPressedAnimationDuration(BindableObject bindable)
-            => (int)bindable.GetValue(PressedAnimationDurationProperty);
-
-        public static void SetPressedAnimationDuration(BindableObject bindable, int value)
-            => bindable.SetValue(PressedAnimationDurationProperty, value);
 
         public static Easing GetRegularAnimationEasing(BindableObject bindable)
             => bindable.GetValue(RegularAnimationEasingProperty) as Easing;
@@ -737,17 +759,17 @@ namespace TouchEffect
         public static void SetRegularAnimationEasing(BindableObject bindable, Easing value)
             => bindable.SetValue(RegularAnimationEasingProperty, value);
 
+        public static int GetHoveredAnimationDuration(BindableObject bindable)
+            => (int)bindable.GetValue(HoveredAnimationDurationProperty);
+
+        public static void SetHoveredAnimationDuration(BindableObject bindable, int value)
+            => bindable.SetValue(HoveredAnimationDurationProperty, value);
+
         public static Easing GetHoveredAnimationEasing(BindableObject bindable)
             => bindable.GetValue(HoveredAnimationEasingProperty) as Easing;
 
         public static void SetHoveredAnimationEasing(BindableObject bindable, Easing value)
             => bindable.SetValue(HoveredAnimationEasingProperty, value);
-
-        public static Easing GetPressedAnimationEasing(BindableObject bindable)
-            => bindable.GetValue(PressedAnimationEasingProperty) as Easing;
-
-        public static void SetPressedAnimationEasing(BindableObject bindable, Easing value)
-            => bindable.SetValue(PressedAnimationEasingProperty, value);
 
         public static int GetRippleCount(BindableObject bindable)
             => (int)bindable.GetValue(RippleCountProperty);
@@ -909,15 +931,19 @@ namespace TouchEffect
 
         public double PressedRotationY => GetPressedRotationY(Control);
 
+        public int AnimationDuration => GetAnimationDuration(Control);
+
+        public Easing AnimationEasing => GetAnimationEasing(Control);
+
         public int PressedAnimationDuration => GetPressedAnimationDuration(Control);
 
         public Easing PressedAnimationEasing => GetPressedAnimationEasing(Control);
 
         public int RegularAnimationDuration => GetRegularAnimationDuration(Control);
 
-        public int HoveredAnimationDuration => GetHoveredAnimationDuration(Control);
-
         public Easing RegularAnimationEasing => GetRegularAnimationEasing(Control);
+
+        public int HoveredAnimationDuration => GetHoveredAnimationDuration(Control);
 
         public Easing HoveredAnimationEasing => GetHoveredAnimationEasing(Control);
 

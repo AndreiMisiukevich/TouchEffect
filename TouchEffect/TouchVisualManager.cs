@@ -20,7 +20,7 @@ namespace TouchEffect
 
         private CancellationTokenSource _animationTokenSource;
 
-        private Func<TouchEff, TouchState, HoverState, int, CancellationToken, Task> _customAnimationTaskGetter;
+        private Func<TouchEff, TouchState, HoverState, int, Easing, CancellationToken, Task> _customAnimationTaskGetter;
 
         private double? _durationMultiplier;
 
@@ -197,7 +197,7 @@ namespace TouchEffect
             });
         }
 
-        internal void SetCustomAnimationTask(Func<TouchEff, TouchState, HoverState, int, CancellationToken, Task> animationTaskGetter)
+        internal void SetCustomAnimationTask(Func<TouchEff, TouchState, HoverState, int, Easing, CancellationToken, Task> animationTaskGetter)
             => _customAnimationTaskGetter = animationTaskGetter;
 
         internal void Reset()
@@ -219,6 +219,8 @@ namespace TouchEffect
         internal void AbortAnimations(TouchEff sender)
         {
             _animationTokenSource?.Cancel();
+            _animationTokenSource?.Dispose();
+            _animationTokenSource = null;
             var control = sender.Control;
             if (control == null)
             {
@@ -250,7 +252,7 @@ namespace TouchEffect
             VisualStateManager.GoToState(visualElement, state);
         }
 
-        private async Task SetBackgroundColorAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
+        private async Task SetBackgroundColorAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
         {
             var regularBackgroundColor = sender.RegularBackgroundColor;
             var pressedBackgroundColor = sender.PressedBackgroundColor;
@@ -268,17 +270,14 @@ namespace TouchEffect
                 _defaultBackgroundColor = control.BackgroundColor;
 
             var color = GetBackgroundColor(regularBackgroundColor);
-            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 color = GetBackgroundColor(pressedBackgroundColor);
-                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 color = GetBackgroundColor(hoveredBackgroundColor);
-                easing = sender.HoveredAnimationEasing;
             }
 
             if (duration <= 0)
@@ -297,7 +296,7 @@ namespace TouchEffect
             await animationCompletionSource.Task;
         }
 
-        private async Task SetOpacityAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
+        private async Task SetOpacityAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
         {
             var regularOpacity = sender.RegularOpacity;
             var pressedOpacity = sender.PressedOpacity;
@@ -311,23 +310,20 @@ namespace TouchEffect
             }
 
             var opacity = regularOpacity;
-            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 opacity = pressedOpacity;
-                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 opacity = hoveredOpacity;
-                easing = sender.HoveredAnimationEasing;
             }
 
             await sender.Control.FadeTo(opacity, (uint)Abs(duration), easing);
         }
 
-        private async Task SetScaleAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
+        private async Task SetScaleAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
         {
             var regularScale = sender.RegularScale;
             var pressedScale = sender.PressedScale;
@@ -341,17 +337,14 @@ namespace TouchEffect
             }
 
             var scale = regularScale;
-            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 scale = pressedScale;
-                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 scale = hoveredScale;
-                easing = sender.HoveredAnimationEasing;
             }
 
             var control = sender.Control;
@@ -367,7 +360,7 @@ namespace TouchEffect
             await tcs.Task;
         }
 
-        private async Task SetTranslationAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
+        private async Task SetTranslationAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
         {
             var regularTranslationX = sender.RegularTranslationX;
             var pressedTranslationX = sender.PressedTranslationX;
@@ -389,25 +382,22 @@ namespace TouchEffect
 
             var translationX = regularTranslationX;
             var translationY = regularTranslationY;
-            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 translationX = pressedTranslationX;
                 translationY = pressedTranslationY;
-                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 translationX = hoveredTranslationX;
                 translationY = hoveredTranslationY;
-                easing = sender.HoveredAnimationEasing;
             }
 
             await sender.Control.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
+        private async Task SetRotationAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
         {
             var regularRotation = sender.RegularRotation;
             var pressedRotation = sender.PressedRotation;
@@ -421,23 +411,20 @@ namespace TouchEffect
             }
 
             var rotation = regularRotation;
-            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 rotation = pressedRotation;
-                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 rotation = hoveredRotation;
-                easing = sender.HoveredAnimationEasing;
             }
 
             await sender.Control.RotateTo(rotation, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationXAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
+        private async Task SetRotationXAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
         {
             var regularRotationX = sender.RegularRotationX;
             var pressedRotationX = sender.PressedRotationX;
@@ -451,23 +438,20 @@ namespace TouchEffect
             }
 
             var rotationX = regularRotationX;
-            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 rotationX = pressedRotationX;
-                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 rotationX = hoveredRotationX;
-                easing = sender.HoveredAnimationEasing;
             }
 
             await sender.Control.RotateXTo(rotationX, (uint)Abs(duration), easing);
         }
 
-        private async Task SetRotationYAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration)
+        private async Task SetRotationYAsync(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
         {
             var regularRotationY = sender.RegularRotationY;
             var pressedRotationY = sender.PressedRotationY;
@@ -481,17 +465,14 @@ namespace TouchEffect
             }
 
             var rotationY = regularRotationY;
-            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 rotationY = pressedRotationY;
-                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 rotationY = hoveredRotationY;
-                easing = sender.HoveredAnimationEasing;
             }
 
             await sender.Control.RotateYTo(rotationY, (uint)Abs(duration), easing);
@@ -510,14 +491,17 @@ namespace TouchEffect
             }
             var token = _animationTokenSource.Token;
             var duration = sender.RegularAnimationDuration;
+            var easing = sender.RegularAnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
                 duration = sender.RegularAnimationDuration;
+                easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovering)
             {
                 duration = sender.HoveredAnimationDuration;
+                easing = sender.HoveredAnimationEasing;
             }
             duration = duration.AdjustDurationMultiplier(durationMultiplier);
 
@@ -530,14 +514,14 @@ namespace TouchEffect
 
             sender.RaiseAnimationStarted(touchState, hoverState, duration);
             return Task.WhenAll(
-                _customAnimationTaskGetter?.Invoke(sender, touchState, hoverState, duration, token) ?? Task.FromResult(true),
-                SetBackgroundColorAsync(sender, touchState, hoverState, duration),
-                SetOpacityAsync(sender, touchState, hoverState, duration),
-                SetScaleAsync(sender, touchState, hoverState, duration),
-                SetTranslationAsync(sender, touchState, hoverState, duration),
-                SetRotationAsync(sender, touchState, hoverState, duration),
-                SetRotationXAsync(sender, touchState, hoverState, duration),
-                SetRotationYAsync(sender, touchState, hoverState, duration),
+                _customAnimationTaskGetter?.Invoke(sender, touchState, hoverState, duration, easing, token) ?? Task.FromResult(true),
+                SetBackgroundColorAsync(sender, touchState, hoverState, duration, easing),
+                SetOpacityAsync(sender, touchState, hoverState, duration, easing),
+                SetScaleAsync(sender, touchState, hoverState, duration, easing),
+                SetTranslationAsync(sender, touchState, hoverState, duration, easing),
+                SetRotationAsync(sender, touchState, hoverState, duration, easing),
+                SetRotationXAsync(sender, touchState, hoverState, duration, easing),
+                SetRotationYAsync(sender, touchState, hoverState, duration, easing),
                 Task.Run(async () =>
                 {
                     _animationProgress = 0;

@@ -121,7 +121,7 @@ namespace TouchEffect
             set => SetValue(ShouldSetImageOnAnimationEndProperty, value);
         }
 
-        private async Task GetAnimationTask(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, CancellationToken token)
+        private async Task GetAnimationTask(TouchEff sender, TouchState touchState, HoverState hoverState, int duration, Easing easing, CancellationToken token)
         {
             var regularBackgroundImageSource = RegularBackgroundImageSource;
             var pressedBackgroundImageSource = PressedBackgroundImageSource;

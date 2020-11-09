@@ -155,6 +155,8 @@ HoveredRotationX | `double` | 0.0 | RotationX of hovered state
 RegularRotationY | `double` | 0.0 | RotationY of regular state
 PressedRotationY | `double` | 0.0 | RotationY of pressed state
 HoveredRotationY | `double` | 0.0 | RotationY of hovered state
+AnimationDuration | `int` | 0 | The common duration of animation
+AnimationEasing | `Easing` | null | The common easing of animation
 PressedAnimationDuration | `int` | 0 | The duration of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
 PressedAnimationEasing | `Easing` | null | The easing of animation by applying PressedOpacity and/or PressedBackgroundColor and/or PressedScale
 HoveredAnimationDuration | `int` | 0 | The duration of animation by applying HoveredOpacity and/or HoveredBackgroundColor and/or HoveredScale
