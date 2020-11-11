@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using TouchEffect.Delegates;
 using TouchEffect.EventArgs;
 using Xamarin.Forms;
 using TouchEffect.Enums;
@@ -23,19 +22,19 @@ namespace TouchEffect
         internal TouchEff(Func<TouchEff, TouchState, HoverState, int, Easing, CancellationToken, Task> animationTaskGetter) : this()
             => _visualManager.SetCustomAnimationTask(animationTaskGetter);
 
-        public event TEffectStatusChangedHandler StatusChanged;
+        public event EventHandler<TouchStatusChangedEventArgs> StatusChanged;
 
-        public event TEffectStateChangedHandler StateChanged;
+        public event EventHandler<TouchStateChangedEventArgs> StateChanged;
 
-        public event TEffectUserInteractionStateChangedHandler UserInteractionStateChanged;
+        public event EventHandler<UserInteractionStateChangedEventArgs> UserInteractionStateChanged;
 
-        public event TEffectHoverStatusChangedHandler HoverStatusChanged;
+        public event EventHandler<HoverStatusChangedEventArgs> HoverStatusChanged;
 
-        public event TEffectHoverStateChangedHandler HoverStateChanged;
+        public event EventHandler<HoverStateChangedEventArgs> HoverStateChanged;
 
-        public event TEffectCompletedHandler Completed;
+        public event EventHandler<TouchCompletedEventArgs> Completed;
 
-        public event AnimationStartedHandler AnimationStarted;
+        public event EventHandler<AnimationStartedEventArgs> AnimationStarted;
 
         //The backdor for https://github.com/AndreiMisiukevich/TouchEffect/issues/71
         [EditorBrowsable(EditorBrowsableState.Never)]
