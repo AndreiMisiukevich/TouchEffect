@@ -1,11 +1,11 @@
-﻿namespace TouchEffect.EventArgs
+﻿using System;
+
+namespace TouchEffect
 {
-    public class TouchCompletedEventArgs : System.EventArgs
+    public class TouchCompletedEventArgs : EventArgs
     {
-        public TouchCompletedEventArgs(object parameter)
-        {
-            Parameter = parameter;
-        }
+        internal TouchCompletedEventArgs(object parameter)
+            => Parameter = parameter;
 
         public object Parameter { get; }
     }

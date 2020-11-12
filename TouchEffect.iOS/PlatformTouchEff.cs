@@ -73,7 +73,7 @@ namespace TouchEffect.iOS
 
             IsCanceled = false;
             _startPoint = GetTouchPoint(touches);
-            HandleTouch(TouchStatus.Started, UserInteractionState.Running);
+            HandleTouch(TouchStatus.Started, TouchInteractionStatus.Started);
             base.TouchesBegan(touches, evt);
         }
 
@@ -81,7 +81,7 @@ namespace TouchEffect.iOS
         {
             if (_effect?.IsDisabled ?? true) return;
 
-            HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled, UserInteractionState.Idle);
+            HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled, TouchInteractionStatus.Completed);
             IsCanceled = true;
             base.TouchesEnded(touches, evt);
         }
@@ -90,7 +90,7 @@ namespace TouchEffect.iOS
         {
             if (_effect?.IsDisabled ?? true) return;
 
-            HandleTouch(TouchStatus.Canceled, UserInteractionState.Idle);
+            HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed);
             IsCanceled = true;
             base.TouchesCancelled(touches, evt);
         }
@@ -108,7 +108,7 @@ namespace TouchEffect.iOS
                 var maxDiff = Max(diffX, diffY);
                 if (maxDiff > disallowTouchThreshold)
                 {
-                    HandleTouch(TouchStatus.Canceled, UserInteractionState.Idle);
+                    HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed);
                     IsCanceled = true;
                     base.TouchesMoved(touches, evt);
                     return;
@@ -140,7 +140,7 @@ namespace TouchEffect.iOS
         private CGPoint? GetTouchPoint(NSSet touches)
             => Renderer != null ? (touches?.AnyObject as UITouch)?.LocationInView(Renderer) : null;
 
-        public void HandleTouch(TouchStatus status, UserInteractionState? userInteractionState = null)
+        public void HandleTouch(TouchStatus status, TouchInteractionStatus? userInteractionState = null)
         {
             if (IsCanceled || _effect == null)
             {
@@ -201,7 +201,7 @@ namespace TouchEffect.iOS
             if (gestureRecognizer is TouchUITapGestureRecognizer touchGesture && otherGestureRecognizer is UIPanGestureRecognizer &&
                 otherGestureRecognizer.State == UIGestureRecognizerState.Began)
             {
-                touchGesture.HandleTouch(TouchStatus.Canceled, UserInteractionState.Idle);
+                touchGesture.HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed);
                 touchGesture.IsCanceled = true;
             }
 

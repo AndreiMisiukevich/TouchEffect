@@ -1,5 +1,5 @@
 ﻿
-namespace TouchEffect.Enums
+namespace TouchEffect
 {
     public enum TouchStatus
     {

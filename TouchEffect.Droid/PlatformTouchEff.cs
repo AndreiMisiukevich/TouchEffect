@@ -170,7 +170,7 @@ namespace TouchEffect.Android
                     IsCanceled = false;
                     _startX = e.Event.GetX();
                     _startY = e.Event.GetY();
-                    _effect?.HandleUserInteraction(UserInteractionState.Running);
+                    _effect?.HandleUserInteraction(TouchInteractionStatus.Started);
                     _effect?.HandleTouch(TouchStatus.Started);
                     StartRipple(e.Event.GetX(), e.Event.GetY());
                     if (_effect.DisallowTouchThreshold > 0)
@@ -253,7 +253,7 @@ namespace TouchEffect.Android
                 Group.Parent?.RequestDisallowInterceptTouchEvent(false);
             }
             _effect?.HandleTouch(status);
-            _effect?.HandleUserInteraction(UserInteractionState.Idle);
+            _effect?.HandleUserInteraction(TouchInteractionStatus.Completed);
             EndRipple();
         }
 

@@ -1,44 +1,24 @@
 ﻿using System.Windows.Input;
-using TouchEffect.EventArgs;
 using Xamarin.Forms;
-using TouchEffect.Enums;
-using TouchEffect.Extensions;
 using System.ComponentModel;
 using System;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Linq;
 
 namespace TouchEffect
 {
     public class TouchEff : RoutingEffect
     {
-        private readonly TouchVisualManager _visualManager;
-        private VisualElement _control;
-
-        public TouchEff() : base($"{nameof(TouchEffect)}.{nameof(TouchEff)}")
-            => _visualManager = new TouchVisualManager();
-
-        internal TouchEff(Func<TouchEff, TouchState, HoverState, int, Easing, CancellationToken, Task> animationTaskGetter) : this()
-            => _visualManager.SetCustomAnimationTask(animationTaskGetter);
-
         public event EventHandler<TouchStatusChangedEventArgs> StatusChanged;
 
         public event EventHandler<TouchStateChangedEventArgs> StateChanged;
 
-        public event EventHandler<UserInteractionStateChangedEventArgs> UserInteractionStateChanged;
+        public event EventHandler<TouchInteractionStatusChangedEventArgs> InteractionStatusChanged;
 
         public event EventHandler<HoverStatusChangedEventArgs> HoverStatusChanged;
 
         public event EventHandler<HoverStateChangedEventArgs> HoverStateChanged;
 
         public event EventHandler<TouchCompletedEventArgs> Completed;
-
-        public event EventHandler<AnimationStartedEventArgs> AnimationStarted;
-
-        //The backdor for https://github.com/AndreiMisiukevich/TouchEffect/issues/71
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool IsForceUpdateStateAnimatedForIsToggledProperty { get; set; }
 
         public static readonly BindableProperty IsAvailableProperty = BindableProperty.CreateAttached(
             nameof(IsAvailable),
@@ -104,14 +84,14 @@ namespace TouchEffect
             nameof(State),
             typeof(TouchState),
             typeof(TouchEff),
-            TouchState.Regular,
+            TouchState.Normal,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty UserInteractionStateProperty = BindableProperty.CreateAttached(
             nameof(UserInteractionState),
-            typeof(UserInteractionState),
+            typeof(TouchInteractionStatus),
             typeof(TouchEff),
-            UserInteractionState.Idle,
+            TouchInteractionStatus.Completed,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty HoverStatusProperty = BindableProperty.CreateAttached(
@@ -125,7 +105,7 @@ namespace TouchEffect
             nameof(HoverState),
             typeof(HoverState),
             typeof(TouchEff),
-            HoverState.Regular,
+            HoverState.Normal,
             BindingMode.OneWayToSource);
 
         public static readonly BindableProperty RegularBackgroundColorProperty = BindableProperty.CreateAttached(
@@ -467,7 +447,7 @@ namespace TouchEffect
             BindingMode.TwoWay,
             propertyChanged: (bindable, oldValue, newValue) =>
             {
-                bindable.GetTouchEff()?.ForceUpdateState(IsForceUpdateStateAnimatedForIsToggledProperty);
+                bindable.GetTouchEff()?.ForceUpdateState(false);
                 TryGenerateEffect(bindable, oldValue, newValue);
             });
 
@@ -505,6 +485,87 @@ namespace TouchEffect
             typeof(TouchEff),
             -1,
             propertyChanged: TryGenerateEffect);
+
+        public static readonly BindableProperty RegularBackgroundImageSourceProperty = BindableProperty.CreateAttached(
+            nameof(RegularBackgroundImageSource),
+            typeof(ImageSource),
+            typeof(TouchEff),
+            default(ImageSource),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
+            });
+
+        public static readonly BindableProperty HoveredBackgroundImageSourceProperty = BindableProperty.CreateAttached(
+            nameof(HoveredBackgroundImageSource),
+            typeof(ImageSource),
+            typeof(TouchEff),
+            default(ImageSource),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
+            });
+
+        public static readonly BindableProperty PressedBackgroundImageSourceProperty = BindableProperty.CreateAttached(
+            nameof(PressedBackgroundImageSource),
+            typeof(ImageSource),
+            typeof(TouchEff),
+            default(ImageSource),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
+            });
+
+        public static readonly BindableProperty RegularBackgroundImageAspectProperty = BindableProperty.CreateAttached(
+            nameof(RegularBackgroundImageAspect),
+            typeof(Aspect),
+            typeof(TouchEff),
+            default(Aspect),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
+            });
+
+        public static readonly BindableProperty HoveredBackgroundImageAspectProperty = BindableProperty.CreateAttached(
+            nameof(HoveredBackgroundImageAspect),
+            typeof(Aspect),
+            typeof(TouchEff),
+            default(Aspect),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
+            });
+
+        public static readonly BindableProperty PressedBackgroundImageAspectProperty = BindableProperty.CreateAttached(
+            nameof(PressedBackgroundImageAspect),
+            typeof(Aspect),
+            typeof(TouchEff),
+            default(Aspect),
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                bindable.GetTouchEff()?.ForceUpdateState();
+                TryGenerateEffect(bindable, oldValue, newValue);
+            });
+
+        public static readonly BindableProperty ShouldSetImageOnAnimationEndProperty = BindableProperty.CreateAttached(
+            nameof(ShouldSetImageOnAnimationEnd),
+            typeof(bool),
+            typeof(TouchEff),
+            default(bool),
+            propertyChanged: TryGenerateEffect);
+
+        readonly TouchGestureManager touchGestureManager = new TouchGestureManager();
+
+        VisualElement control;
+
+        public TouchEff() : base($"{nameof(TouchEffect)}.{nameof(TouchEff)}")
+        {
+        }
 
         public static bool GetIsAvailable(BindableObject bindable)
             => (bool)bindable.GetValue(IsAvailableProperty);
@@ -560,10 +621,10 @@ namespace TouchEffect
         public static void SetState(BindableObject bindable, TouchState value)
             => bindable.SetValue(StateProperty, value);
 
-        public static UserInteractionState GetUserInteractionState(BindableObject bindable)
-            => (UserInteractionState)bindable.GetValue(UserInteractionStateProperty);
+        public static TouchInteractionStatus GetUserInteractionState(BindableObject bindable)
+            => (TouchInteractionStatus)bindable.GetValue(UserInteractionStateProperty);
 
-        public static void SetUserInteractionState(BindableObject bindable, UserInteractionState value)
+        public static void SetUserInteractionState(BindableObject bindable, TouchInteractionStatus value)
             => bindable.SetValue(UserInteractionStateProperty, value);
 
         public static HoverStatus GetHoverStatus(BindableObject bindable)
@@ -812,6 +873,48 @@ namespace TouchEffect
         public static void SetNativeAnimationShadowRadius(BindableObject bindable, int value)
             => bindable.SetValue(NativeAnimationShadowRadiusProperty, value);
 
+        public static ImageSource GetRegularBackgroundImageSource(BindableObject bindable)
+            => (ImageSource)bindable.GetValue(RegularBackgroundImageSourceProperty);
+
+        public static void SetRegularBackgroundImageSource(BindableObject bindable, ImageSource value)
+            => bindable.SetValue(RegularBackgroundImageSourceProperty, value);
+
+        public static ImageSource GetHoveredBackgroundImageSource(BindableObject bindable)
+            => (ImageSource)bindable.GetValue(HoveredBackgroundImageSourceProperty);
+
+        public static void SetHoveredBackgroundImageSource(BindableObject bindable, ImageSource value)
+            => bindable.SetValue(HoveredBackgroundImageSourceProperty, value);
+
+        public static ImageSource GetPressedBackgroundImageSource(BindableObject bindable)
+            => (ImageSource)bindable.GetValue(PressedBackgroundImageSourceProperty);
+
+        public static void SetPressedBackgroundImageSource(BindableObject bindable, ImageSource value)
+            => bindable.SetValue(PressedBackgroundImageSourceProperty, value);
+
+        public static Aspect GetRegularBackgroundImageAspect(BindableObject bindable)
+            => (Aspect)bindable.GetValue(RegularBackgroundImageAspectProperty);
+
+        public static void SetRegularBackgroundImageAspect(BindableObject bindable, Aspect value)
+            => bindable.SetValue(RegularBackgroundImageAspectProperty, value);
+
+        public static Aspect GetHoveredBackgroundImageAspect(BindableObject bindable)
+            => (Aspect)bindable.GetValue(HoveredBackgroundImageAspectProperty);
+
+        public static void SetHoveredBackgroundImageAspect(BindableObject bindable, Aspect value)
+            => bindable.SetValue(HoveredBackgroundImageAspectProperty, value);
+
+        public static Aspect GetPressedBackgroundImageAspect(BindableObject bindable)
+            => (Aspect)bindable.GetValue(PressedBackgroundImageAspectProperty);
+
+        public static void SetPressedBackgroundImageAspect(BindableObject bindable, Aspect value)
+            => bindable.SetValue(PressedBackgroundImageAspectProperty, value);
+
+        public static bool GetShouldSetImageOnAnimationEnd(BindableObject bindable)
+            => (bool)bindable.GetValue(ShouldSetImageOnAnimationEndProperty);
+
+        public static void SetShouldSetImageOnAnimationEnd(BindableObject bindable, bool value)
+            => bindable.SetValue(ShouldSetImageOnAnimationEndProperty, value);
+
         private static void TryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
         {
             if (!(bindable is VisualElement view) || view.Effects.OfType<TouchEff>().Any())
@@ -854,7 +957,7 @@ namespace TouchEffect
             internal set => SetState(Control, value);
         }
 
-        public UserInteractionState UserInteractionState
+        public TouchInteractionStatus UserInteractionState
         {
             get => GetUserInteractionState(Control);
             internal set => SetUserInteractionState(Control, value);
@@ -954,6 +1057,20 @@ namespace TouchEffect
             internal set => SetIsToggled(Control, value);
         }
 
+        public ImageSource RegularBackgroundImageSource => GetRegularBackgroundImageSource(Control);
+
+        public ImageSource HoveredBackgroundImageSource => GetHoveredBackgroundImageSource(Control);
+
+        public ImageSource PressedBackgroundImageSource => GetPressedBackgroundImageSource(Control);
+
+        public Aspect RegularBackgroundImageAspect => GetRegularBackgroundImageAspect(Control);
+
+        public Aspect HoveredBackgroundImageAspect => GetHoveredBackgroundImageAspect(Control);
+
+        public Aspect PressedBackgroundImageAspect => GetPressedBackgroundImageAspect(Control);
+
+        public bool ShouldSetImageOnAnimationEnd => GetShouldSetImageOnAnimationEnd(Control);
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool CanExecute
             => IsAvailable &&
@@ -963,17 +1080,17 @@ namespace TouchEffect
         [EditorBrowsable(EditorBrowsableState.Never)]
         public VisualElement Control
         {
-            get => _control;
+            get => control;
             set
             {
-                if (_control != null)
+                if (control != null)
                 {
                     IsUsed = false;
-                    _visualManager.Reset();
+                    touchGestureManager.Reset();
                     SetChildrenInputTransparent(false);
                 }
-                _visualManager.AbortAnimations(this);
-                _control = value;
+                touchGestureManager.AbortAnimations(this);
+                control = value;
                 if (value != null)
                 {
                     SetChildrenInputTransparent(ShouldMakeChildrenInputTransparent);
@@ -992,10 +1109,10 @@ namespace TouchEffect
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void HandleTouch(TouchStatus status)
-            => _visualManager.HandleTouch(this, status);
+            => touchGestureManager.HandleTouch(this, status);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void HandleUserInteraction(UserInteractionState userInteractionState)
+        public void HandleUserInteraction(TouchInteractionStatus userInteractionState)
         {
             if (UserInteractionState != userInteractionState)
             {
@@ -1006,7 +1123,7 @@ namespace TouchEffect
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void HandleHover(HoverStatus status)
-            => _visualManager.HandleHover(this, status);
+            => touchGestureManager.HandleHover(this, status);
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseStateChanged()
@@ -1018,7 +1135,7 @@ namespace TouchEffect
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseUserInteractionStateChanged()
-            => UserInteractionStateChanged?.Invoke(Control, new UserInteractionStateChangedEventArgs(UserInteractionState));
+            => InteractionStatusChanged?.Invoke(Control, new TouchInteractionStatusChangedEventArgs(UserInteractionState));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void RaiseStatusChanged()
@@ -1039,17 +1156,13 @@ namespace TouchEffect
         public void RaiseCompleted()
             => Completed?.Invoke(Control, new TouchCompletedEventArgs(CommandParameter));
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void RaiseAnimationStarted(TouchState touchState, HoverState hoverState, int duration)
-            => AnimationStarted?.Invoke(Control, new AnimationStartedEventArgs(touchState, hoverState, duration));
-
         internal void ForceUpdateState(bool animated = true)
         {
             if (Control == null)
             {
                 return;
             }
-            _visualManager.ChangeStateAsync(this, animated);
+            touchGestureManager.ChangeStateAsync(this, animated);
         }
 
         internal void HandleLongPress()
@@ -1058,7 +1171,7 @@ namespace TouchEffect
             {
                 return;
             }
-            _visualManager.HandleLongPress(this);
+            touchGestureManager.HandleLongPress(this);
         }
 
         private void SetChildrenInputTransparent(bool value)

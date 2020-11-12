@@ -1,9 +1,9 @@
 ﻿
-namespace TouchEffect.Enums
+namespace TouchEffect
 {
     public enum TouchState
     {
-        Regular,
+        Normal,
         Pressed
     }
 }

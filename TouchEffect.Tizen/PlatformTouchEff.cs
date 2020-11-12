@@ -74,7 +74,7 @@ namespace TouchEffect.Tizen
             if (_effect?.IsDisabled ?? true) return;
 
             IsCanceled = false;
-            HandleTouch(TouchStatus.Started, UserInteractionState.Running);
+            HandleTouch(TouchStatus.Started, TouchInteractionStatus.Started);
         }
 
         private void OnLongTapStarted(object data)
@@ -84,14 +84,14 @@ namespace TouchEffect.Tizen
             IsCanceled = false;
 
             _longTapStarted = true;
-            HandleTouch(TouchStatus.Started, UserInteractionState.Running);
+            HandleTouch(TouchStatus.Started, TouchInteractionStatus.Started);
         }
 
         private void OnGestureEnded(object data)
         {
             if (_effect?.IsDisabled ?? true) return;
 
-            HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled, UserInteractionState.Idle);
+            HandleTouch(_effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled, TouchInteractionStatus.Completed);
             IsCanceled = true;
             _tapCompleted = true;
         }
@@ -107,11 +107,11 @@ namespace TouchEffect.Tizen
                 return;
             }
 
-            HandleTouch(TouchStatus.Canceled, UserInteractionState.Idle);
+            HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed);
             IsCanceled = true;
         }
 
-        public void HandleTouch(TouchStatus status, UserInteractionState? userInteractionState = null)
+        public void HandleTouch(TouchStatus status, TouchInteractionStatus? userInteractionState = null)
         {
             if (IsCanceled || _effect == null) return;
 

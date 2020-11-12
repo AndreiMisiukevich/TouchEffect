@@ -1,13 +1,11 @@
-﻿using TouchEffect.Enums;
+﻿using System;
 
-namespace TouchEffect.EventArgs
+namespace TouchEffect
 {
-    public class TouchStatusChangedEventArgs : System.EventArgs
+    public class TouchStatusChangedEventArgs : EventArgs
     {
-        public TouchStatusChangedEventArgs(TouchStatus status)
-        {
-            Status = status;
-        }
+        internal TouchStatusChangedEventArgs(TouchStatus status)
+            => Status = status;
 
         public TouchStatus Status { get; }
     }

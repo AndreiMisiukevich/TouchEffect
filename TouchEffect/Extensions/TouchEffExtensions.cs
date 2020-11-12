@@ -2,7 +2,7 @@
 using System.Linq;
 using System.ComponentModel;
 
-namespace TouchEffect.Extensions
+namespace TouchEffect
 {
     public static class TouchEffExtensions
     {
