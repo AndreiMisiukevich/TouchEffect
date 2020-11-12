@@ -6,10 +6,9 @@ using System;
 
 namespace TouchEffect
 {
+    // TODO: If hovered value is not set, take Normal value instead of default
     sealed class TouchGestureManager
     {
-        const string ChangeBackgroundColorAnimationName = nameof(ChangeBackgroundColorAnimationName);
-
         const int AnimationProgressDelay = 10;
 
         Color defaultBackgroundColor;
@@ -223,7 +222,7 @@ namespace TouchEffect
                 return;
             }
             ViewExtensions.CancelAnimations(control);
-            AnimationExtensions.AbortAnimation(control, ChangeBackgroundColorAnimationName);
+            control.AbortAnimation(nameof(SetBackgroundColorAsync));
         }
 
         void UpdateStatusAndState(TouchEff sender, TouchStatus status, TouchState state)
@@ -335,7 +334,7 @@ namespace TouchEffect
                 {0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, v, control.BackgroundColor.B, control.BackgroundColor.A), control.BackgroundColor.G, color.G) },
                 {0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, v, control.BackgroundColor.A), control.BackgroundColor.B, color.B) },
                 {0, 1,  new Animation(v => control.BackgroundColor = new Color(control.BackgroundColor.R, control.BackgroundColor.G, control.BackgroundColor.B, v), control.BackgroundColor.A, color.A) },
-            }.Commit(sender.Control, ChangeBackgroundColorAnimationName, 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
+            }.Commit(sender.Control, nameof(SetBackgroundColorAsync), 16, (uint)duration, easing, (d, b) => animationCompletionSource.SetResult(true));
             await animationCompletionSource.Task;
         }
 
