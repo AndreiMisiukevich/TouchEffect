@@ -268,8 +268,11 @@ namespace TouchEffect
             }
             else if (hoverState == HoverState.Hovered)
             {
-                aspect = sender.HoveredBackgroundImageAspect;
-                source = hoveredBackgroundImageSource;
+                if (sender.Control.IsSet(TouchEff.HoveredBackgroundImageAspectProperty))
+                    aspect = sender.HoveredBackgroundImageAspect;
+
+                if (sender.Control.IsSet(TouchEff.HoveredBackgroundImageSourceProperty))
+                    source = hoveredBackgroundImageSource;
             }
 
             try
@@ -286,10 +289,11 @@ namespace TouchEffect
 
             if (sender.Control is Image image)
             {
-                image.BatchBegin();
-                image.Aspect = aspect;
-                image.Source = source;
-                image.BatchCommit();
+                using (image.Batch())
+                {
+                    image.Aspect = aspect;
+                    image.Source = source;
+                }
             }
         }
 
@@ -316,7 +320,7 @@ namespace TouchEffect
             {
                 color = GetBackgroundColor(pressedBackgroundColor);
             }
-            else if (hoverState == HoverState.Hovered)
+            else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEff.HoveredBackgroundColorProperty))
             {
                 color = GetBackgroundColor(hoveredBackgroundColor);
             }
@@ -356,7 +360,7 @@ namespace TouchEffect
             {
                 opacity = pressedOpacity;
             }
-            else if (hoverState == HoverState.Hovered)
+            else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEff.HoveredOpacityProperty))
             {
                 opacity = hoveredOpacity;
             }
@@ -383,7 +387,7 @@ namespace TouchEffect
             {
                 scale = pressedScale;
             }
-            else if (hoverState == HoverState.Hovered)
+            else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEff.HoveredScaleProperty))
             {
                 scale = hoveredScale;
             }
@@ -431,8 +435,11 @@ namespace TouchEffect
             }
             else if (hoverState == HoverState.Hovered)
             {
-                translationX = hoveredTranslationX;
-                translationY = hoveredTranslationY;
+                if (sender.Control.IsSet(TouchEff.HoveredTranslationXProperty))
+                    translationX = hoveredTranslationX;
+
+                if (sender.Control.IsSet(TouchEff.HoveredTranslationYProperty))
+                    translationY = hoveredTranslationY;
             }
 
             await sender.Control.TranslateTo(translationX, translationY, (uint)Abs(duration), easing);
@@ -457,7 +464,7 @@ namespace TouchEffect
             {
                 rotation = pressedRotation;
             }
-            else if (hoverState == HoverState.Hovered)
+            else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEff.HoveredRotationProperty))
             {
                 rotation = hoveredRotation;
             }
@@ -484,7 +491,7 @@ namespace TouchEffect
             {
                 rotationX = pressedRotationX;
             }
-            else if (hoverState == HoverState.Hovered)
+            else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEff.HoveredRotationXProperty))
             {
                 rotationX = hoveredRotationX;
             }
@@ -511,7 +518,7 @@ namespace TouchEffect
             {
                 rotationY = pressedRotationY;
             }
-            else if (hoverState == HoverState.Hovered)
+            else if (hoverState == HoverState.Hovered && sender.Control.IsSet(TouchEff.HoveredRotationYProperty))
             {
                 rotationY = hoveredRotationY;
             }
@@ -528,23 +535,39 @@ namespace TouchEffect
         {
             if (sender.Control == null)
             {
-                return Task.CompletedTask;
+                return Task.FromResult(false);
             }
             var token = animationTokenSource.Token;
-            var duration = sender.NormalAnimationDuration;
-            var easing = sender.NormalAnimationEasing;
+            var duration = sender.AnimationDuration;
+            var easing = sender.AnimationEasing;
 
             if (touchState == TouchState.Pressed)
             {
-                duration = sender.PressedAnimationDuration;
-                easing = sender.PressedAnimationEasing;
+                if (sender.Control.IsSet(TouchEff.PressedAnimationDurationProperty))
+                    duration = sender.PressedAnimationDuration;
+
+                if (sender.Control.IsSet(TouchEff.PressedAnimationEasingProperty))
+                    easing = sender.PressedAnimationEasing;
             }
             else if (hoverState == HoverState.Hovered)
             {
-                duration = sender.HoveredAnimationDuration;
-                easing = sender.HoveredAnimationEasing;
+                if (sender.Control.IsSet(TouchEff.HoveredAnimationDurationProperty))
+                    duration = sender.HoveredAnimationDuration;
+
+                if (sender.Control.IsSet(TouchEff.HoveredAnimationEasingProperty))
+                    easing = sender.HoveredAnimationEasing;
             }
-            duration = duration.AdjustDurationMultiplier(durationMultiplier);
+            else
+            {
+                if (sender.Control.IsSet(TouchEff.NormalAnimationDurationProperty))
+                    duration = sender.NormalAnimationDuration;
+
+                if (sender.Control.IsSet(TouchEff.NormalAnimationEasingProperty))
+                    easing = sender.NormalAnimationEasing;
+            }
+
+            if (durationMultiplier.HasValue)
+                duration = (int)durationMultiplier.Value * duration;
 
             if (duration <= 0 &&
                 Device.RuntimePlatform != Device.iOS &&
