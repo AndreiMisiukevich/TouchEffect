@@ -15,7 +15,7 @@
             touch:TouchEff.PressedAnimationDuration="800"
             touch:TouchEff.PressedOpacity="0.6"
             touch:TouchEff.PressedScale="0.9"
-            touch:TouchEff.RegularAnimationDuration="800"
+            touch:TouchEff.NormalAnimationDuration="800"
             touch:TouchEff.RippleCount="-1"
             BackgroundColor="Black"
             HorizontalOptions="CenterAndExpand"
@@ -27,7 +27,7 @@
                 TextColor="White" />
             <VisualStateManager.VisualStateGroups>
                 <VisualStateGroup x:Name="TouchStates">
-                    <VisualState x:Name="Regular" />
+                    <VisualState x:Name="Normal" />
 
                     <VisualState x:Name="Hovering">
                         <VisualState.Setters>

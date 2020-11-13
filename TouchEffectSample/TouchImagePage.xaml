@@ -15,7 +15,7 @@
             HeightRequest="250"
             WidthRequest="250"
             touch:TouchEff.Command="{Binding Command, Source={x:Reference root}}">
-            <touch:TouchImage.RegularBackgroundImageSource>
+            <touch:TouchImage.NormalBackgroundImageSource>
                 <OnPlatform x:TypeArguments="ImageSource">
                     <OnPlatform.Platforms>
                         <On Platform="iOS" Value="button" />
@@ -25,7 +25,7 @@
                         <On Platform="Tizen" Value="button.png" />
                     </OnPlatform.Platforms>
                 </OnPlatform>
-            </touch:TouchImage.RegularBackgroundImageSource>
+            </touch:TouchImage.NormalBackgroundImageSource>
             <touch:TouchImage.PressedBackgroundImageSource>
                 <OnPlatform x:TypeArguments="ImageSource">
                     <OnPlatform.Platforms>

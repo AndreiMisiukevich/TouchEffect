@@ -30,14 +30,14 @@
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.IsToggled="false"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -55,15 +55,15 @@
                 Grid.Column="1" 
                 touch:TouchEff.IsToggled="true"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -80,15 +80,15 @@
                 Grid.Column="2" 
                 touch:TouchEff.IsToggled="false"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -106,14 +106,14 @@
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.IsToggled="false"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -131,14 +131,14 @@
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.IsToggled="true"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -155,15 +155,15 @@
                 Grid.Column="2" 
                 touch:TouchEff.IsToggled="false"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -180,15 +180,15 @@
                 Grid.Column="0" 
                 touch:TouchEff.IsToggled="false"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -205,15 +205,15 @@
                 Grid.Column="1" 
                 touch:TouchEff.IsToggled="false"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>
@@ -230,15 +230,15 @@
                 Grid.Column="2" 
                 touch:TouchEff.IsToggled="true"
                 touch:TouchEff.Command="{Binding Command, Source={x:Reference page}}"
-                touch:TouchEff.RegularBackgroundColor="Red"
+                touch:TouchEff.NormalBackgroundColor="Red"
                 touch:TouchEff.PressedBackgroundColor="Gold"
                 touch:TouchEff.PressedRotationY="180"
                 touch:TouchEff.PressedScale="1.2"
                 touch:TouchEff.RippleCount="-1"
                 touch:TouchEff.PressedAnimationEasing="{x:Static forms:Easing.CubicInOut}"
-                touch:TouchEff.RegularAnimationEasing="{x:Static forms:Easing.CubicInOut}"
+                touch:TouchEff.NormalAnimationEasing="{x:Static forms:Easing.CubicInOut}"
                 touch:TouchEff.PressedAnimationDuration="500"
-                touch:TouchEff.RegularAnimationDuration="500">
+                touch:TouchEff.NormalAnimationDuration="500">
             <ContentView.Effects>
                 <touch:TouchEff AnimationStarted="OnAnimStarted"/>
             </ContentView.Effects>

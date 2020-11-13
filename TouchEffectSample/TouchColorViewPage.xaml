@@ -7,7 +7,7 @@
              Title="TouchColorViewPage">
     <StackLayout>
        <ContentView
-            touch:TouchEff.RegularBackgroundColor="Green"
+            touch:TouchEff.NormalBackgroundColor="Green"
             touch:TouchEff.PressedBackgroundColor="Red"
             touch:TouchEff.PressedScale="1.2"
             touch:TouchEff.RippleCount="1"
@@ -17,7 +17,7 @@
             touch:TouchEff.PressedTranslationX="5"
             touch:TouchEff.PressedTranslationY="5"
             touch:TouchEff.PressedAnimationDuration="500"
-            touch:TouchEff.RegularAnimationDuration="500"
+            touch:TouchEff.NormalAnimationDuration="500"
             Padding="10, 5"
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand">
