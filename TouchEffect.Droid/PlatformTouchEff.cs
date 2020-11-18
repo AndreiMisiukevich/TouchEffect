@@ -321,7 +321,7 @@ namespace TouchEffect.Android
             if (defaultcolor != Xamarin.Forms.Color.Default)
                 color = defaultcolor.ToAndroid();
             else
-                color = Color.Argb(31, 0, 0, 0);
+                color = Color.Argb(64, 128, 128, 128);
 
             return new ColorStateList(
                 new[] { new int[] { } },
