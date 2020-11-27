@@ -1,4 +1,6 @@
-# TouchEff effect for Xamarin Forms (Repsonisve touches without TapGestureRecognizer)
+# TouchEffect was merged to XamarinCommunityToolkit https://github.com/xamarin/XamarinCommunityToolkit/pull/566 I highly recomment to use TouchEffect from XCT
+
+## TouchEff effect for Xamarin Forms (Repsonisve touches without TapGestureRecognizer)
 This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer. It makes it possible to change the appearance of any control in response to touch events, either directly via xaml or with your custom logic hooked up to the events which this plugin exposes.
 
 With this plugin it is also possible to respond to hover events (if the platform exposes them) and to display native touch feedback events (Tilt on UWP, Ripple on Android, Opacity/Color changing on iOS).
