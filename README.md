@@ -1,4 +1,4 @@
-# TouchEffect was merged to XamarinCommunityToolkit https://github.com/xamarin/XamarinCommunityToolkit/pull/566 I highly recomment to use TouchEffect from XCT
+# TouchEffect was merged into XamarinCommunityToolkit https://github.com/xamarin/XamarinCommunityToolkit/pull/566 I highly recommed to use TouchEffect from XCT
 
 ## TouchEff effect for Xamarin Forms (Repsonisve touches without TapGestureRecognizer)
 This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer. It makes it possible to change the appearance of any control in response to touch events, either directly via xaml or with your custom logic hooked up to the events which this plugin exposes.
