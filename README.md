@@ -195,7 +195,7 @@ HoveredBackgroundImageAspect | `Aspect` | AspectFit | Background image aspect of
 **If you want to customize/extend existing controls, you may observe State property via triggers**
 
 
-Check source code for more info, or 🇧🇾 ***just ask me =)*** 🇧🇾
+Check source code for more info, or ***just ask me =)***
 
 ## License
 The MIT License (MIT) see [License file](LICENSE)
